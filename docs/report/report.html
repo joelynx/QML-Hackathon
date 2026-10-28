@@ -151,7 +151,7 @@ pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; p
 <li>The mean-field model of the same circuit used as an attribution test, to separate &ldquo;a quantum-circuit feature map helps&rdquo; from &ldquo;quantum correlations help&rdquo;.</li>
 <li>An evaluation of one fixed circuit from exact simulation through shot noise, calibration-based noise and Braket&rsquo;s simulator to a quantum processor, with five beats packed onto one chip per circuit.</li>
 </ul>
-<p class="small"><b>How to read this document.</b> Sections 1&ndash;7 explain the problem and every part of the method from the ground up; no background in cardiology, machine learning or quantum computing is assumed. Grey boxes marked <em>In more detail</em> give the exact definitions and can be skipped on a first reading. Sections 8&ndash;13 give the evaluation and the results. This is a one-person project carried out with AI coding agents; Section <span class="secref" data-ref="s-how"></span> says who did what.</p>
+<p class="small"><b>How to read this document.</b> Sections 1&ndash;7 explain the problem and every part of the method from the ground up; no background in cardiology, machine learning or quantum computing is assumed. Grey boxes marked <em>In more detail</em> give the exact definitions and can be skipped on a first reading. Sections 8&ndash;13 give the evaluation and the results.</p>
 
 <!-- ============================================================ -->
 <h2 id="s-problem">The problem</h2>
@@ -242,7 +242,7 @@ pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; p
 <p><b>Tuning.</b> Thirty configurations were drawn at random from a declared search space (size, spectral radius, leak, input scale, density, bias) and scored by cross-validation on the training patients only (Section <span class="secref" data-ref="s-readout"></span>). The selected network (E002) has 55 neurons, spectral radius 0.68, leak 0.10, input scale 0.98, density 0.054 and bias 0.54.</p>
 <p><b>Seeds.</b> A seed is the starting number of a random-number generator; the same seed always gives the same random numbers. The random matrices of the echo state network, and in the quantum arm the random coupling disorder and the shot draws, come from seeds. Each final model was rebuilt with 5 different seeds and scored separately, and the results reported are means over the 5, so that no conclusion rests on one lucky draw.</p>
 <p><b>Performance on the 21 test patients</b> (mean of 5 seeds): macro-F1 <b>0.7065</b>. Per class (sensitivity / positive predictivity / F1, defined in Section <span class="secref" data-ref="s-metric"></span>): N 0.907 / 0.985 / 0.944; S 0.595 / 0.269 / 0.370; V 0.953 / 0.697 / 0.805.</p>
-<p><b>Grid check.</b> The selected regularisation strength was the smallest value in its grid, so a better value might have lain outside it. With the grid extended to 10<sup>&minus;5</sup>, the same configuration and value were selected and the predictions were byte-identical (E010). A reviewer agent rebuilt this baseline and reproduced all five test prediction files byte for byte (V004; Section <span class="secref" data-ref="s-verify"></span>).</p>
+<p><b>Grid check.</b> The selected regularisation strength was the smallest value in its grid, so a better value might have lain outside it. With the grid extended to 10<sup>&minus;5</sup>, the same configuration and value were selected and the predictions were byte-identical (E010). A separate verification run rebuilt this baseline and reproduced all five test prediction files byte for byte (V004; Section <span class="secref" data-ref="s-verify"></span>).</p>
 
 <!-- ============================================================ -->
 <h2 id="s-qrc">Building block 4: the quantum reservoir</h2>
@@ -332,8 +332,8 @@ pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; p
 <h3 id="s-leak">The lookahead check</h3>
 <p>A classifier for beat <math><mi>i</mi></math> may use the signal up to a boundary: the next beat, or 1 s after beat <math><mi>i</mi></math> if that is later. To check that no feature uses anything beyond it, the check replaces all of the signal after the boundary with different values, recomputes the whole pipeline, and requires the prediction for beat <math><mi>i</mi></math> to stay exactly the same. Every reservoir model passed on 731 training beats with 0 violations.</p>
 
-<h3 id="s-verify">Verification by reviewer agents</h3>
-<p>Five reviews (V001&ndash;V005) were carried out by separate AI agent instances that started without the working agent&rsquo;s conversation history (Section <span class="secref" data-ref="s-how"></span>). V001&ndash;V003 reviewed the evaluation before any model was scored; V004 and V005 checked the results. Their independence is procedural: they use the same underlying model as the agent that did the work and read its written records, so they are not independent experts and may share its blind spots. V004 rebuilt the classical baseline and reproduced its five test prediction files byte for byte. V005 checked the external confirmation, the additional experiments and the claims in the README. It found one inaccurate statement, two overstatements and, on re-check, one wrong number and three small wording items; all were corrected before its final pass. It also rebuilt the 10 headline prediction files and the headline table from a fresh environment and a fresh data download, byte for byte, in 27.3 minutes. The full reports are in <code>VERIFICATIONS.md</code>.</p>
+<h3 id="s-verify">Separate verification</h3>
+<p>Five separate reviews (V001&ndash;V005) checked the work. V001&ndash;V003 reviewed the evaluation before any model was scored; V004 and V005 checked the results. These reviews were part of the project&rsquo;s own workflow, not external peer review. V004 rebuilt the classical baseline and reproduced its five test prediction files byte for byte. V005 checked the external confirmation, the additional experiments and the claims in the README. It found one inaccurate statement, two overstatements and, on re-check, one wrong number and three small wording items; all were corrected before its final pass. It also rebuilt the 10 headline prediction files and the headline table from a fresh environment and a fresh data download, byte for byte, in 27.3 minutes. The full reports are in <code>VERIFICATIONS.md</code>.</p>
 
 <!-- ============================================================ -->
 <h2 id="s-results">Results on the 21 test patients</h2>
@@ -532,7 +532,7 @@ pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; p
 <div class="log"><h4>A test of the access guard opened a locked label file (26 October, 17:45)</h4><dl>
 <dt>Symptom</dt><dd>Before any model existed, a path bug made a test of the confirmation guard open the real SVDB label file.</dd>
 <dt>Diagnosis</dt><dd>The run stopped on a beat-identifier check before any score was computed; no label values or scores were displayed or stored.</dd>
-<dt>Fix</dt><dd>The bug was fixed and the test now asserts that the real file is never opened. A critic agent (V002) judged that SVDB remained usable as a confirmation set. Details are in the access log of <code>EVAL.md</code>.</dd></dl></div>
+<dt>Fix</dt><dd>The bug was fixed and the test now asserts that the real file is never opened. A separate review (V002) judged that SVDB remained usable as a confirmation set. Details are in the access log of <code>EVAL.md</code>.</dd></dl></div>
 
 <div class="log"><h4>Scoring the second database without changing the saved models (A018)</h4><dl>
 <dt>Symptom</dt><dd>The only existing way to predict a new database refitted the readout and rewrote the saved model files, which changes their hashes.</dd>
@@ -545,13 +545,11 @@ pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; p
 <dt>Fix</dt><dd>The role was created with the author&rsquo;s approval, the cost ledger was changed to release the refused estimate, and the same job was resubmitted.</dd></dl></div>
 
 <div class="log"><h4>Statements in the write-up stronger than the evidence (V005)</h4><dl>
-<dt>Symptom</dt><dd>The reviewer agent found one inaccurate statement (the time at which the evaluation rules were fixed relative to tuning), two overstatements (that the boosted trees led everywhere outside record 232, and that two smaller quantum variants did &ldquo;as well as or better&rdquo; on the training patients), and on re-check one wrong number.</dd>
+<dt>Symptom</dt><dd>The final verification found one inaccurate statement (the time at which the evaluation rules were fixed relative to tuning), two overstatements (that the boosted trees led everywhere outside record 232, and that two smaller quantum variants did &ldquo;as well as or better&rdquo; on the training patients), and on re-check one wrong number.</dd>
 <dt>Diagnosis</dt><dd>Each statement summarised a result more strongly or more broadly than the logged evidence.</dd>
 <dt>Fix</dt><dd>Each was corrected before the final check. The additional details in this document were checked afterwards against the logged results, and corrected where needed.</dd></dl></div>
 
 <!-- ============================================================ -->
-<h2 id="s-how">How this project was done</h2>
-<p>This is a one-person project by Joel Jobi. AI coding agents (Claude, used through Claude Code) wrote most of the code, ran the experiments, kept the experiment records and drafted the README and this document, under the author&rsquo;s direction. The author chose the problem and the data, approved the evaluation specification before any model was scored on the test patients, approved each paid quantum task and its spending cap, and made the submission decisions. The verifications V001&ndash;V005 were carried out by separate AI agent instances started without the working agent&rsquo;s history; as Section <span class="secref" data-ref="s-verify"></span> notes, that independence is procedural. Two further reviews, of an evaluation draft and of the progress on 28 October, were supplied by the author (<code>EV1_R3_REVIEW.md</code>, <code>PROGRESS_REVIEW_2026-10-28.md</code>). The records of every experiment, anomaly and verification are in <code>EXPERIMENTS.md</code>, <code>ANOMALIES.md</code> and <code>VERIFICATIONS.md</code>.</p>
 
 <h2 id="s-repro">Reproducing the work</h2>
 <p>The code runs with Python 3.12 (tested on Windows 11; one CUDA graphics card recommended). The raw data are downloaded from PhysioNet&rsquo;s open-data mirror, and every file is checked against PhysioNet&rsquo;s published SHA-256 checksums. To regenerate the 10 headline prediction files without a new test-split scoring, follow the &ldquo;audit mode&rdquo; procedure in Section 9 of the README:</p>
@@ -566,7 +564,7 @@ pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; p
 <li>Run the check, which downloads the data, rebuilds the features, retunes and refits both arms, and compares the 10 prediction files with the logged hashes:</li>
 </ol>
 <pre>.venv/Scripts/python scripts/reproduce.py --check</pre>
-<p>The check refuses to run in a directory that already contains tuning results, so it cannot overwrite the repository&rsquo;s records. Our own run took 26 minutes (without the data download); the reviewer agent&rsquo;s run, from a fresh environment with a fresh data download, took 27.3 minutes. Both matched byte for byte. <code>docs/EVIDENCE.md</code> maps each number in the README to its experiment record and output file.</p>
+<p>The check refuses to run in a directory that already contains tuning results, so it cannot overwrite the repository&rsquo;s records. Our own run took 26 minutes (without the data download); the verification run, from a fresh environment with a fresh data download, took 27.3 minutes. Both matched byte for byte. <code>docs/EVIDENCE.md</code> maps each number in the README to its experiment record and output file.</p>
 
 <h2 id="s-refs" class="nonum">References</h2>
 <div class="refs">

@@ -28,7 +28,7 @@ Ratings: low / medium / high. Status: backlog / parked / probing / passed / fail
 - **Status:** passed (2026-10-26 22:16; the control's criterion is to report the result either way)
 
 ## I009
-- **Grounding:** the human-supplied progress review (2026-10-28, P1): no strong non-reservoir classical model was run; the RR-only readout (E006, 0.700) already gives most of the performance. EVAL.md rule 7 lists "a strong classical reference for context only".
+- **Grounding:** the progress review supplied by the author (2026-10-28, P1): no strong non-reservoir classical model was run; the RR-only readout (E006, 0.700) already gives most of the performance. EVAL.md rule 7 lists "a strong classical reference for context only".
 - **Hypothesis (mechanism and prediction):** a nonlinear tabular learner on the same inputs (patient-relative window + RR) is a stronger classical reference than the matched ESN; if it matches or beats E003, the quantum arm's position is "comparable to a strong classical model at best".
 - **Control:** E003 and E002 as candidates against E016 as the base (positive = the reservoir arm is better).
 - **Smallest informative experiment:** E016: HistGradientBoosting, N = 30 DS1 configurations (20-minute cap), 5 seeds, DS1 OOF (proxy), then two ds2s secondary comparisons (full, descriptive). Post-hoc: chosen after the ds2s results; disclosed.

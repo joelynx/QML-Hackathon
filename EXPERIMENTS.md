@@ -44,10 +44,10 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Tuning protocol (rule 3):** each configuration is scored with reservoir seed 0 (and shot seed 0 for QRC) by pooled out-of-fold macro-F1 over the DS1 N/S/V units on the fixed folds `ds1_folds.json` (a *proxy* result). The configuration score is the best over the λ grid. The best (configuration, λ) wins; ties go to the lower index. No other selection, no reading of ds2s, ds2 or svdb.
 - **Final runs:** seed indices 0-4 in both arms (rule 1). Reservoir seed s; QRC shot seed 1000 + s. The readout is refitted on all DS1 units with the selected λ. Model artifacts and run manifests per seed in `runs/E00X/`. Seed 0 is the tuning reservoir draw in both arms (a small, symmetric selection effect on DS1 only).
 - **Seed-noise diagnostic (EVAL.md):** E002 seeds 0-4 against E002 seeds 5-9 on pooled DS1 out-of-fold predictions, `compare --split ds1 --role diagnostic`.
-- **Headline pair (rule 4), named before any run:** candidate **E003** (QRC, 5 seeds) against baseline **E002** (ESN R0, 5 seeds) on ds2s, `compare --role headline`. It runs only after the human approves the evaluation version, and only after both arms pass the full-pipeline lookahead check.
+- **Headline pair (rule 4), named before any run:** candidate **E003** (QRC, 5 seeds) against baseline **E002** (ESN R0, 5 seeds) on ds2s, `compare --role headline`. It runs only after the author approves the evaluation version, and only after both arms pass the full-pipeline lookahead check.
 
 ## E001
-- **Date / owner:** 2026-10-26 ~18:55-19:00 UAE / agent
+- **Date:** 2026-10-26 ~18:55-19:00 UAE
 - **Idea / anomaly links:** A009
 - **Hypothesis and predeclared decision criterion:** exploratory, no criterion; the aim was to choose the shared reservoir input before tuning. Recorded as a design probe.
 - **Change:** linear readout on RR only, raw window + RR, patient-relative window + RR, raw + relative + RR, and one untuned ESN and QRC configuration on either input.
@@ -56,7 +56,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Comparison baseline:** none (diagnostic)
 - **Component / dependency parents:** none
 - **Evaluation version / data and split IDs:** EV1 draft r4 data (DS1 rebuilt after R1); `ds1_folds.json`
-- **Environment and exact command:** inline Python in the session (copied in `runs/probes/P01_morphology/stdout.txt`)
+- **Environment and exact command:** inline Python (copied in `runs/probes/P01_morphology/stdout.txt`)
 - **Seeds / repetitions / variants attempted in this line:** 6 feature sets x 5 λ values, one seed each
 - **Raw results and artifacts:** `runs/probes/P01_morphology/scores.json`, `stdout.txt`
 - **Baseline score / candidate score / signed delta:** OOF macro-F1 at the best λ: RR only 0.637; raw window + RR 0.546; relative window + RR 0.619; raw + relative + RR 0.553; ESN(relative) + RR 0.634; QRC(relative) + RR 0.600. Earlier, on raw windows: ESN + RR 0.522, QRC + RR 0.537.
@@ -72,7 +72,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** one untuned configuration per reservoir; DS1-only evidence. RR alone is competitive with every reservoir (A009), so the R0 slice may not beat an RR-only readout.
 
 ## E002
-- **Date / owner:** 2026-10-26 / agent
+- **Date:** 2026-10-26
 - **Idea / anomaly links:** none (the R0 reference of Phase 3)
 - **Hypothesis and predeclared decision criterion:** none; R0 is the reference. Validity-only verification after its ds2s score exists.
 - **Change:** matched leaky-tanh ESN arm as declared above.
@@ -91,12 +91,12 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Cost:** < 0.1 GPU-h, USD 0
 - **Execution:** completed
 - **Outcome:** not assessed (R0 has no baseline)
-- **Verification:** **pass**: V004 (validity-only, critic agent, 2026-10-26 21:53-22:06; `VERIFICATIONS.md`, `runs/V004/`). The critic reran tuning, finals and the lookahead check with pipeline `55884b1fb66732b9`. It reproduced every ds2s prediction file byte-identically to the logged headline inputs, and every DS1 OOF file and model array. It ran no ds2s scoring. Findings, none blocking: M1, the packet named `ad80a50e` as the current revision while `55884b1f` was on disk (the rerun used `55884b1f`); M2, the tuning scores come from float32 code (A011); M3, README reproduction text, fixed 22:09; M4, the download script did not pin the sums-file hash, fixed 22:09; M5, the clean copy ran 37 of 38 fixtures because SVDB was not built.
+- **Verification:** **pass**: V004 (validity-only review, 2026-10-26 21:53-22:06; `VERIFICATIONS.md`, `runs/V004/`). The reviewer reran tuning, finals and the lookahead check with pipeline `55884b1fb66732b9`. It reproduced every ds2s prediction file byte-identically to the logged headline inputs, and every DS1 OOF file and model array. It ran no ds2s scoring. Findings, none blocking: M1, the packet named `ad80a50e` as the current revision while `55884b1f` was on disk (the rerun used `55884b1f`); M2, the tuning scores come from float32 code (A011); M3, README reproduction text, fixed 22:09; M4, the download script did not pin the sums-file hash, fixed 22:09; M5, the clean copy ran 37 of 38 fixtures because SVDB was not built.
 - **Adoption:** **incumbent** (R0), from 2026-10-26 22:07 UAE
 - **Limitations and next action:** λ at the lower edge of the declared grid (A010): the extended-grid fairness check is E010/E011, scored later as a secondary comparison. The PASS does not establish that the ESN baseline is fully tuned.
 
 ## E003
-- **Date / owner:** 2026-10-26 / agent
+- **Date:** 2026-10-26
 - **Idea / anomaly links:** none (the first quantum arm of the slice)
 - **Hypothesis and predeclared decision criterion:** the finite-shot quantum reservoir features improve macro-F1 on ds2s over the matched ESN, under the EV1 decision rule (role headline: delta >= +0.02, 95% CI lower bound > 0, delta without record 232 > 0). Slice members S_f1 and V_f1 at 98.75%.
 - **Change:** 10-qubit QRC arm as declared above.
@@ -114,13 +114,13 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Mechanism check:** full-pipeline lookahead check on 731 DS1 beats: **passed** (0 violations). The simulator matches an independent dense-matrix implementation to 4e-7. Finite-shot features are batch-invariant (per-beat Philox streams, float64 CDF).
 - **Cost:** < 0.1 GPU-h, USD 0
 - **Execution:** completed
-- **Outcome:** **no detectable change** (primary, headline; EV1, and identically under EV2). Slice family complete under EV2 (98.75%): **V_f1 +0.0688 [+0.0207, +0.1543] favorable**; S_f1 -0.0231 [-0.1456, +0.0978], lowdata_k5 (E007) -0.0086 [-0.0858, +0.0794], lowdata_k11 (E008) -0.0308 [-0.1045, +0.0546], each no detectable change. Scorecard Performance anchor 2 conditions are met (no detectable change overall; one family member with lower bound > 0; all four reported), pending the critic's rating.
+- **Outcome:** **no detectable change** (primary, headline; EV1, and identically under EV2). Slice family complete under EV2 (98.75%): **V_f1 +0.0688 [+0.0207, +0.1543] favorable**; S_f1 -0.0231 [-0.1456, +0.0978], lowdata_k5 (E007) -0.0086 [-0.0858, +0.0794], lowdata_k11 (E008) -0.0308 [-0.1045, +0.0546], each no detectable change. Scorecard Performance anchor 2 conditions are met (no detectable change overall; one family member with lower bound > 0; all four reported), pending the reviewer's rating.
 - **Verification:** not requested (the primary does not meet the decision rule; the slice claim will be verified with the final candidate)
 - **Adoption:** candidate (does not replace R0: no favorable primary outcome)
 - **Limitations and next action:** the V gain over the ESN is reproduced by the classical mean-field model of the same circuit (E004: E003 vs E004 +0.0039 [-0.0028, +0.0115]; V F1 0.874 for both). It is therefore not attributable to quantum correlations (A016). Removing the couplings (E005) lowers V F1 (-0.063 [-0.132, -0.021]) and raises S F1. A010 caveat: E010/E011 pending. **EV2 rerun:** `runs/E003/compare_ds2s_headline_EV2.json`, logged 22:15:23 as EV2's first scoring. Every number and interval is identical to the EV1 run (only the command, scorer revision and time differ). Tables: `runs/tables/headline_ds2s.md`.
 
 ## E004
-- **Date / owner:** 2026-10-26 ~19:30 UAE / agent
+- **Date:** 2026-10-26 ~19:30 UAE
 - **Idea / anomaly links:** I001, A012
 - **Hypothesis and predeclared decision criterion:** control, no criterion (EVAL.md rule 7). If the QRC's advantage were quantum, the mean-field model of the same gates would score lower.
 - **Change:** `reservoirs.MeanField` with E003's selected configuration and λ (no tuning of its own). Product-state Bloch vectors, ZZ gates replaced by neighbour-driven Z rotations, ZZ readout = product of single-qubit values; 1,024 shots per circuit as independent bits from per-beat Philox streams. Validated: it equals the exact statevector QRC at J = 0 to 3.5e-6.
@@ -144,7 +144,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** a secondary comparison: descriptive, not part of the slice family. Consequence: the headline's V gain over the ESN is shared by a classical simulation of the same gates (A016).
 
 ## E005
-- **Date / owner:** 2026-10-26 ~19:30 UAE / agent
+- **Date:** 2026-10-26 ~19:30 UAE
 - **Idea / anomaly links:** I002, A012
 - **Hypothesis and predeclared decision criterion:** control, no criterion (EVAL.md rule 7): removes every entangling gate.
 - **Change:** E003's configuration with J = 0; everything else identical (QRC simulator, 1,024 shots).
@@ -168,7 +168,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** J = 0 lies outside the declared QRC search space (J ~ U[0.1, 1.5]). The DS1 proxy advantage of the separable variant (+0.012) did not carry over to ds2s overall (-0.0009). A016.
 
 ## E006
-- **Date / owner:** 2026-10-26 ~19:45 UAE / agent
+- **Date:** 2026-10-26 ~19:45 UAE
 - **Idea / anomaly links:** I003, A009
 - **Hypothesis and predeclared decision criterion:** control, no criterion (EVAL.md rule 7: "RR plus handcrafted features alone").
 - **Change:** the shared readout on the 8 RR features only; λ chosen from the declared grid by DS1 OOF (0.1).
@@ -192,7 +192,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** RR features use the next beat (one-beat lookahead) as EVAL.md allows. On ds2s the RR-only readout is close to the ESN arm overall (0.700 vs 0.707); its S F1 (0.390) is the highest of the three and its V F1 (0.739) the lowest. The reservoirs' contribution is mainly on V.
 
 ## E007
-- **Date / owner:** 2026-10-26 21:37-21:40 UAE / agent
+- **Date:** 2026-10-26 21:37-21:40 UAE
 - **Idea / anomaly links:** EVAL.md slice (c) (pre-registered slice family member `lowdata_k5`)
 - **Hypothesis and predeclared decision criterion:** slice family member (EVAL.md Comparison procedure): macro-F1 delta of the refitted QRC arm over the refitted ESN arm on ds2s, 98.75% CI, slice rule.
 - **Change:** both headline arms keep their full-DS1 configuration and λ (E003 configuration 15, λ 0.1; E002 configuration 28, λ 0.001), reservoir seeds 0-4 and shot seeds 1000-1004. The readout's normalisation and weights are refitted on the 13,283 N/S/V units of the frozen k = 5 subset only. Assumption: λ is part of the selected configuration, so it is kept and not re-selected on the subset; EVAL.md lists "input normalisation, readout weights, decision rule" as refitted quantities.
@@ -216,7 +216,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** one subset per k (subset-selection uncertainty not measured); λ kept from full DS1 (assumption). The QRC refit loses S F1 and gains V F1, as in the headline; without 232 the delta is positive (+0.0425). The EV2 provenance checks (D4) accepted these runs before any label was read. Table `runs/tables/lowdata_k5_ds2s.md`.
 
 ## E008
-- **Date / owner:** 2026-10-26 21:41-21:44 UAE / agent
+- **Date:** 2026-10-26 21:41-21:44 UAE
 - **Idea / anomaly links:** EVAL.md slice (c) (`lowdata_k11`)
 - **Hypothesis and predeclared decision criterion:** as E007, with k = 11.
 - **Change:** as E007, refitted on the 25,375 N/S/V units of the frozen k = 11 subset (106, 112, 115, 116, 119, 124, 205, 208, 209, 220, 223).
@@ -240,7 +240,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** one subset per k (subset-selection uncertainty not measured); λ kept from full DS1 (assumption). The QRC refit loses S F1 and gains V F1, as in the headline; without 232 the delta is positive (+0.0286). The EV2 provenance checks (D4) accepted these runs before any label was read. Table `runs/tables/lowdata_k11_ds2s.md`.
 
 ## E009
-- **Date / owner:** 2026-10-26 21:42-21:46 UAE / agent
+- **Date:** 2026-10-26 21:42-21:46 UAE
 - **Idea / anomaly links:** A015 (open question), A010
 - **Hypothesis and predeclared decision criterion:** diagnostic, no criterion. Question: is the QRC arm's lower false-alarm rate on ds2s a property of its features, or of its stronger selected readout regularisation (λ 0.1 vs 0.001)?
 - **Change:** none to any arm. Both headline configurations (E002 cfg28, E003 cfg15), seeds 0-4 (QRC shot seeds 1000-1004), are scored by pooled DS1 out-of-fold predictions at each λ of the declared grid.
@@ -270,7 +270,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** DS1 proxy only. On DS1 the QRC features give fewer V false positives at every λ; the S false-positive reduction appears mainly at the QRC's selected λ = 0.1. At the ESN's λ = 0.001 the ESN is slightly better overall, and stronger regularisation hurts the ESN monotonically. On DS1 the ESN's V F1 is higher at its selected λ (0.774 vs 0.742); on ds2s the QRC's is (0.874 vs 0.805).
 
 ## E010
-- **Date / owner:** 2026-10-26 21:52 UAE (declared before running) / agent
+- **Date:** 2026-10-26 21:52 UAE (declared before running)
 - **Idea / anomaly links:** A010
 - **Hypothesis and predeclared decision criterion:** fairness check, no criterion. The ESN's selected λ sits at the lower edge of the declared grid. If the classical arm was under-regularised-tuned, an extended grid should raise its DS1 OOF score and change the ds2s comparison. Declared before running: the same 30 configurations (`sample_configs`, seed 20261026), tuning seed 0, nested grid λ ∈ {1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1}, best (configuration, λ) by pooled DS1 OOF macro-F1, ties to the lower index and the earlier grid value; final seeds 0-4 like E002. Reported as a `secondary` comparison E011 vs E010 on ds2s, alongside the headline, never replacing it.
 - **Change:** readout grid extended downward (two values) for tuning; nothing else.
@@ -294,7 +294,7 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 - **Limitations and next action:** A010 resolved: extending the grid does not change the selection, so the planned secondary comparison E011 vs E010 would repeat the headline exactly and was not run (no test-split access spent). Only 5 of 30 ESN configurations prefer λ < 1e-3 under the extended grid, none of them the selected one.
 
 ## E011
-- **Date / owner:** 2026-10-26 21:52 UAE (declared before running) / agent
+- **Date:** 2026-10-26 21:52 UAE (declared before running)
 - **Idea / anomaly links:** A010
 - **Hypothesis and predeclared decision criterion:** as E010, for the QRC arm, so that both arms get the same extended budget.
 - **Change:** as E010.
@@ -319,15 +319,15 @@ Code: `src/qhc/pipe/` (pipeline revision `cf7bd4bd0a9634f8` at declaration; ever
 
 ## Phase 4 declarations (2026-10-28 ~18:50 UAE, written before any E012+ model run; the free calibration fetch, device search and SVDB feature build started 18:45-18:48)
 
-Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and at session start ~18:36 (probe-count limit lifted for this session; 20 min per probe, 3 GPU-h per run and per-task Braket approval stay; Braket cap USD 35; experiment freeze 22:00; push by 23:30).
+Authorized by the author 2026-10-28 ~18:20 ("Don't drop the experiments...") and again at ~18:36 (probe-count limit lifted for this work period; 20 min per probe, 3 GPU-h per run and per-task Braket approval stay; Braket cap USD 35; experiment freeze 22:00; push by 23:30).
 
 - **Status of every ds2s comparison below:** `--role secondary`, descriptive. Every one is chosen after the ds2s headline and control results were seen (post-hoc choices, disclosed in the README). None replaces the headline E003 vs E002, none joins the slice family, and none can turn the inconclusive primary or the mean-field attribution (A016) into a quantum-benefit claim.
-- **Test-split budget:** 7 of 15 used; 8 left. Declared here: E012 (1), E014 (1), E015 (1), E016 (2) = 5; 3 spare. Only the coordinator runs `qhc.evaluate compare/score` on ds2s, ds2 or svdb; lanes write label-free predictions and manifests only.
+- **Test-split budget:** 7 of 15 used; 8 left. Declared here: E012 (1), E014 (1), E015 (1), E016 (2) = 5; 3 spare. `qhc.evaluate compare/score` on ds2s, ds2 or svdb is run only centrally, never from a compute lane; the lanes write label-free predictions and manifests only.
 - **Code rule:** evaluation code (`src/qhc/*.py`, EV2 `8501643023cd2eb6`) and the existing pipeline (`src/qhc/pipe/*.py`, `55884b1fb66732b9`) are not edited. New code goes in `src/qhc/p4/<module>.py`; run manifests record `code_revision` as `eval <rev> / pipe <rev> / p4 <module> <sha16>`.
 - **Common protocol unless a card says otherwise:** E003's selected QRC configuration (cfg15: input scale 0.317, J 0.106, h 0.159, depth 2, ring, disorder 0.421); readout `readout.Readout`, λ grid {0.001, 0.01, 0.1, 1}; DS1 OOF on the fixed folds `ds1_folds.json`; 5 seeds (reservoir seed s, shot or noise seed 1000 + s, s = 0-4); the readout is refitted on all DS1 units for ds2s predictions.
 
 ## E012
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (GPU0 lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / GPU0 lane
 - **Idea / anomaly links:** I004; review P2
 - **Hypothesis and predeclared decision criterion:** ablation, no decision criterion. Finite-shot noise (1,024 shots) may act as a regulariser or as a cost; exact expectations (`shots=None`) isolate it.
 - **Change:** `reservoirs.QRC(shots=None)` with E003's configuration and λ = 0.1 (fixed, not reselected); shot seed n/a.
@@ -347,7 +347,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Limitations and next action:** shot noise at 1,024 shots costs nothing measurable on ds2s; the measurement model is not what limits the QRC arm.
 
 ## E013
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (GPU0 lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / GPU0 lane
 - **Idea / anomaly links:** I004; review P2
 - **Hypothesis and predeclared decision criterion:** proxy sweep, no decision criterion. Prediction: DS1 OOF macro-F1 flat from 1,024 shots upward, lower at 64 shots.
 - **Change:** shots in {64, 256, 4096} (1,024 = E003, exact = E012), E003's configuration, λ fixed at 0.1; the best λ from the grid reported as a second column.
@@ -366,7 +366,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Limitations and next action:** prospective hardware arithmetic: 256 shots per circuit would cost about 0.008 DS1 macro-F1 (proxy) at a quarter of the shots.
 
 ## E014
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (GPU0 lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / GPU0 lane
 - **Idea / anomaly links:** I007
 - **Hypothesis and predeclared decision criterion:** ablation. K changes, so these are not members of the headline search (rule 2).
 - **Change:** (a) qubit count n in {6, 8, 12}: each 10-sample input chunk is linearly resampled to n points (`np.interp`; identity at n = 10), ring over n qubits, couplings drawn from the reservoir seed, Z + ZZ readout per snapshot, K = 4(n + n(n-1)/2) = 84, 144, 312; (b) n = 10 with Z-only readout, K = 40. Everything else as E003 (1,024 shots). λ selected per variant from the declared grid by seed-0 DS1 OOF (the tuning protocol), then 5 seeds at that λ.
@@ -386,7 +386,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Limitations and next action:** confound: changing n also resamples each 10-sample chunk to n points, so qubit count and input resolution move together. Smaller readouts (n = 6, Z-only) score higher on DS1 (A020). More qubits did not help.
 
 ## E015
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (GPU1 lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / GPU1 lane
 - **Idea / anomaly links:** I005; review P2; EVAL.md hardware and noise tracks
 - **Hypothesis and predeclared decision criterion:** device-noise simulation, a secondary candidate (EVAL.md). Prediction: at current two-qubit error rates the 80 ZZ gates per beat (160 native two-qubit gates) shrink the ZZ correlators and move V F1 towards the separable control's.
 - **Change:** E003's circuit (seed couplings) simulated with stochastic Pauli trajectories: depolarising error after every single-qubit gate (median 1q error), two-qubit depolarising error after each of the 2 native two-qubit gates per ZZ (median 2q error), and per-qubit readout assignment error on every sampled bit. Rates come from the device calibration returned by the free Braket `GetDevice` call at fetch time (recorded with the time), for Rigetti Cepheus-1-108Q and IQM Garnet; if a device returns none, the provider's published figures with their source. 1,024 shots per circuit, split over trajectories; per-beat Philox streams keyed by (beat key, seed), so features do not depend on batching. The readout is trained on noisy DS1 features (noise-aware). Declared limitations: no idle T1/T2 decay, no crosstalk, no routing (a 10-qubit ring is assumed embeddable).
@@ -408,7 +408,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Limitations and next action:** no idle T1/T2 decay, crosstalk or routing; on Rigetti arbitrary rotations compile to more than one pulse, so 1q error is probably underestimated; the noise simulation is therefore optimistic. The noise-aware readout recovers macro-F1 by moving the decision towards S; the V-class gain over the ESN (the headline's favorable slice) does not survive device noise at Rigetti's rates.
 
 ## E016
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (CPU B lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / CPU B lane
 - **Idea / anomaly links:** I009 (review P1); EVAL.md rule 7, "a strong classical reference for context only"
 - **Hypothesis and predeclared decision criterion:** context, no criterion. Post-hoc: chosen after the ds2s results (the review found no strong non-reservoir classical model); disclosed.
 - **Change:** `HistGradientBoostingClassifier` (scikit-learn 1.9.1) on the reservoir arms' inputs plus RR: [patient-relative window (40) | RR block (8)]; class-balanced sample weights; no early stopping. DS1 budget N = 30 configurations drawn i.i.d. with `default_rng(20261026)`: learning rate log-U[0.02, 0.3]; max leaf nodes in {15, 31, 63, 127}; min samples per leaf in {20, 50, 100, 200}; L2 log-U[1e-3, 10]; max iterations in {100, 200, 300}; max features U[0.5, 0.9] (so seeds differ). Scored by pooled DS1 OOF macro-F1 on the fixed folds with random state 0, in index order; the best wins, ties to the lower index. 20-minute wall-clock cap on the search: configurations not reached are recorded as not evaluated (realised N reported). Final: random states 0-4, refitted on all DS1 units.
@@ -428,7 +428,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Limitations and next action:** post-hoc (chosen after the ds2s results). The overall tie is carried by record 232's S beats, which the boosted trees rarely predict (A019); pooled over the other 20 records the boosted trees lead (−0.087 against E003, −0.133 against E002), though not in every record (not in 100, 123, 210 or 219; V005 F2), and their V F1 is higher than both reservoir arms' with a 95% CI that excludes 0. The matched ESN is a controlled comparator, not the strongest classical model.
 
 ## E017
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (CPU C lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / CPU C lane
 - **Idea / anomaly links:** I008; A016; scorecard Depth anchor 3
 - **Hypothesis and predeclared decision criterion:** diagnostic. If the QRC and mean-field feature maps are near-identical as kernels (linear CKA near 1, geometric difference near 1), A016's attribution is supported at the representation level; per-patient kernel-target alignment shows where each map helps.
 - **Change:** seed-0 DS1 features of E003 (QRC, 1,024 shots), the exact QRC (E012 setting), E004 (mean-field), E005 (separable), E002 (ESN) and RR only; standardised; linear kernels (the readout is linear). Centered kernel-target alignment (one-hot N/S/V targets, V-vs-rest, S-vs-rest) per DS1 record and pooled on a seeded stratified subsample; linear CKA between maps; the geometric difference of Huang et al. 2021 between the QRC and each classical map on a seeded subsample of 2,000 beats, trace-normalised, with a stated regulariser.
@@ -443,10 +443,10 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Mechanism check:** regenerated reservoirs equal the saved artifacts; reference rows calibrate the scale of "same map".
 - **Cost:** < 0.05 GPU-h, USD 0
 - **Execution:** completed | **Outcome:** not assessed (diagnostic) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
-- **Limitations and next action:** at the representation level the mean-field map is as close to the QRC as the QRC is to itself under a new shot or reservoir seed, which supports A016; linear kernels on measured expectations, DS1 only. KTA does not predict readout F1 (the separable map has the highest KTA but the lowest ds2s V F1). References verified via paperfetch: Kornblith et al., ICML 2019, PMLR 97:3519-3529; Cortes, Mohri & Rostamizadeh, JMLR 13:795-828 (2012); Huang et al., Nat. Commun. 12, 2631 (2021), doi:10.1038/s41467-021-22539-9.
+- **Limitations and next action:** at the representation level the mean-field map is as close to the QRC as the QRC is to itself under a new shot or reservoir seed, which supports A016; linear kernels on measured expectations, DS1 only. KTA does not predict readout F1 (the separable map has the highest KTA but the lowest ds2s V F1). References checked in a literature search: Kornblith et al., ICML 2019, PMLR 97:3519-3529; Cortes, Mohri & Rostamizadeh, JMLR 13:795-828 (2012); Huang et al., Nat. Commun. 12, 2631 (2021), doi:10.1038/s41467-021-22539-9.
 
 ## E018
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (CPU A lane; the coordinator runs the access)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / CPU A lane (the test-split access itself is run centrally, not from the lane)
 - **Idea / anomaly links:** A018; EVAL.md confirmation policy; progress-review takeaways
 - **Hypothesis and predeclared decision criterion:** the pre-registered SVDB confirmation of the frozen headline pair E003 vs E002. *Confirmed* if the SVDB paired delta is > 0 and its 95% CI lower bound is > 0 (EVAL.md, fixed 2026-10-26).
 - **Change:** none to the models. A predict-only path (`src/qhc/p4/predict.py`) loads each of the 10 saved headline artifacts, checks the regenerated reservoir against the saved `res_*` arrays, the shot count and the configuration, and writes predictions and manifests without touching the artifact. **Precondition:** its ds2s self-check (in a scratch directory) reproduces all 10 logged headline prediction hashes; hashes only, nothing scored. Then SVDB predictions, then `compare --split svdb --role confirmation` (its built-in placeholder-label preflight runs first).
@@ -467,13 +467,13 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Limitations and next action:** the ds2s V-class gain did not transfer: on SVDB the QRC arm's V F1 equals the ESN's (0.570 vs 0.574); its V PPV is higher (0.544 vs 0.463) and its V sensitivity lower (0.600 vs 0.763), the same direction of trade-off as on ds2s but without the F1 gain. SVDB differs in sampling rate (128 Hz, resampled) and lead; possible subject overlap with MIT-BIH (A006). The predict-only path ran with pipeline `55884b1fb66732b9` while the artifacts record `da67af87f8b8fd73`; the ds2s hash match covers the MIT-BIH path, and the SVDB resampling branch has no earlier reference output. No repair access is planned: no implementation defect is known.
 
 ## E019
-- **Date / owner:** 2026-10-28 18:50 UAE (declared before running) / agent (Braket lane)
+- **Date / compute lane:** 2026-10-28 18:50 UAE (declared before running) / Braket lane
 - **Idea / anomaly links:** I006; EVAL.md hardware track
 - **Hypothesis and predeclared decision criterion:** diagnostic, label-free: how far hardware features of E003's seed-0 circuit are from the finite-shot and exact simulations (per-feature correlation, mean absolute difference), and how often the seed-0 readout's predicted class agrees with the simulation's. No macro-F1 is claimed.
-- **Change:** a seeded draw of ds2s beats stratified by the seed-0 simulated predicted class (label-free; fixed before any task), 4 snapshot circuits per beat, several beats packed on disjoint 10-qubit rings of one device per task; device allowlist, shot cap and cost ledger in code. **Every task needs the human's approval with a cost estimate; Braket cap USD 35.** Abandoned and reported if results are not back by 21:30.
+- **Change:** a seeded draw of ds2s beats stratified by the seed-0 simulated predicted class (label-free; fixed before any task), 4 snapshot circuits per beat, several beats packed on disjoint 10-qubit rings of one device per task; device allowlist, shot cap and cost ledger in code. **Every task needs the author's approval with a cost estimate; Braket cap USD 35.** Abandoned and reported if results are not back by 21:30.
 - **Result type:** diagnostic
 - **Evaluation version / data and split IDs:** EV2; ds2s beats (inputs only, no labels read)
-- **Approval and cost:** the human approved Rigetti Cepheus-1-108Q, 48 beats, 1 program-set task, cap USD 18.00 (AskUserQuestion, ~19:20 UAE). First submission refused by AWS before creation (missing service-linked role `AWSServiceRoleForAmazonBraket`; 0 tasks created, checked with `search_quantum_tasks`; USD 0). The human approved creating the role via API (done 15:57:26 UTC) and resubmitting the same job; `scripts/braket_submit.py` `ledger_total` was changed to release a refused pre-submit estimate (recorded in the ledger). Task `arn:aws:braket:us-west-1:…:quantum-task/73e0c152-76d6-432a-98fb-738ab43b9308` submitted 15:58:21 UTC, completed within minutes; results fetched with `AWS_PROFILE=qhack` (the SDK's program-set result reader ignores the session's profile). **Estimated cost USD 17.71** (USD 0.30 + 40 × 1,024 × 0.000425; actual billing to be checked by the human).
+- **Approval and cost:** the author approved Rigetti Cepheus-1-108Q, 48 beats, 1 program-set task, cap USD 18.00 (~19:20 UAE). First submission refused by AWS before creation (missing service-linked role `AWSServiceRoleForAmazonBraket`; 0 tasks created, checked with `search_quantum_tasks`; USD 0). The author approved creating the role via API (done 15:57:26 UTC) and resubmitting the same job; `scripts/braket_submit.py` `ledger_total` was changed to release a refused pre-submit estimate (recorded in the ledger). Task `arn:aws:braket:us-west-1:…:quantum-task/73e0c152-76d6-432a-98fb-738ab43b9308` submitted 15:58:21 UTC, completed within minutes; results fetched with `AWS_PROFILE=qhack` (the SDK's program-set result reader ignores the session's profile). **Estimated cost USD 17.71** (USD 0.30 + 40 × 1,024 × 0.000425; actual billing to be checked by the author).
 - **Candidate revision + config:** `src/qhc/p4/braket_hw.py`, `scripts/braket_submit.py` (`.venv-braket`); E003 seed-0 circuit (couplings from `runs/E003/model_seed0.npz`), 48 ds2s beats (16 per seed-0 simulated predicted class, `default_rng(20261026)`, `runs/E019/beats.json`, label-free), 4 snapshot circuits per beat, 5 disjoint 10-qubit rings per circuit (verbatim native gates on pinned physical qubits), 40 circuits x 1,024 shots
 - **Environment and exact command:** `.venv-braket/Scripts/python scripts/braket_submit.py submit --plan runs/E019/plan_rigetti_b48.json --mode programset`; `... fetch ...`; `python -I -m qhc.p4.braket_hw analyse`
 - **Raw results and artifacts:** `runs/E019/` (`results/*.json` per circuit with counts and task ARN, `analysis.json`, `analysis_features.npz`, `cost_ledger.jsonl`, `approval.json`, plans, device JSON, pricing, `submit*_stdout.txt`, `fetch_stdout.txt`, `analyse_stdout.txt`)

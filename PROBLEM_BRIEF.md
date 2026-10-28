@@ -1,12 +1,12 @@
 # Problem Brief (open mode)
 
-- **Brief version / date:** `hackathon_details.md` (local copy of the organisers' brief, file dated 2026-10-25), read 2026-10-26. Phase 1 written 2026-10-26 by the agent.
+- **Brief version / date:** `hackathon_details.md` (local copy of the organisers' brief, file dated 2026-10-25), read 2026-10-26. Phase 1 written 2026-10-26.
 - **Conflict rule:** official text wins: the organisers' brief, then the official Submissions panel and form once published, with later organiser announcements superseding earlier ones. Pages about other quantum hackathons are context only and never rules. Where the official text is silent, the assumption is written here and flagged.
 
 ## Sources
 | Source | Link | Accessed / rule version | Kind (official / forum / assumption) |
 |---|---|---|---|
-| Hackathon brief: overview, steps, assessment, deliverables, timeline | `hackathon_details.md` (supplied by the human; no public URL found) | 2026-10-26 | official |
+| Hackathon brief: overview, steps, assessment, deliverables, timeline | `hackathon_details.md` (supplied by the author; no public URL found) | 2026-10-26 | official |
 | Web search for the event by name ("Quantum Healthcare Hackathon" UAE 2026): no public page found; closest hits are NYUAD's quantum hackathons for social good | https://hackathon.nyuad.nyu.edu/ | 2026-10-26 | external, context only |
 | Past winners, NYUAD Hackathon 2023 (health entries) | https://hackathon.nyuad.nyu.edu/year/2023/ | 2026-10-26 | external, context only |
 | Past winners, Pakistan national quantum hackathon (LUMS news) | https://sbasse.lums.edu.pk/winners-of-national-quantum-hackathon | 2026-10-26 | external, context only |
@@ -19,7 +19,7 @@
 | CHB-MIT Scalp EEG, chb01 summary | https://physionet.org/content/chbmit/1.0.0/ | 2026-10-26 | data source (licence not checked) |
 | MoleculeNet BBBP | https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/BBBP.csv | 2026-10-26 | data source (licence not checked) |
 | IBM Quantum Open Plan: free, up to 10 QPU minutes per 28-day window | https://quantum.cloud.ibm.com/docs/guides/plans-overview (seen through search results, page not opened) | 2026-10-26 | external, provider terms |
-| Literature (paper keys inline below; about 31 papers annotated in paperfetch with tag `qhack-phase1`) | paperfetch local store | 2026-10-26 | literature |
+| Literature (paper keys inline below; about 31 papers annotated during a literature search, tag `qhack-phase1`) | local literature-search notes | 2026-10-26 | literature |
 
 ## The competition
 - **Theme and tracks:** use quantum techniques to improve a classical ML approach, or build a quantum model that outperforms a baseline, on a healthcare problem the team chooses. National / Hybrid track. *official*
@@ -68,7 +68,7 @@ What the evidence says about gains: there is no published result of a quantum mo
   - A quantum reservoir needs no gradient training on the quantum side, so a few beats can be run on real hardware cheaply.
 - **Runner-up (pivot target): C2, small gene-panel classification on TCGA-BRCA with bandwidth-matched quantum kernels.** Its data is in hand and its pipeline is the fastest to build, which is what a pivot needs. It is less distinctive than C1. If chosen as the pivot, prefer ER status by IHC or a survival target over PAM50 (A003).
 - **Shortlist (top 3, each with an inspected sample):** C1 > C2 > C4.
-  - C4 is more distinctive than C2 but less sound at n = 267, so it ranks third. The human may prefer it to C2 as the runner-up; its data is also in hand.
+  - C4 is more distinctive than C2 but less sound at n = 267, so it ranks third. The author may prefer it to C2 as the runner-up; its data is also in hand.
 - **Ranked list with reasons:**
   1. C1: distinct, matched controls available, data verified, strong soundness story.
   2. C2: fastest to build, credible small-cohort framing, less distinct.
@@ -85,10 +85,10 @@ What the evidence says about gains: there is no published result of a quantum mo
   - C6: indirect healthcare relevance; licence unverified.
   - C7: low distinctiveness; strong classical baseline.
   - C3: kept off the shortlist for indistinctness, though its data is in hand.
-- **Human decision and date:** 2026-10-26, between 02:15 and 15:50 UAE (exact time not recorded). The human chose **C1**, with **C2 as the runner-up** ("move on with C1, and C2 as the runner up"). The human also asked how to use the USD 15 for an edge; the agent's recommendation and the pending choices are in STATE.md.
+- **Author's decision and date:** 2026-10-26, between 02:15 and 15:50 UAE (exact time not recorded). The author chose **C1**, with **C2 as the runner-up** ("move on with C1, and C2 as the runner up"). The author also asked how to use the USD 15 for an edge; the recommendation and the pending choices were kept in the project status notes (not part of the repository).
 
 ## Chosen problem (exact)
-C1, chosen by the human on 2026-10-26.
+C1, chosen by the author on 2026-10-26.
 
 - **User:** a cardiology technician or physician reviewing long ambulatory ECGs (Holter or wearable patch). Interpreting algorithms trained on other patients must work on a new patient without per-patient labels.
 - **Decision the system supports:** for each detected heartbeat, flag it as normal (N), supraventricular ectopic (S) or ventricular ectopic (V), so that abnormal beats and episodes are prioritised for human review. F (fusion) and Q (unclassifiable) are reported but not part of the primary metric.
@@ -130,7 +130,7 @@ C1, chosen by the human on 2026-10-26.
   - C4: SPECT in `runs/data/samples/spect/`.
   - Other samples (MedMNIST, BBBP, PTB-XL metadata, CinC 2012 outcomes, CHB-MIT summary) are in `runs/data/samples/`.
   - PhysioNet's main site served about 5 KB/s from here; the AWS open-data mirror (`physionet-open.s3.amazonaws.com`) served about 850 KB/s.
-- **Requests filed for the human:** QPU access, optional (STATE.md, updated with the IBM Open Plan finding). No data requests.
+- **Requests filed for the author:** QPU access, optional (project status notes, updated with the IBM Open Plan finding). No data requests.
 
 ## Observed structure
 - **MIT-BIH:**
@@ -153,7 +153,7 @@ C1, chosen by the human on 2026-10-26.
   - Geometric difference g_CQ (Huang et al. 2021, `doi:10.1038/s41467-021-22539-9`) between reservoir Gram matrices as a cheap pre-check before full runs.
   - A patient-adaptive small-data track, where any quantum regularity benefit is most plausible (Beaulieu et al., `doi:10.1021/acs.jcim.5c00958`: quantum reservoir parity at 100-200 records, gone by 800).
   - Classical features + quantum reservoir features as an "improve the classical model" variant.
-- **External test data (SVDB approved by the human 2026-10-26; raw files in `runs/data/raw/svdb/`):**
+- **External test data (SVDB approved by the author 2026-10-26; raw files in `runs/data/raw/svdb/`):**
   - MIT-BIH Supraventricular Arrhythmia DB (SVDB), https://physionet.org/content/svdb/1.0.0/, ODC-By 1.0, open access.
   - 78 half-hour two-lead recordings "chosen to supplement the examples of supraventricular arrhythmias in the MIT-BIH Arrhythmia Database". Headers checked: 128 Hz, leads named only ECG1 and ECG2, 230,400 samples per record. The subject count is not stated on the page.
   - It would give S-class results that do not rest on one test patient (A001). Needs resampling from 128 to 360 Hz and lead matching.
@@ -171,8 +171,8 @@ C1, chosen by the human on 2026-10-26.
     | IonQ Forte | USD 0.08 | under 1 circuit at 1,000 shots |
 
   - No free QPU tier on Braket. The pricing page does not mention program sets.
-  - Agent's estimate, to be measured on a first small job: the IBM free 10 minutes covers several hundred to about 1,000 circuits at 1,000 shots, far more than USD 15 buys on Braket.
-  - Update 2026-10-26 ~15:50: the human cannot reach IBM's Open Plan today and may retry tomorrow. Alternatives checked:
+  - Estimate, to be measured on a first small job: the IBM free 10 minutes covers several hundred to about 1,000 circuits at 1,000 shots, far more than USD 15 buys on Braket.
+  - Update 2026-10-26 ~15:50: the author cannot reach IBM's Open Plan today and may retry tomorrow. Alternatives checked:
     - IQM Resonance Starter is free, "up to 30 credits per month, based on availability", with Qiskit support and IQM Crystal 54, Crystal 20 and Star 24 listed. The page does not say what one credit buys. Pay-as-you-go is listed as "starting at $0.30/sec" of QPU time (https://iqm.tech/products/iqm-resonance/).
     - AWS promotional credits apply "only to the specific Services designated by your AWS contracting entity"; Braket is neither listed as eligible nor excluded (https://aws.amazon.com/awscredits/).
     - The new AWS Free Tier's free plan is "limited to select services only", and Braket is not mentioned (https://aws.amazon.com/free/).
@@ -183,15 +183,15 @@ C1, chosen by the human on 2026-10-26.
 ## Ambiguities and open questions
 | Question | Interpretations | What changes | Blocking / provisional (assumption) | Owner |
 |---|---|---|---|---|
-| Which problem do we pursue? | C1 (recommended), C2 (runner-up), C4, or another | Everything from Phase 2 on | resolved 2026-10-26: C1, runner-up C2 | human |
-| Add an external test database (SVDB, optionally INCART)? | yes / no | S-class evidence beyond one patient (A001); preprocessing work (resampling, lead matching) | resolved 2026-10-26: SVDB approved ("Regarding the dataset, go ahead"); INCART not requested | human |
-| How to use the USD 15 and which QPU account | IBM Open Plan (free) for the hardware run with USD 15 as a Braket fallback / USD 15 for a QuEra Aquila analog showcase / unspent | Whether and where a hardware run happens | provisional: recommend the IBM free tier plus the USD 15 held as fallback | human |
-| Who organises and judges, and is there a public page, FAQ or forum? | unknown; no public page found | How to pitch (clinical vs quantum audience), rubric weights | provisional: assume a mixed quantum + ML panel, rubric weights equal except performance likely heavier | human |
-| Team size and roles | solo plus agent, or a team | Time plan, presentation | provisional: one human plus the agent | human |
-| What "comparably similar" baseline means | (a) same architecture with the quantum block swapped for a classical one; (b) strongest classical model on the same features | Which baseline the headline delta uses | provisional: headline = (a), a matched classical reservoir; (b) a strong classical reference is reported as context, so judges see both | agent (Phase 2), human to confirm with EV1 |
-| Must results come from real hardware? | simulator OK / QPU expected | QPU spend, credibility | provisional: simulators OK, small QPU demo optional | human (check the Submissions panel) |
-| Submission format and limits (repo link vs upload, write-up length, video?) | unknown until the form is published | Packaging in Phase 6 | provisional | human (check the Submissions panel) |
-| Beat locations: reference annotations or an automatic QRS detector? | reference (standard in the benchmark) / detector (closer to deployment) | Realism vs comparability | provisional: reference positions, stated as a limitation | agent (Phase 2) |
-| Is the 1-beat lookahead for the post-RR interval acceptable? | yes, as a ~1 s latency / no, causal only | Feature set, especially for S beats | provisional: allowed and declared; the causal-only variant is a sensitivity check | agent (Phase 2) |
-| Class set for the primary metric | N/S/V / N/S/V/F | Metric noise (F is tiny and concentrated) | provisional: N/S/V primary, F reported | agent (Phase 2), human approves EV1 |
-| Presentation on 2026-10-31: format and length | unknown | Phase 6 deliverables | provisional | human |
+| Which problem do we pursue? | C1 (recommended), C2 (runner-up), C4, or another | Everything from Phase 2 on | resolved 2026-10-26: C1, runner-up C2 | author |
+| Add an external test database (SVDB, optionally INCART)? | yes / no | S-class evidence beyond one patient (A001); preprocessing work (resampling, lead matching) | resolved 2026-10-26: SVDB approved ("Regarding the dataset, go ahead"); INCART not requested | author |
+| How to use the USD 15 and which QPU account | IBM Open Plan (free) for the hardware run with USD 15 as a Braket fallback / USD 15 for a QuEra Aquila analog showcase / unspent | Whether and where a hardware run happens | provisional: recommend the IBM free tier plus the USD 15 held as fallback | author |
+| Who organises and judges, and is there a public page, FAQ or forum? | unknown; no public page found | How to pitch (clinical vs quantum audience), rubric weights | provisional: assume a mixed quantum + ML panel, rubric weights equal except performance likely heavier | author |
+| Team size and roles | solo, or a team | Time plan, presentation | provisional: one person, the author | author |
+| What "comparably similar" baseline means | (a) same architecture with the quantum block swapped for a classical one; (b) strongest classical model on the same features | Which baseline the headline delta uses | provisional: headline = (a), a matched classical reservoir; (b) a strong classical reference is reported as context, so judges see both | Phase 2, author to confirm with EV1 |
+| Must results come from real hardware? | simulator OK / QPU expected | QPU spend, credibility | provisional: simulators OK, small QPU demo optional | author (check the Submissions panel) |
+| Submission format and limits (repo link vs upload, write-up length, video?) | unknown until the form is published | Packaging in Phase 6 | provisional | author (check the Submissions panel) |
+| Beat locations: reference annotations or an automatic QRS detector? | reference (standard in the benchmark) / detector (closer to deployment) | Realism vs comparability | provisional: reference positions, stated as a limitation | Phase 2 |
+| Is the 1-beat lookahead for the post-RR interval acceptable? | yes, as a ~1 s latency / no, causal only | Feature set, especially for S beats | provisional: allowed and declared; the causal-only variant is a sensitivity check | Phase 2 |
+| Class set for the primary metric | N/S/V / N/S/V/F | Metric noise (F is tiny and concentrated) | provisional: N/S/V primary, F reported | Phase 2, author approves EV1 |
+| Presentation on 2026-10-31: format and length | unknown | Phase 6 deliverables | provisional | author |

@@ -7,7 +7,7 @@
 Guards (all enforced in code before any paid call):
   * device allowlist: Rigetti Cepheus-1-108Q and IQM Garnet ARNs only (IonQ, AQT, QuEra, others refused);
   * shots <= 1,024 per executable; at most HARD_MAX_TASKS quantum tasks;
-  * runs/E019/approval.json must exist (written by the coordinator after the human approves): device_arn, max_tasks,
+  * runs/E019/approval.json must exist (written after the author approves): device_arn, max_tasks,
     max_usd; the plan's device must match and the number of tasks must not exceed max_tasks;
   * cost ledger runs/E019/cost_ledger.jsonl: the estimated cost is appended BEFORE each submission; refusal if the
     cumulative estimate (all ledger entries) would exceed approval max_usd or, in any case, USD 35;
@@ -175,7 +175,7 @@ def check_plan(plan, mode, dry):
     if dry:
         return subs, costs, None
     if not os.path.exists(APPROVAL):
-        sys.exit("REFUSED: runs/E019/approval.json missing (the human must approve first)")
+        sys.exit("REFUSED: runs/E019/approval.json missing (the author must approve first)")
     ap = json.load(open(APPROVAL))
     if ap.get("device_arn") != arn:
         sys.exit(f"REFUSED: approval is for {ap.get('device_arn')}, plan is for {arn}")

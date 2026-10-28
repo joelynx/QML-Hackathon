@@ -15,14 +15,14 @@ Observations that don't fit expectations. Log liberally; ideation reads this fir
 | A010 | The declared readout λ grid's lower edge (0.001) binds for the ESN far more often than for the QRC | DS1 tuning, 30 configurations per arm | 30 + 30 | ESN: best λ = 0.001 in 15 of 30 configurations, including the selected one; QRC: 2 of 30 | Fairness of the matched comparison (the classical arm may be under-tuned on regularisation) | exploratory (E002, E003 tuning) | runs/E002/tuning.jsonl, runs/E003/tuning.jsonl | resolved (E010/E011: same selection with an extended grid) |
 | A011 | float32 GPU matrix products made per-beat outputs depend on the batch, so the lookahead check flagged 2 of 141 beats on R0 | DS1 record 207, first 150 s | 2 beats | probability differences 1.8e-7 and 2.2e-8 (check tolerance 1e-6 relative), identical with or without the future signal replaced | Lookahead check of every pipeline | predefined (lookahead check) | runs/E002/leakcheck_seed0.json (first attempt, overwritten; numbers in E002 card) | explained (numerical; fixed with float64) |
 | A012 | On DS1 the tuned QRC behaves like its classical mean-field model, and removing all couplings scores higher | DS1 OOF, 5 seeds per arm | 50,542 units | QRC 0.6671; mean-field 0.6671; separable (J = 0) 0.6793; ESN 0.6620; RR only 0.6367 | The quantum-advantage question itself | exploratory (E003-E006, proxy) | runs/E00{3,4,5,6}/oof_ds1_seed*.csv | open |
-| A013 | Rubric failure analysis (self-rated; latest 23:55): Depth 1 is the lowest weighted criterion; Performance, Ingenuity and Soundness are 2; the conditions of both gates appear met, and the critic check is pending | Scorecard | 6 rows | 1 of 4 weighted criteria at 1 (was 2 of 4) | Judged score | exploratory | runs/phase3/scorecard_selfrating_2026-10-26_2355.md | open |
+| A013 | Rubric failure analysis (internal rating; latest 23:55): Depth 1 is the lowest weighted criterion; Performance, Ingenuity and Soundness are 2; the conditions of both gates appear met, and the verification check is pending | Scorecard | 6 rows | 1 of 4 weighted criteria at 1 (was 2 of 4) | Judged score | exploratory | runs/phase3/scorecard_selfrating_2026-10-26_2355.md | open |
 | A014 | Judge questions without evidence yet: quantum vs classical mechanism, baseline fairness, hardware, literature context, single-patient dependence, workload | Write-up | 6 questions | n/a | Judged score | exploratory | ANOMALIES A014 | open |
 | A015 | Headline failure analysis (ds2s): the QRC arm's gain over the ESN is fewer false alarms (V false positives halved); it misses more S beats, almost all in record 232 | ds2s, per class and per record, seed-averaged | 21 records, 47,129 units | V FP per seed 709 vs 1,324 (V TP 3,036 vs 3,050); S FP 1,790 vs 2,886, S TP 750 vs 1,059 (232: 493 vs 781 of 1,381) | Headline delta +0.0208; V_f1 slice +0.0688 | predefined (per class, per record, 232) | runs/E003/failure_analysis_ds2s.txt, runs/E003/compare_ds2s_headline.json | open |
 | A016 | On ds2s the QRC's gain over the ESN is reproduced by its classical mean-field model; the couplings matter for V, but classical couplings suffice | ds2s, EV2 secondary comparisons, 5 seeds per arm | 21 records, 47,129 units | QRC vs mean-field +0.0039 [-0.0028, +0.0115] (V F1 0.874 both); separable vs QRC -0.0009, V F1 -0.063 [-0.132, -0.021], S F1 +0.067 | The quantum-advantage question (headline V gain) | predefined controls (EVAL.md rule 7) | runs/E004/compare_ds2s_secondary_E003_vs_E004.json, runs/E005/compare_ds2s_secondary_E005_vs_E003.json | open |
 | A008 | Current MIT-BIH annotation totals differ from de Chazal 2004 Table II | DS1 and DS2, AAMI classes, all beat annotations before edge exclusions | DS1 N -2, S +2, V +1; DS2 N +1; F and Q equal | n/a (provenance) | Literature comparability of DS1/DS2 counts only | predefined (independent review R3) | EV1_R3_REVIEW.md R3; tests/test_scorer.py::test_units_match_current_dataset_counts | open (cause unverified; labels not altered) |
 | A006 | SVDB headers carry no demographics and name leads only ECG1/ECG2, so subject overlap with MIT-BIH and lead identity cannot be checked | SVDB, all 78 records | 78 records, 184,286 units | n/a (provenance) | Any SVDB confirmation claim | exploratory | Phase 2, SVDB headers and PhysioNet page | open |
 | A017 | Finite-shot keys for SVDB beats differ between the batch path and the per-record path: the batch path hashes native 128 Hz beat IDs, while `pipeline_fn` (demo, leakcheck) hashes resampled 360 Hz positions | SVDB, any beat run through `pipeline_fn` | all SVDB beats; MIT-BIH is unaffected (native 360 Hz) | 210 of 220 QRC features changed on one synthetic beat, max abs diff 0.098 (review probe); prediction impact not measured | none on any scored result; an SVDB demo would disagree with the scored predictions | exploratory (progress review 2026-10-28) | PROGRESS_REVIEW_2026-10-28.md; `run.keys_of`, `run.pipeline_fn` | open |
-| A018 | `load_artifact` rebuilds the reservoir from configuration and seed without checking the saved `res_*` arrays or the saved shot count, and no command predicts a new split from the saved artifacts (`final` refits and overwrites `model_seed*.npz`) | E002/E003 model artifacts, 5 seeds each | 10 artifacts | n/a (provenance) | the SVDB confirmation must score the exact DS1-trained artifacts (EVAL.md confirmation policy) | exploratory (progress review 2026-10-28; agent check) | PROGRESS_REVIEW_2026-10-28.md; `run.load_artifact`, `run.cmd_final` | open |
+| A018 | `load_artifact` rebuilds the reservoir from configuration and seed without checking the saved `res_*` arrays or the saved shot count, and no command predicts a new split from the saved artifacts (`final` refits and overwrites `model_seed*.npz`) | E002/E003 model artifacts, 5 seeds each | 10 artifacts | n/a (provenance) | the SVDB confirmation must score the exact DS1-trained artifacts (EVAL.md confirmation policy) | exploratory (progress review 2026-10-28; checked in code) | PROGRESS_REVIEW_2026-10-28.md; `run.load_artifact`, `run.cmd_final` | open |
 
 Status: open / explained / exploited / dismissed. Explained is not exploited; record both and the evidence.
 
@@ -138,14 +138,14 @@ Status: open / explained / exploited / dismissed. Explained is not exploited; re
 - **Status:** open.
 
 ## A013 (failure analysis: rubric)
-- **Observation:** lowest self-rated criteria (`runs/phase3/scorecard_selfrating_2026-10-26.md`), weighted equally: Performance 0 (no ds2s comparison yet), Gate deliverables 0, Depth 1, Gate reproducible 1.
-- **Slice / size:** six scorecard rows; internal generator rating only, not critic-rated.
+- **Observation:** lowest internally rated criteria (`runs/phase3/scorecard_selfrating_2026-10-26.md`), weighted equally: Performance 0 (no ds2s comparison yet), Gate deliverables 0, Depth 1, Gate reproducible 1.
+- **Slice / size:** six scorecard rows; a single internal rating only, without the second rating.
 - **Magnitude:** 2 of 4 weighted criteria at or below 1; both gates below 3.
 - **Status:** open. Performance needs EV1 approval and the headline run. Depth needs ablation axes beyond entanglement.
 - **Update 2026-10-26 21:43 (after the headline; `runs/E002/packet-selfrating.md`):** Performance 1 (no detectable change on the primary; V_f1 slice favorable, but anchor 2 needs all four family members reported, and the low-data pair waits for the D4 fix). Ingenuity 2, Depth 1, Soundness 2, Gate deliverables 0 (no write-up beyond one paragraph), Gate reproducible 1 (one-command script `scripts/reproduce.py` written; clean-environment run in progress). Lowest weighted: Performance and Depth at 1; both gates below 3.
 - **Update 2026-10-26 23:55 (Phase 3 close-out; `runs/phase3/scorecard_selfrating_2026-10-26_2355.md`):**
   - Ratings: Performance 2 (complete slice family, V_f1 favorable), Ingenuity 2, **Depth 1**, Soundness 2.
-  - The conditions of both gates appear met, and the critic check is pending:
+  - The conditions of both gates appear met, and the verification check is pending:
     - Deliverables: all four items exist. The explanation is the `WRITEUP.md` draft.
     - Reproducible: `scripts/reproduce.py --check` ran as one command in a fresh venv and regenerated every headline input byte-identically (`runs/phase3/reproduce_check_EV2.md`).
   - The lowest weighted criterion is Depth. It needs at least two more ablation axes (readout size or qubit count, shots or noise) for anchor 2, and device noise, hardware and a kernel diagnostic for anchor 3. Phase 4 targets these.
@@ -186,7 +186,7 @@ Status: open / explained / exploited / dismissed. Explained is not exploited; re
 - **Status:** open. The extended-λ fairness check E010/E011 is done (A010 resolved, same selections). Hardware or noise evidence would not change the attribution.
 
 ## A017
-- **Date:** 2026-10-28 (raised by the human-supplied progress review; code path confirmed by the agent).
+- **Date:** 2026-10-28 (raised by the progress review supplied by the author; the code path was then confirmed in the code).
 - **Observation:**
   - `features.build_split` keeps the native-sample beat IDs (for example `svdb:800:100002`, at 128 Hz) while it resamples the signal to 360 Hz, and `run.keys_of` hashes those IDs into each beat's finite-shot stream.
   - `run.pipeline_fn`, used by the demo and the lookahead check, builds the IDs from the resampled positions it receives instead.
@@ -201,7 +201,7 @@ Status: open / explained / exploited / dismissed. Explained is not exploited; re
 - **Status:** open.
 
 ## A018
-- **Date:** 2026-10-28 (raised by the progress review; the missing predict path was found by the agent).
+- **Date:** 2026-10-28 (raised by the progress review; the missing predict path was then found in a code check).
 - **Observation:**
   - `run.load_artifact` restores the readout from the saved file, but it regenerates the reservoir from configuration and seed. It neither compares the result with the saved `res_*` arrays nor reads the saved shot count; the module default (1,024) is used.
   - No command predicts a new split from the saved artifacts. `final` refits the readout and rewrites `model_seed*.npz`, and the file bytes change because the stored metadata records the current pipeline revision.

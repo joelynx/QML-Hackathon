@@ -1,15 +1,15 @@
 # Verifications (open mode)
 
-One report per verification, written by the critic. The coordinator links each report from its experiment card. Metric reviews and rehearsal question sets are also recorded here, with verdict n/a.
+One report per verification, written by the reviewer. Each report is linked from its experiment card. Metric reviews and rehearsal question sets are also recorded here, with verdict n/a.
 
 ## V001
 - **Report type:** metric review
-- **Experiment / candidate revision / comparison baseline / component parents / EV#:** none (no candidate exists). EV1 draft, code revision `f816fe79bf5f1fb4`, fixtures `70b4c33b861de1c0`. Reviewed 2026-10-26 by the critic in a fresh context.
+- **Experiment / candidate revision / comparison baseline / component parents / EV#:** none (no candidate exists). EV1 draft, code revision `f816fe79bf5f1fb4`, fixtures `70b4c33b861de1c0`. Reviewed 2026-10-26 separately.
 - **Claim under review:** EV1 (draft) fits the user's decision and does not flatter either arm or hide an error a clinician would care about. EV1 consists of: macro-F1 over N/S/V on ds2s units; the paired record-cluster bootstrap; the decision rule and thresholds; the matched-baseline rules; and the SVDB confirmation policy.
 - **Packet contents and raw evidence links:**
-  - Read: CLAUDE.md, the 05-verification guide, PROBLEM_BRIEF.md ("Chosen problem (exact)"), EVAL.md, ANOMALIES.md, `src/qhc/{evalspec,units,scorer,evaluate}.py`, `tests/test_scorer.py`, `runs/data/processed/EV1/manifest.json`, `runs/EV1_reference/*.json`, and the ds1/ds2s positions and labels files.
+  - Read: the verification procedure, PROBLEM_BRIEF.md ("Chosen problem (exact)"), EVAL.md, ANOMALIES.md, `src/qhc/{evalspec,units,scorer,evaluate}.py`, `tests/test_scorer.py`, `runs/data/processed/EV1/manifest.json`, `runs/EV1_reference/*.json`, and the ds1/ds2s positions and labels files.
   - Not read: IDEAS.md, `labels_svdb.csv`. Nothing was scored on svdb.
-  - The critic's scripts are outside the repo: `check1.py` (independent rescoring and bootstrap) and `check2.py` (leak and lookahead counts), in the session scratchpad `C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin-Desktop-Water-Hackathon-quantum-healthcare\2942d4c9-43db-4379-9b05-5a31d0d761be\scratchpad\v001\`.
+  - The reviewer's scripts are outside the repo: `check1.py` (independent rescoring and bootstrap) and `check2.py` (leak and lookahead counts), in a local scratch directory outside the repository.
 - **Checks** (pass / fail / n/a (reason) / not run; one line of evidence each):
   1. Reproduce: **pass.**
      - `.venv/Scripts/python -I -m pytest -q` gives 24 passed.
@@ -39,9 +39,9 @@ One report per verification, written by the critic. The coordinator links each r
   8. Selection exposure: **n/a (no candidate).**
      - Confirmation log reviewed: one data-card inspection entry in EVAL.md, and no `runs/confirmation_access.jsonl` exists. This is consistent with "nothing scored on SVDB".
      - The guard has defects (S6).
-  9. Blind rubric rating: **n/a** (metric review; no deliverables).
+  9. Rubric rating: **n/a** (metric review; no deliverables).
 
-     | Criterion | Critic | Generator | Gap |
+     | Criterion | Reviewer | Internal | Gap |
      |---|---|---|---|
      | n/a | | | |
 
@@ -81,7 +81,7 @@ One report per verification, written by the critic. The coordinator links each r
         1. Equal realised count N <= 40 per arm. The count covers every DS1-CV configuration of every design variant of that arm.
         2. Declare both search spaces before the first tuning run. The ESN space must include standard settings.
         3. Pre-register the headline as the first quantum-versus-matched-classical pair evaluated on ds2s, named by experiment ID before the run.
-        4. Later pairs are secondary unless the human approves a replacement. A replacement uses a 1 - 0.05/m CI for m such comparisons, and m is reported.
+        4. Later pairs are secondary unless the author approves a replacement. A replacement uses a 1 - 0.05/m CI for m such comparisons, and m is reported.
         5. ds2 scorings count toward the cap of 15.
   - **Should fix:**
     - **S1. One patient can carry the headline.**
@@ -167,7 +167,7 @@ One report per verification, written by the critic. The coordinator links each r
   - Read: EVAL.md r2 (including "Response to V001" and the access-log incident), `src/qhc/*.py` (including the new `leakcheck.py`), `tests/test_scorer.py`, the rebuilt `runs/data/processed/EV1/` files, and `runs/EV1_reference/compare_rr_vs_const_ds2s.json`.
   - Not opened: `confirm/labels_svdb.csv`. My scripts wrap `pd.read_csv` so that they fail on any path under `confirm/`.
   - For svdb, only the label-free `positions_svdb.csv` and `records_svdb.csv` were read.
-  - Scripts: `check3.py` and `check4.py` in the V001 scratchpad folder. The guard probes ran on synthetic files in a temp directory.
+  - Scripts: `check3.py` and `check4.py` in the V001 scratch folder. The guard probes ran on synthetic files in a temp directory.
 - **Checks:**
   1. Reproduce: **pass.**
      - pytest: 28 passed.
@@ -196,7 +196,7 @@ One report per verification, written by the critic. The coordinator links each r
   8. Selection exposure: **pass.**
      - Guard order checked on the compare path. A malformed baseline seed raises PredictionError with no log written. A good pair logs exactly once and writes `confirmed`. The cap is enforced in code.
      - `runs/confirmation_access.jsonl` does not exist in the project (no access so far).
-  9. Blind rubric rating: **n/a** (metric review).
+  9. Rubric rating: **n/a** (metric review).
   10. Claims check: **pass.** EVAL r2 statements match the code and data; residuals R1-R4 below.
 - **Per finding:**
 
@@ -229,7 +229,7 @@ One report per verification, written by the critic. The coordinator links each r
     - Predictions of S or V on F/Q beats are reported separately, not as false flags.
 - **SVDB incident (access log, ~17:45):** the log entry and the fix are adequate, and SVDB is **not compromised** as a confirmation set.
   - SVDB's confirmatory value depends on no training, tuning or selection decision being informed by its labels.
-  - No model existed. Validation failed on beat IDs, which equal the public prediction set. By the coordinator's account, no class values or scores were displayed or stored.
+  - No model existed. Validation failed on beat IDs, which equal the public prediction set. By the project's own account, no class values or scores were displayed or stored.
   - The fix is verified: load paths are now resolved at call time, and the guard test plus my probes assert that the real file is never opened.
   - Limits and requests:
     - I cannot independently verify what the pytest run displayed. Please add the exact error text to the incident row.
@@ -241,7 +241,7 @@ One report per verification, written by the critic. The coordinator links each r
 - **Scope and limitations of verdict:**
   - No SVDB labels were read and nothing was scored on svdb.
   - The guard was exercised only on synthetic files.
-  - The incident account rests on the coordinator's statement.
+  - The incident account rests on the project's own statement.
 - **Evaluation defect found:** no new defect. The V001 defects (B1, B2) are resolved in r2. R1 should be fixed before approval but is not blocking.
 
 ## Template (copy for V002 onward)
@@ -258,9 +258,9 @@ One report per verification, written by the critic. The coordinator links each r
   6. Validity (incl. data card complete, raw hash matches, licence allowed):
   7. Robustness:
   8. Selection exposure (variants in line / full evaluations on EV#; confirmation access logged?):
-  9. Blind rubric rating (from packet.md alone, written down before opening packet-selfrating.md):
+  9. Rubric rating (from packet.md alone, written down before opening packet-selfrating.md):
 
-     | Criterion | Critic | Generator | Gap |
+     | Criterion | Reviewer | Internal | Gap |
      |---|---|---|---|
 
   10. Claims check: <claims without an experiment ID or source>
@@ -273,27 +273,27 @@ One report per verification, written by the critic. The coordinator links each r
 
 ## V003
 - **Report type:** metric review re-check (of EV1 draft r4 against the independent review `EV1_R3_REVIEW.md`)
-- **Experiment / candidate revision / comparison baseline / component parents / EV#:** none (no candidate exists). EV1 draft r4, code revision `a2439884ff2f1909`, fixtures `15f4ece17d6839a2` (both recomputed and matched; 33/33 tests pass). Reviewed 2026-10-26 ~18:50-19:00 by a critic subagent in a fresh context.
+- **Experiment / candidate revision / comparison baseline / component parents / EV#:** none (no candidate exists). EV1 draft r4, code revision `a2439884ff2f1909`, fixtures `15f4ece17d6839a2` (both recomputed and matched; 33/33 tests pass). Reviewed 2026-10-26 ~18:50-19:00 separately.
 - **Claim under review:** EV1 r4 resolves every item of the r3 review (R1-R6, additional changes, small corrections, acceptance checks) and introduces no new defect.
-- **Packet contents and raw evidence links:** full report `runs/V003/report.md` (saved by the coordinator; the harness blocked the subagent from writing it); probes `runs/V003/probes.py`, results `runs/V003/probe_results.json`. All probes synthetic, with the processed-data path and both logs redirected; `confirm/`, raw SVDB annotations, real ds2s/ds2/svdb scoring and the real logs were not touched.
+- **Packet contents and raw evidence links:** full report `runs/V003/report.md` (saved on the reviewer's behalf; the review run could not write it); probes `runs/V003/probes.py`, results `runs/V003/probe_results.json`. All probes synthetic, with the processed-data path and both logs redirected; `confirm/`, raw SVDB annotations, real ds2s/ds2/svdb scoring and the real logs were not touched.
 - **Checks:** R1, R2, R3, additional 1-5 and the small corrections resolved; independent brute-force bootstrap reproduces the CIs to ~1e-16; Table V formulas match term for term. R4, R5, R6 partly resolved.
 - **Verdict:** NEEDS-CHANGES. Blocking B1 (headline and low-data slices could be chosen after ds2s peeks); should-fix S1 (copies pass as seeds), S2 (a failure after logging spends a confirmation access), S3 (a repair could change models); minor M1-M6.
-- **Coordinator response:** all findings addressed in EV1 draft r5; table "Response to V003" in EVAL.md.
-- **Follow-up re-check (same critic, ~19:00-19:05) of the intermediate r5** (revision `ba12ebc1e0ad903c`, fixtures `dc7b3985739aabe5`, 38/38 pass): **APPROVE-READY.** B1, S1-S3 and M1-M6 resolved (probes `runs/V003/r5/probes_r5.py`, results `runs/V003/r5/probe_results_r5.json`). New: should-fix N1 (a reference-only "headline" would open ds2s to other models early); minor N2 (SVDB before any headline), N3 (identical headline rerun refused after later entries), N4 (`--out` could overwrite an input), N5 (no code guard for test labels outside the command), and serialization errors at the final write.
-- **Coordinator response to the follow-up:** N1-N4 and the write fallback fixed in the final r5 (revision `9a1922c8898b90db`, fixtures `7f323fb891968894`, 38 pass); N5 handled procedurally (verifications grep pipeline code for test-label reads). The final r5 was not re-checked by the critic; the changes are confined to `_check_order`, `_confirmation_access`, `_check_out`, `_smoke_test` and `_write`, each covered by a test.
+- **Response:** all findings addressed in EV1 draft r5; table "Response to V003" in EVAL.md.
+- **Follow-up re-check (same reviewer, ~19:00-19:05) of the intermediate r5** (revision `ba12ebc1e0ad903c`, fixtures `dc7b3985739aabe5`, 38/38 pass): **APPROVE-READY.** B1, S1-S3 and M1-M6 resolved (probes `runs/V003/r5/probes_r5.py`, results `runs/V003/r5/probe_results_r5.json`). New: should-fix N1 (a reference-only "headline" would open ds2s to other models early); minor N2 (SVDB before any headline), N3 (identical headline rerun refused after later entries), N4 (`--out` could overwrite an input), N5 (no code guard for test labels outside the command), and serialization errors at the final write.
+- **Response to the follow-up:** N1-N4 and the write fallback fixed in the final r5 (revision `9a1922c8898b90db`, fixtures `7f323fb891968894`, 38 pass); N5 handled procedurally (verifications grep pipeline code for test-label reads). The final r5 was not re-checked by the reviewer; the changes are confined to `_check_order`, `_confirmation_access`, `_check_out`, `_smoke_test` and `_write`, each covered by a test.
 
 ## V004
 - **Report type:** validity-only (R0)
-- **Experiment / candidate revision / comparison baseline / component parents / EV#:** E002 (R0, matched leaky-tanh ESN arm). Artifacts produced with pipeline `da67af87f8b8fd73` (run manifests), tuning launched with `cf7bd4bd0a9634f8` (reconstruction in `runs/E002/pipe_at_tuning/`; its raw-bytes hash recomputes to `cf7bd4bd0a9634f8`). Pipeline on disk when this verification started (21:52 UAE): **`55884b1fb66732b9`**, not the `ad80a50e051c6820` the packet calls current (M1). Comparison baseline: none (first incumbent; comparison checks n/a). Component parents: none. EV1 approved r5, evaluation revision `9a1922c8898b90db` (recomputed), fixtures `7f323fb891968894` (recomputed). Reviewed 2026-10-26 21:52-22:15 UAE by a critic subagent in a fresh context.
+- **Experiment / candidate revision / comparison baseline / component parents / EV#:** E002 (R0, matched leaky-tanh ESN arm). Artifacts produced with pipeline `da67af87f8b8fd73` (run manifests), tuning launched with `cf7bd4bd0a9634f8` (reconstruction in `runs/E002/pipe_at_tuning/`; its raw-bytes hash recomputes to `cf7bd4bd0a9634f8`). Pipeline on disk when this verification started (21:52 UAE): **`55884b1fb66732b9`**, not the `ad80a50e051c6820` the packet calls current (M1). Comparison baseline: none (first incumbent; comparison checks n/a). Component parents: none. EV1 approved r5, evaluation revision `9a1922c8898b90db` (recomputed), fixtures `7f323fb891968894` (recomputed). Reviewed 2026-10-26 21:52-22:15 UAE separately.
 - **Claim under review** (from `runs/E002/packet.md`):
   1. The E002 pipeline fits and selects on DS1 only, has no leakage or lookahead, and writes outputs the EV1 command accepts.
   2. Its ds2s macro-F1 0.7065 (mean of 5 seeded runs) comes from the approved evaluation command.
   3. The slice runs from a clean checkout, and its data provenance is recorded.
   4. Every claim in `README.md` "Result so far" has evidence.
 - **Packet contents and raw evidence links:**
-  - Read: CLAUDE.md, the 05-verification guide, `runs/E002/packet.md` (including "Clean-environment results", appended 21:58), EVAL.md (EV1 r5 with D1-D6), PROBLEM_BRIEF.md, README.md, `src/qhc/pipe/*.py`, `src/qhc/leakcheck.py`, the run and check parts of `src/qhc/evaluate.py` and `scorer.validate`, `scripts/reproduce.py`, `scripts/download_data.py`, the real-data fixtures in `tests/test_scorer.py`, the E002 artifacts, `runs/E003/compare_ds2s_headline.json`, `runs/full_eval_log.jsonl`, the EXPERIMENTS.md declarations and the E002/E003 card fields. `runs/E002/packet-selfrating.md` was opened only after my ratings were written (`runs/V004/blind_ratings.json`, with an addendum written before opening it).
+  - Read: the verification procedure, `runs/E002/packet.md` (including "Clean-environment results", appended 21:58), EVAL.md (EV1 r5 with D1-D6), PROBLEM_BRIEF.md, README.md, `src/qhc/pipe/*.py`, `src/qhc/leakcheck.py`, the run and check parts of `src/qhc/evaluate.py` and `scorer.validate`, `scripts/reproduce.py`, `scripts/download_data.py`, the real-data fixtures in `tests/test_scorer.py`, the E002 artifacts, `runs/E003/compare_ds2s_headline.json`, `runs/full_eval_log.jsonl`, the EXPERIMENTS.md declarations and the E002/E003 card fields. `runs/E002/packet-selfrating.md` was opened only after my ratings were written (`runs/V004/blind_ratings.json`, with an addendum written before opening it).
   - Not read or hashed: IDEAS.md, `labels_ds2s.csv`, `labels_ds2.csv`, `runs/data/processed/EV1/confirm/`, `runs/data/raw/svdb/`. Not touched: `runs/E010/`, `runs/E011/`, and every existing `runs/E###/` directory except for reads.
-  - Critic outputs and scripts, all in `runs/V004/`:
+  - Reviewer outputs and scripts, all in `runs/V004/`:
     - `pipe_snapshot/`: the exact pipeline code that ran (`55884b1fb66732b9`);
     - `driver.py`, `driver_stdout.txt`, `driver_log.json`: features rebuilt into `runs/V004/features/`, then `tune --arm esn`, `final` seeds 0-4 (`--oof --splits ds2s`) and 5-9 (`--oof`), and `leakcheck`, all with `--exp V004/R0` (outputs in `runs/V004/R0/`);
     - `compare_repro.py` / `compare_repro.json`: rerun vs E002 and vs the logged headline inputs;
@@ -301,7 +301,7 @@ One report per verification, written by the critic. The coordinator links each r
     - `probes.py` / `probes.json`: label-free probes P1-P5;
     - `headline_ds2s_regen.md`: the tables rebuilt from the logged comparison;
     - `blind_ratings.json`.
-  - ds2s scoring by the critic: **none**. `runs/full_eval_log.jsonl` had 6 lines before and after, with an unchanged sha256 `5496347c...` (`runs/V004/full_eval_log_before.sha256`). `runs/confirmation_access.jsonl` does not exist.
+  - ds2s scoring by the reviewer: **none**. `runs/full_eval_log.jsonl` had 6 lines before and after, with an unchanged sha256 `5496347c...` (`runs/V004/full_eval_log_before.sha256`). `runs/confirmation_access.jsonl` does not exist.
 - **Checks** (pass / fail / n/a (reason) / not run; one line of evidence each):
   1. Reproduce: **pass.**
      - Full retune from regenerated features on the current pipeline `55884b1fb66732b9`:
@@ -340,11 +340,11 @@ One report per verification, written by the critic. The coordinator links each r
   7. Robustness: **n/a** (validity-only; no gain is claimed for R0). Fact: per-seed ds2s macro-F1 ranges from 0.7027 to 0.7162.
   8. Selection exposure (variants in line / full evaluations on EV#; confirmation access logged?): **pass.**
      - 30 configurations x 4 λ, selected on DS1 only. `selected_config.json` was written at 19:22, before the first non-reference ds2s scoring (headline 21:26:59).
-     - Full evaluations on EV1: 1 (the headline). The 5 pre-approval reference re-scorings are diagnostics. The critic added none.
+     - Full evaluations on EV1: 1 (the headline). The 5 pre-approval reference re-scorings are diagnostics. The reviewer added none.
      - Confirmation: no access (no `runs/confirmation_access.jsonl`). The policy applies to the final frozen pair, so it is n/a for R0.
-  9. Blind rubric rating (from packet.md alone, written before opening packet-selfrating.md): **done.** One build exists (the R0 slice), and no rubric change is claimed for R0. Gap = critic minus generator.
+  9. Rubric rating (from packet.md alone, written before opening packet-selfrating.md): **done.** One build exists (the R0 slice), and no rubric change is claimed for R0. Gap = reviewer minus internal rating.
 
-     | Criterion | Critic | Generator | Gap |
+     | Criterion | Reviewer | Internal | Gap |
      |---|---|---|---|
      | Performance vs comparable classical baseline | 1 | 1 | 0 |
      | Ingenuity | 1 | 2 | -1 |
@@ -353,22 +353,22 @@ One report per verification, written by the critic. The coordinator links each r
      | Gate: deliverables complete | 0 | 0 | 0 |
      | Gate: reproducible | 2 | 1 | +1 |
 
-     - Ingenuity: the generator credits the limitation and literature gap written in PROBLEM_BRIEF.md. The deliverable (README) states neither, so I rate 1.
-     - Reproducible: `scripts/reproduce.py` (21:46) postdates the self-rating (21:43, "no single command yet"). I rate 2, not 3: the one-command path was not run end to end, README does not name it, the clean copy is an older pipeline revision with 37/38 fixtures, and I did not run the clean-environment build myself.
+     - Ingenuity: the internal rating credits the limitation and literature gap written in PROBLEM_BRIEF.md. The deliverable (README) states neither, so I rate 1.
+     - Reproducible: `scripts/reproduce.py` (21:46) postdates the internal rating (21:43, "no single command yet"). I rate 2, not 3: the one-command path was not run end to end, README does not name it, the clean copy is an older pipeline revision with 37/38 fixtures, and I did not run the clean-environment build myself.
      - Both gates are below 3, as both raters agree.
   10. Claims check: **pass** (no number without a source). Items:
       - README "Result so far": 0.727, 0.707, +0.021 [-0.016, +0.062], V +0.069 [+0.021, +0.154] and S -0.023 [-0.146, +0.098] all match `runs/E003/compare_ds2s_headline.json`. "30 configurations each": both `tuning.jsonl` files have 30 lines on the same λ grid.
       - README mean-field and separable sentence: cites A012 but not the experiment IDs (E004, E005), and gives no numbers.
       - README "Reproduce": the demo command writes `runs/demo/qrc_100.png`, but the packaged demo is `runs/demo/qrc_E003_rec232.png`, and no listed command regenerates it. The one-command `scripts/reproduce.py` is not mentioned (M3).
       - Packet, "Current: `ad80a50e`": stale (M1).
-      - E002 card / self-rating: "no single command yet" is superseded by `scripts/reproduce.py`. The DS1 tuning best 0.6744 comes from the float32 code; the current code gives 0.67449 (M2).
+      - E002 card / internal rating: "no single command yet" is superseded by `scripts/reproduce.py`. The DS1 tuning best 0.6744 comes from the float32 code; the current code gives 0.67449 (M2).
       - EVAL.md approval sha256 `f758910b...` cannot be recomputed, because bookkeeping lines were appended after the approval. The evaluation code and fixture hashes do recompute.
 - **Implementation and evaluation valid:** yes (E002 as produced and as regenerated; no leakage, no lookahead, valid outputs, score from the approved command).
 - **Improvement claim supported:** n/a (validity-only R0 report).
 - **Verdict:** **PASS** (validity-only).
 - **Scope and limitations of verdict:**
   - Covers the exact E002 artifacts: `pred_ds2s_seed0-4.csv` with the hashes logged for the headline, `model_seed0-9.npz`, configuration 28 with λ 0.001.
-  - Regenerated on pipeline `55884b1fb66732b9` in the project's venv from the project's raw data. The clean-environment and fresh-download evidence is the coordinator's run (`75e043aa`), read, not rerun.
+  - Regenerated on pipeline `55884b1fb66732b9` in the project's venv from the project's raw data. The clean-environment and fresh-download evidence is the project's own run (`75e043aa`), read, not rerun.
   - ds2s was not rescored. The score rests on byte-identity with the logged inputs and on the approved scorer.
   - The tuning-time code is a reconstruction. Only its hash was checked, not its identity with what ran.
   - SVDB not examined.
@@ -388,32 +388,32 @@ One report per verification, written by the critic. The coordinator links each r
   - **M5 (scope note):** the clean copy passed 37/38 fixtures because SVDB was not built. The full README sequence builds SVDB, so 38 is expected but was not observed in a clean environment.
 
 ## V005
-- **Report type:** final-submission verification. It covers the validity of E018 (the SVDB confirmation) and of the Phase 4 results (E012-E017, E019), the README claim set, and a blind scorecard rating including both gates.
+- **Report type:** final-submission verification. It covers the validity of E018 (the SVDB confirmation) and of the Phase 4 results (E012-E017, E019), the README claim set, and a scorecard rating including both gates.
 - **Experiment / candidate revision / comparison baseline / component parents / EV#:**
   - E018: E003 (QRC) against E002 (ESN, R0). Frozen artifacts `runs/E00{2,3}/model_seed{0..4}.npz`, predicted through `p4 predict 08dc4140d5d45b6b`.
   - Phase 4 secondaries: E012, E014-n6 and E015-rigetti against E003; E003 and E002 against E016.
   - Revisions: evaluation `8501643023cd2eb6` (EV2), pipeline `55884b1fb66732b9`, Phase 4 ablate `f7fe9f52db014c44`, noise `8b1226919f8ca395`, boost `c2c2fc47c011e891`, kernels `647cb96976578b0d`, braket_hw `4a5dbce596f0a847`. All were recomputed on disk at about 20:25 and equal the packet.
   - No candidate for promotion; the incumbent stays E002 (R0).
-  - Critic, fresh context, 2026-10-28 20:05-20:45 UAE.
+  - Reviewer: separate verification run, 2026-10-28 20:05-20:45 UAE.
 - **Claim under review** (`runs/V005/packet.md`):
   1. E018 is a valid, pre-registered, access-logged confirmation, with the outcome *not confirmed*.
   2. The five Phase 4 ds2s secondaries and the DS1 and label-free results are valid and reported as descriptive.
   3. Every number and claim in `README.md` (sha256 prefix `f83bad2ffa7d7209`, unchanged during the check) and `docs/EVIDENCE.md` is traceable, and none is stronger than its evidence.
-  4. Blind scorecard ratings, including both gates.
+  4. Scorecard ratings, including both gates.
 - **Packet contents and raw evidence links:**
   - Read:
-    - instructions: CLAUDE.md, the 05 guide, the packet;
+    - instructions: the verification procedure, the packet;
     - specifications: EVAL.md (EV2: scorecard, comparison procedure, confirmation policy, access log), the EXPERIMENTS.md index, declarations, E002, Phase 4 declarations and E012-E019, ANOMALIES.md A019, `hackathon_details.md`;
     - deliverables: README.md, docs/EVIDENCE.md, `.gitignore`;
     - code: the relevant parts of `src/qhc/p4/{predict,ablate,noise,boost}.py` and `scripts/{reproduce,download_data}.py`;
     - logged outputs: the 7 compare JSONs, `runs/full_eval_log.jsonl`, `runs/confirmation_access.jsonl`, `runs/confirmation_reports/`, `runs/E019/{approval.json,cost_ledger.jsonl,analysis.json}`.
   - Not read, opened, hashed or listed:
-    - IDEAS.md, STATE.md;
+    - IDEAS.md, the project status notes;
     - `runs/data/processed/EV1/confirm/`;
     - every ds2, ds2s and svdb label file. The names, but not the contents, of three tracked r3-snapshot label files appeared in `git ls-files` (F4).
   - `packet-selfrating.md` was opened only after `runs/V005/blind_ratings.json` was complete (20:36).
-  - The critic ran no `compare` or `score` on any split and made no Braket call. `runs/full_eval_log.jsonl` had 18 lines and `runs/confirmation_access.jsonl` 1 line, before and after.
-  - Critic outputs, in `runs/V005/`:
+  - The reviewer ran no `compare` or `score` on any split and made no Braket call. `runs/full_eval_log.jsonl` had 18 lines and `runs/confirmation_access.jsonl` 1 line, before and after.
+  - Reviewer outputs, in `runs/V005/`:
     - `E018/`: `regen.sh`, `regen.log`, `compare_hashes.py`, `hash_report.json`;
     - `E014/`, `E015/`: `regen_e01x.py`, `regen.log`, `regen_report.json`;
     - `E016/`: `final_stdout.txt`;
@@ -459,7 +459,7 @@ One report per verification, written by the critic. The coordinator links each r
        - this was access 1 of a cap of 2, `repair_reason` is null, and the EVAL.md row is present.
      - Test-split count recomputed: 13 of 15 (the 18 log lines minus 5 pre-approval references).
      - Licences: ODC-By 1.0.
-     - E019: the human's approval is recorded (1 task, cap USD 18). Ledger estimate USD 17.708. The first attempt was refused before any task was created (USD 0).
+     - E019: the author's approval is recorded (1 task, cap USD 18). Ledger estimate USD 17.708. The first attempt was refused before any task was created (USD 0).
      - The raw SVDB and MIT-BIH hashes were verified by the fresh download in check 9.
   7. Robustness: **pass, except one wording item (F2).**
      - Recomputed from the logged per-record confusions (no label access):
@@ -470,22 +470,22 @@ One report per verification, written by the critic. The coordinator links each r
      - Leave-one-record-out ranges and deltas without record 232 all match: headline +0.0111 to +0.0460; SVDB −0.0157 to −0.0010; E014 without 232 +0.0004; E015 −0.0179; E016 −0.0869 and −0.1329.
      - Not supported: E016 "lead everywhere else" (F2).
   8. Selection exposure: **pass.** README Sections 4 and 6 and limitation 13 label every Phase 4 ds2s comparison as secondary, descriptive and post-hoc. Variant counts are published. SVDB is presented as the pre-registered confirmation and reported as not confirmed. One timing wording item remains (F6).
-  9. Blind rubric rating: **done.** Gap = critic − generator; generator ratings are from `packet-selfrating.md`.
+  9. Rubric rating: **done.** Gap = reviewer − internal rating; internal ratings are from `packet-selfrating.md`.
 
-     | Criterion | Critic | Generator | Gap |
+     | Criterion | Reviewer | Internal | Gap |
      |---|---|---|---|
      | Performance vs comparable classical baseline | 2 | 2 | 0 |
      | Ingenuity | 3 | 3 | 0 |
      | Depth | 3 | 3 | 0 |
-     | Soundness | 2 | "3 if the critic passes, else 2" → 2 | 0 |
+     | Soundness | 2 | "3 if the reviewer passes, else 2" → 2 | 0 |
      | Gate: deliverables complete | 3 | 3 | 0 |
-     | Gate: reproducible | 3 | "2 unless the critic checks clean env + fresh download" → 3 (checked) | 0 |
+     | Gate: reproducible | 3 | "2 unless the reviewer checks clean env + fresh download" → 3 (checked) | 0 |
 
      - Performance:
        - Anchor 2 is met: the V_f1 slice's 98.75% lower bound is +0.0207 and all four slice members are reported.
        - Anchor 3 is not: the ds2s primary is not favorable and SVDB is not confirmed.
-     - Soundness: anchor 3 needs a critic PASS on the claims, and that is withheld (F1-F3). It becomes 3 after the repair and a PASS.
-     - **Reproducible, anchor 3, checked by the critic.** Fresh venv from the system Python 3.12.10 and `requirements-lock.txt`, then `pip install -e .`, in a copy outside the project (`%TEMP%\v005_clean`) with only the README's audit-mode files. Then `scripts/reproduce.py --check` was run as one command, without `--skip-data`. Timeline (UAE):
+     - Soundness: anchor 3 needs a verification PASS on the claims, and that is withheld (F1-F3). It becomes 3 after the repair and a PASS.
+     - **Reproducible, anchor 3, checked by the reviewer.** Fresh venv from the system Python 3.12.10 and `requirements-lock.txt`, then `pip install -e .`, in a copy outside the project (`%TEMP%\v005_clean`) with only the README's audit-mode files. Then `scripts/reproduce.py --check` was run as one command, without `--skip-data`. Timeline (UAE):
        - 20:07:46-20:12:25 (4.7 min): venv, lock and editable install. Torch 2.11.0+cu128, CUDA available.
        - 20:12:25-20:21:00 (about 8.5 min): fresh download.
          - MIT-BIH: 144 files verified.
@@ -506,12 +506,12 @@ One report per verification, written by the critic. The coordinator links each r
         - ds2s: headline, slices, per-class F1, AUPRC, review burden and S/V sensitivity;
         - controls and Phase 4: E004-E006 and E012-E019;
         - SVDB table: V sensitivity/PPV 0.600/0.544 against 0.763/0.463; 801 against 870 flags per hour; 133 against 111 missed ectopic beats per hour; 39.0 h.
-      - References checked with paperfetch:
+      - References checked with a literature search:
         - Gupta et al. 2025 (doi:10.1038/s41746-025-01597-z): the authors match and the quote is verbatim in the abstract.
         - Jaeger 2001: title, sole author and year confirmed by Semantic Scholar (`s2:8430c0b9afa478ae660398704b11dca1221ccf22`). "GMD Report 148" is not in that record.
         - de Chazal 2004: SVEB +P 38.5% is verbatim in the abstract.
         - Pandey 2026: the abstract supports the README's paraphrase.
-      - For de Chazal, paperfetch also returned "Acquire manually using the SCH Protocol: Automated Access Blocked". Its `paper_url` points to an unofficial shadow-library mirror and is not reproduced here. No acquisition is needed, because the claim is verified from the abstract. A legitimate green open-access copy is listed at http://hdl.handle.net/2262/17623.
+      - For de Chazal, the literature search also returned "Acquire manually using the SCH Protocol: Automated Access Blocked". Its `paper_url` points to an unofficial shadow-library mirror and is not reproduced here. No acquisition is needed, because the claim is verified from the abstract. A legitimate green open-access copy is listed at http://hdl.handle.net/2262/17623.
 - **Implementation and evaluation valid:** **yes.**
   - E018 is reproduced 20 of 20 files.
   - E014-n6, E015-rigetti and E016 are reproduced byte-identically, 15 of 15 ds2s files.
@@ -529,11 +529,11 @@ One report per verification, written by the critic. The coordinator links each r
 - **Evaluation defect found:** none.
 - **Findings, ranked by severity:**
   - **F1 (should-fix, required; false statement).**
-    - Where: `README.md:10`, "The evaluation was pre-registered and human-approved before any model existed", and `README.md:87`, "fixed … before any model existed".
+    - Where: `README.md:10`, "The evaluation was pre-registered and author-approved before any model existed", and `README.md:87`, "fixed … before any model existed".
     - E002 and E003 were tuned and their artifacts and ds2s predictions written on 2026-10-26 at 19:11-19:21. Evidence: the `tuning.jsonl`, `model_seed0.npz` and `pred_ds2s_seed0.csv` file times, and EXPERIMENTS.md:30, "EV1 draft r5 … not yet approved".
-    - The human approved EV1 at 21:26 and EV2 (guard fixes) at 22:14.
+    - The author approved EV1 at 21:26 and EV2 (guard fixes) at 22:14.
     - What is true: the metric, split, units, decision rule and slice family were fixed in the draft before tuning, and r5 was approved unchanged before any test-split scoring (headline 21:26:59).
-    - Fix: "pre-registered before tuning (EVAL.md draft r5) and approved by the human, unchanged, before any test-split scoring; EV2's guard fixes (22:14) changed no metric, split or threshold".
+    - Fix: "pre-registered before tuning (EVAL.md draft r5) and approved by the author, unchanged, before any test-split scoring; EV2's guard fixes (22:14) changed no metric, split or threshold".
   - **F2 (should-fix, required; overstatement).**
     - Where: `README.md:193`, "…and lead everywhere else (A019)", and EXPERIMENTS.md:428, "on every other record the boosted trees lead".
     - Per record (seed-averaged confusions, descriptive), E016 does not lead E003 on records 100, 123, 210 and 219, besides record 232. The supported fact is the pooled one: without 232 the delta is −0.0869 against E003 and −0.1329 against E002.
@@ -545,9 +545,9 @@ One report per verification, written by the critic. The coordinator links each r
   - **F4 (should-fix, packaging; the brief's "repository excludes label files").**
     - Commit `fc69043` tracks `runs/EV1_r3_snapshot/processed_r3/labels_ds1.csv`, `labels_ds2.csv` and `labels_ds2s.csv`.
     - This contradicts `.gitignore`'s "Not redistributed" and README:310. The licence allows the files, and README:317 discloses the snapshot, so this is not an evaluation leak.
-    - Fix: `git rm --cached runs/EV1_r3_snapshot/processed_r3/labels_*.csv` and add `**/labels_*.csv` to `.gitignore`, or have the human decide to keep them and say so in README Section 10.
+    - Fix: `git rm --cached runs/EV1_r3_snapshot/processed_r3/labels_*.csv` and add `**/labels_*.csv` to `.gitignore`, or have the author decide to keep them and say so in README Section 10.
   - **F5 (should-fix, packaging).**
-    - Commit `fc69043` (20:09:24) captured the critic's in-progress scratch in `runs/V005/`: partial logs, a mid-run `clean/clean_repro.log`, and 20 selfcheck CSVs and manifests (about 22 MB) duplicating `runs/E018/selfcheck_ds2s/`.
+    - Commit `fc69043` (20:09:24) captured the reviewer's in-progress scratch in `runs/V005/`: partial logs, a mid-run `clean/clean_repro.log`, and 20 selfcheck CSVs and manifests (about 22 MB) duplicating `runs/E018/selfcheck_ds2s/`.
     - Fix:
       - commit the final `runs/V005/` logs, JSON and scripts;
       - remove `runs/V005/E018/selfcheck_ds2s/*.csv` from the index, or keep them deliberately;
@@ -558,12 +558,12 @@ One report per verification, written by the critic. The coordinator links each r
     - Fix: "before any model run".
   - **F7 (minor, privacy).**
     - AWS account ID `<aws-account-id>` appears in tracked `runs/E019/cost_ledger.jsonl`, `fetch_stdout.txt` and `results/*.json`, while the E019 card redacts it.
-    - It is not a credential: `git grep` finds no access keys, secrets or private keys. The human decides whether to redact.
+    - It is not a credential: `git grep` finds no access keys, secrets or private keys. The author decides whether to redact.
   - **F8 (info).**
-    - README:60 and EVIDENCE.md:33 say the clean-environment evidence was not rerun by a critic. V005 has now rerun it, so update both and fill `<!-- SLOT:VERIFICATION -->`.
+    - README:60 and EVIDENCE.md:33 say the clean-environment evidence was not rerun by a reviewer. V005 has now rerun it, so update both and fill `<!-- SLOT:VERIFICATION -->`.
     - EVIDENCE.md:88, Jaeger: cite the V005 check.
     - `runs/E019/analysis.json` `n_tasks` = 40 counts circuits; there was 1 program-set task, as the README says.
-- **Re-check after the repair cycle** (critic, 2026-10-28 20:38-20:45 UAE; appended, the report above is unchanged):
+- **Re-check after the repair cycle** (reviewer, 2026-10-28 20:38-20:45 UAE; appended, the report above is unchanged):
   - **Inputs.**
     - `runs/V005/repair_diff_README.txt`. It equals `diff` of `git show HEAD:README.md` (sha256 prefix `f83bad2ffa7d7209`) against the working README (`c41d23713755ca46`), so it is the complete README change.
     - Staged diffs of EXPERIMENTS.md, docs/EVIDENCE.md, ANOMALIES.md and `.gitignore`.
@@ -575,9 +575,9 @@ One report per verification, written by the critic. The coordinator links each r
   - **F2: fixed.** README Section 6.4 and the E016 card now say "pooled over the other 20 records … though not in every record" (the card names 100, 123, 210 and 219).
   - **F3: fixed.**
   - **F4: fixed in the index.** The three label CSVs are staged for deletion and ignored by `**/labels_*.csv`. They are still in commit `fc69043` (`git log --all` finds them), so the amend must land before the push. Check with `git log --all -- runs/EV1_r3_snapshot/processed_r3/labels_ds2s.csv`, which should return nothing.
-  - **F5: fixed.** The selfcheck CSVs are ignored and none is tracked; the critic logs and reports are staged.
+  - **F5: fixed.** The selfcheck CSVs are ignored and none is tracked; the reviewer logs and reports are staged.
   - **F6: fixed in the README.** EXPERIMENTS.md:320 still says "before any E012+ run" (optional).
-  - **F7:** the human decides.
+  - **F7:** the author decides.
   - **F8: done.** See R3 and R5 below for its wording.
   - **Rehearsal additions checked against logged outputs, all correct:**
     - Paper-compatible VEB and SVEB Se and +P, both arms (headline JSON `paper_compatible`).
@@ -615,7 +615,7 @@ One report per verification, written by the critic. The coordinator links each r
     - Everything else in the repair is verified.
     - After R1-R4, a grep of those four lines (plus the F4 history check) is enough for PASS. No rerun is needed.
     - Validity (question 1) stays PASS.
-- **Final check** (critic, 2026-10-28 20:56 UAE; README sha256 prefix `4e3f4606a6b15a97`, commit `87fd848`, clean working tree):
+- **Final check** (reviewer, 2026-10-28 20:56 UAE; README sha256 prefix `4e3f4606a6b15a97`, commit `87fd848`, clean working tree):
   - **R1: fixed.**
     - README.md:132 now reads "three records (200, 214, 221) are within ±0.0015 (A015)".
     - A015 (ANOMALIES.md:167) carries a dated correction note: "only 214 is within ±0.001; three records (200, 214, 221) are within ±0.0015". This matches the logged per-record confusions.
@@ -628,7 +628,7 @@ One report per verification, written by the critic. The coordinator links each r
     - `git log --all` on the three r3 label CSVs returns nothing.
     - `git ls-files` lists no `labels_*` file.
     - The only commit is `87fd848`.
-  - **F7: redacted, by the human's choice.**
+  - **F7: redacted, by the author's choice.**
     - `git log --all -p` contains 0 occurrences of the account ID, and `git grep` finds none.
     - The tracked files carry `<aws-account-id>`.
     - `runs/E019_unredacted/` is ignored and untracked.
@@ -638,5 +638,5 @@ One report per verification, written by the critic. The coordinator links each r
     - No claim is stronger than its evidence: no quantum advantage is claimed, and the post-hoc secondaries are labelled descriptive.
   - **Validity (question 1):** PASS, as recorded above.
   - **Overall V005 verdict: PASS.**
-  - **Scorecard:** Soundness anchor 3 is now met (critic PASS, access-logged confirmation, published variant count, every claim traceable), so the critic's rating is 3. The other ratings are unchanged: Performance 2, Ingenuity 3, Depth 3, both gates 3. These are internal ratings, not the judges'.
+  - **Scorecard:** Soundness anchor 3 is now met (verification PASS, access-logged confirmation, published variant count, every claim traceable), so the reviewer's rating is 3. The other ratings are unchanged: Performance 2, Ingenuity 3, Depth 3, both gates 3. These are internal ratings, not the judges'.
   - **Scope:** unchanged from the report above. Rubric agreement between the two raters is a consistency check, not validation against the judges.

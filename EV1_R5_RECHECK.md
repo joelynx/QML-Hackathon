@@ -99,7 +99,7 @@ The subsequent V003 changes also provide useful protection: reference-only predi
 Two documentation adjustments should accompany the fixes:
 
 - `EVAL.md:381` says the placeholder smoke test means an output error or scorer crash **cannot** spend an access. It catches useful classes of failures, but cannot rule out real-label-dependent failures, resource exhaustion during 8,000 replicates, or a later write failure. Describe it as a preflight check and document how failed attempts are retained and handled. Likewise, the command prints a summary before writing; it does not print the complete report.
-- Refresh `STATE.md`'s “none known” unresolved-defects and “ready for approval” statements after addressing this report. No approval or change to project state is implied by this audit.
+- Refresh the project status notes' “none known” unresolved-defects and “ready for approval” statements after addressing this report. No approval or change to project state is implied by this audit.
 
 **Verification and limits**
 

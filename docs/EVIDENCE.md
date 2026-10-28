@@ -29,9 +29,9 @@ One row per claim or number in [`README.md`](../README.md): where it comes from,
 | E002 ds2s macro-F1 0.7065 (seeds 0.7027-0.7162); Se/PPV/F1 N 0.907/0.985/0.944, S 0.595/0.269/0.370, V 0.953/0.697/0.805 | E002 | `runs/E003/compare_ds2s_headline.json` (arm `baseline`); predictions `runs/E002/pred_ds2s_seed{0..4}.csv` | `python -I -m qhc.pipe.run final --exp E002 --seeds 0 1 2 3 4 --oof --splits ds2s`; then the headline `compare` | full | EV1 (identical under EV2) |
 | Extended λ grid (to 1e-5) selects the same ESN configuration and λ; predictions byte-identical | E010, A010 | `runs/E010/` (`tuning.jsonl`, `selected_config.json`) | `python -I -m qhc.pipe.run tune --arm esn --exp E010 --lambdas 1e-5 1e-4 1e-3 1e-2 1e-1 1`; `final --exp E010 ...` | proxy | EV1 |
 | Same for the QRC (configuration 15, λ 0.1) | E011 | `runs/E011/` | `python -I -m qhc.pipe.run tune --arm qrc --exp E011 --lambdas 1e-5 1e-4 1e-3 1e-2 1e-1 1` | proxy | EV1 |
-| V004 PASS (validity only): critic reran tuning, finals and lookahead in the project venv (pipeline `55884b1fb66732b9`), 5 ds2s prediction files byte-identical; read, did not rerun, the clean-environment evidence | V004 | `VERIFICATIONS.md` V004; `runs/V004/` (`compare_repro.json`, `hashcheck.json`, `driver_log.json`) | `runs/V004/driver.py` | n/a (verification) | EV1 |
+| V004 PASS (validity only): the reviewer reran tuning, finals and lookahead in the project venv (pipeline `55884b1fb66732b9`), 5 ds2s prediction files byte-identical; read, did not rerun, the clean-environment evidence | V004 | `VERIFICATIONS.md` V004; `runs/V004/` (`compare_repro.json`, `hashcheck.json`, `driver_log.json`) | `runs/V004/driver.py` | n/a (verification) | EV1 |
 | Clean environment and fresh download reproduce every scored prediction file; one-command check reproduces all 10 headline files and the table byte for byte (26 min) | E002 card; reproduction reports | `runs/phase3/clean_build_EV2.md`, `runs/phase3/reproduce_check_EV2.md`, `runs/phase3/reproduce_check_EV2/repro_check.log` | `python scripts/reproduce.py --skip-data --check` (in a fresh copy) | n/a (reproduction) | EV2 |
-| Critic rerun from a clean environment and fresh download: 10/10 headline files and the table byte-identical, 27.3 min, no manual step beyond the README's audit-mode file copy; E018 and Phase 4 validity PASS | V005 | `VERIFICATIONS.md` (V005), `runs/V005/` | README Section 9 audit mode (`scripts/reproduce.py --check`) in a fresh copy | verification | EV2 |
+| Reviewer rerun from a clean environment and fresh download: 10/10 headline files and the table byte-identical, 27.3 min, no manual step beyond the README's audit-mode file copy; E018 and Phase 4 validity PASS | V005 | `VERIFICATIONS.md` (V005), `runs/V005/` | README Section 9 audit mode (`scripts/reproduce.py --check`) in a fresh copy | verification | EV2 |
 | Every reservoir arm passes the full-pipeline lookahead check (731 DS1 beats, 0 violations); the shared features (incl. the RR block used by E006) pass at the feature level | E002-E005, E007, E008 cards; EXPERIMENTS.md declarations | `runs/E00{2..5}/leakcheck_seed0.json`, `runs/E007/E00{2,3}/leakcheck_seed0.json`, `runs/E008/E00{2,3}/leakcheck_seed0.json` | `python -I -m qhc.pipe.run leakcheck --exp <E###> --seed 0` | diagnostic | EV1/EV2 |
 | Tuning scores from float32 code; float64 retune selects the same configurations (scores within 3.3e-4) | A011, V004 M2 | `runs/V004/compare_repro.json`; E002 card | as V004 | diagnostic | EV1 |
 
@@ -69,7 +69,7 @@ One row per claim or number in [`README.md`](../README.md): where it comes from,
 | Claim in README | ID | Artifact | Command | Type | EV |
 |---|---|---|---|---|---|
 | Pre-registration; EV1 approved 2026-10-26 21:26, EV2 22:14; 43 fixture tests | EVAL.md | `EVAL.md`; `tests/test_scorer.py` | `python -I -m pytest -q` | n/a | EV1, EV2 |
-| 7 of 15 test-split scorings used before Phase 4: the headline under EV1 and its identical EV2 rerun (2), plus E004, E005, E006, E007 and E008 (5) | EVAL.md, STATE.md | `runs/full_eval_log.jsonl` (12 lines incl. 5 pre-approval reference re-scorings that do not count) | appended automatically by `qhc.evaluate` | n/a | EV1/EV2 |
+| 7 of 15 test-split scorings used before Phase 4: the headline under EV1 and its identical EV2 rerun (2), plus E004, E005, E006, E007 and E008 (5) | EVAL.md | `runs/full_eval_log.jsonl` (12 lines incl. 5 pre-approval reference re-scorings that do not count) | appended automatically by `qhc.evaluate` | n/a | EV1/EV2 |
 | SVDB guard incident 2026-10-26 ~17:45: no label values or scores displayed or stored; V002 judged SVDB not compromised | EVAL.md access log, V002 | `EVAL.md` ("Access log"); `VERIFICATIONS.md` V002 | n/a | n/a | EV1 draft |
 | SVDB demo shot-key mismatch; no scored result affected | A017 | `ANOMALIES.md` A017; `PROGRESS_REVIEW_2026-10-28.md` | review probe (synthetic beat) | diagnostic | n/a |
 | Saved-artifact loading gap; predict-only path for the confirmation | A018 | `ANOMALIES.md` A018; `src/qhc/p4/predict.py` | n/a | n/a | EV2 |
@@ -79,14 +79,14 @@ One row per claim or number in [`README.md`](../README.md): where it comes from,
 
 | Claim in README | Source | How checked | Type |
 |---|---|---|---|
-| de Chazal et al. 2004 report SVEB positive predictivity 38.5% on DS2 | doi:10.1109/tbme.2004.827359 | abstract via the paperfetch store (2026-10-28) | n/a |
-| Bowles et al. 2024: 12 models, 160 datasets; classical models outperform; removing entanglement often as good or better | doi:10.48550/arxiv.2403.07059 | abstract and notes in the paperfetch store | n/a |
-| Pandey 2026: advantages disappear under matched size and tuning (abstract only) | doi:10.48550/arxiv.2607.09905 | abstract in the paperfetch store; full text not accessed | n/a |
-| Gupta et al. 2025: "no consistent trend to support empirical quantum utility in digital health" | doi:10.1038/s41746-025-01597-z | abstract (PubMed) via the paperfetch store | n/a |
-| Kornjača et al. 2024: classical-spin control; Huang et al. 2021: geometric difference | doi:10.48550/arxiv.2407.02553; doi:10.1038/s41467-021-22539-9 | metadata and abstracts in the paperfetch store | n/a |
-| "No quantum reservoir study on MIT-BIH with an inter-patient split and a matched classical reservoir was found" | our scan, about 31 papers, 2026-10-26 | `PROBLEM_BRIEF.md` ("Problem selection"); paperfetch tag `qhack-phase1` | n/a (scoped to our search) |
+| de Chazal et al. 2004 report SVEB positive predictivity 38.5% on DS2 | doi:10.1109/tbme.2004.827359 | abstract via a literature search (2026-10-28) | n/a |
+| Bowles et al. 2024: 12 models, 160 datasets; classical models outperform; removing entanglement often as good or better | doi:10.48550/arxiv.2403.07059 | abstract and notes from a literature search | n/a |
+| Pandey 2026: advantages disappear under matched size and tuning (abstract only) | doi:10.48550/arxiv.2607.09905 | abstract from a literature search; full text not accessed | n/a |
+| Gupta et al. 2025: "no consistent trend to support empirical quantum utility in digital health" | doi:10.1038/s41746-025-01597-z | abstract (PubMed) via a literature search | n/a |
+| Kornjača et al. 2024: classical-spin control; Huang et al. 2021: geometric difference | doi:10.48550/arxiv.2407.02553; doi:10.1038/s41467-021-22539-9 | metadata and abstracts from a literature search | n/a |
+| "No quantum reservoir study on MIT-BIH with an inter-patient split and a matched classical reservoir was found" | our scan, about 31 papers, 2026-10-26 | `PROBLEM_BRIEF.md` ("Problem selection"); literature-search tag `qhack-phase1` | n/a (scoped to our search) |
 | Data citations (MIT-BIH, SVDB Greenwald 1990 Ph.D. thesis, PhysioNet standard citation) | https://physionet.org/content/mitdb/1.0.0/, https://physionet.org/content/svdb/1.0.0/ | copied from the PhysioNet pages, accessed 2026-10-28 | n/a |
-| Jaeger 2001, GMD Report 148 | carried over from the 2026-10-26 draft | not re-checked against a source in this session | n/a |
+| Jaeger 2001, GMD Report 148 | carried over from the 2026-10-26 draft | not re-checked against a source at the time | n/a |
 
 ## Phase 4 and the SVDB confirmation (results filled 2026-10-28 ~20:10 UAE)
 

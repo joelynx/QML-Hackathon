@@ -16,13 +16,6 @@ __pycache__/
 *.egg-info/
 *.pyc
 
-# Agent session journal (local transcripts; not part of the submission)
-.journal/
-
-# Local agent settings and kit metadata (not part of the submission)
-.claude/
-.kit-install.json
-
 # Third-party paper PDFs (copyrighted; cited in the README instead)
 papers/
 
@@ -39,7 +32,7 @@ runs/*/*/features/
 
 # Label files of any split, wherever copied (derived from the databases; rebuilt by qhc.units)
 **/labels_*.csv
-# Critic scratch: regenerated duplicates of logged prediction files (their hashes are in the V005 logs)
+# Verification scratch: regenerated duplicates of logged prediction files (their hashes are in the V005 logs)
 runs/V005/**/selfcheck_ds2s/
 
 # Unredacted Braket records (hold the AWS account ID; kept locally only)
