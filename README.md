@@ -74,6 +74,23 @@ We used Amazon Braket at four levels, each one checked before the next (details 
 
 *Figure: F1 per arm on ds2s, seed means (E006 is one deterministic run). Built by `scripts/make_figure.py` from the logged comparison outputs.*
 
+## AI use statement
+
+This is a one-person project. I used Claude (Anthropic), through Claude Code, as an AI coding and research assistant throughout.
+
+**What I did**
+- Chose the healthcare problem (inter-patient ECG beat classification) and the quantum approach (a quantum reservoir with a matched classical baseline), and picked MIT-BIH and SVDB as the datasets.
+- Read the background literature and decided how the comparison should be framed.
+- Made every project decision. I approved the evaluation plan before any model was scored on the test patients, decided to run the additional experiments, and approved each paid Amazon Braket task with its spending cap.
+- Made the submission decisions, including making the repository public and the licence.
+
+**What Claude did**
+- Wrote all of the code: data pipeline, simulators, models, evaluation, figures and build scripts.
+- Ran the experiments and kept the experiment records.
+- Designed the statistical evaluation under my direction: rules fixed in advance, patient-level bootstrap intervals, a correction for testing four sub-questions, and logged access to the test data.
+- Explained the concepts I needed (reservoir computing, qubits and entanglement, the statistics) as the work progressed.
+- Drafted the README and the PDF write-up, which I reviewed and directed.
+
 ## 1. The healthcare problem
 
 - **Users and setting.** Ambulatory (Holter) ECG monitoring records about 100,000 beats per patient per day. Software flags beats as ectopic, and a technician or cardiologist reviews the flags:
