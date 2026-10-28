@@ -1,0 +1,522 @@
+{
+ "experiment": "E019",
+ "result_type": "diagnostic",
+ "status": "prepared; NO paid task submitted",
+ "time_utc": "2026-10-28T15:00Z",
+ "pricing": {
+  "url": "https://aws.amazon.com/braket/pricing/",
+  "fetched_utc": "2026-10-28T14:45Z",
+  "fetched_uae": "2026-10-28 18:45",
+  "rigetti_cepheus": {
+   "task_usd": 0.3,
+   "shot_usd": 0.000425
+  },
+  "iqm_garnet": {
+   "task_usd": 0.3,
+   "shot_usd": 0.00145
+  },
+  "iqm_emerald": {
+   "task_usd": 0.3,
+   "shot_usd": 0.0016
+  },
+  "change_vs_2026_10_26": "none",
+  "program_sets": "one per-task fee per program set + per-shot fee on total successful shots (AWS blog 'Amazon Braket introduces program sets...'; up to 100 executables; shots = total over the set); GetDevice: maximumExecutables 100, maximumTotalShots 200000"
+ },
+ "devices": {
+  "rigetti": {
+   "status": "ONLINE",
+   "queue": [
+    {
+     "queue": "QUANTUM_TASKS_QUEUE",
+     "queueSize": "0",
+     "queuePriority": "Normal"
+    },
+    {
+     "queue": "QUANTUM_TASKS_QUEUE",
+     "queueSize": "0",
+     "queuePriority": "Priority"
+    },
+    {
+     "queue": "JOBS_QUEUE",
+     "queueSize": "1"
+    }
+   ],
+   "execution_windows_utc": [
+    {
+     "executionDay": "Everyday",
+     "windowStartHour": "00:00:00",
+     "windowEndHour": "01:59:59"
+    },
+    {
+     "executionDay": "Everyday",
+     "windowStartHour": "04:00:00",
+     "windowEndHour": "13:59:59"
+    },
+    {
+     "executionDay": "Everyday",
+     "windowStartHour": "16:00:00",
+     "windowEndHour": "23:59:59"
+    }
+   ],
+   "shots_range": [
+    10,
+    50000
+   ],
+   "native_gates": [
+    "rx",
+    "rz",
+    "cz",
+    "barrier"
+   ],
+   "qubit_count": 107,
+   "disabledQubitRewiringSupported": false,
+   "supportPhysicalQubits": true,
+   "verbatim": true,
+   "fetched_utc": "2026-10-28T14:46:05.568419+00:00"
+  },
+  "iqm": {
+   "status": "ONLINE",
+   "queue": [
+    {
+     "queue": "QUANTUM_TASKS_QUEUE",
+     "queueSize": "0",
+     "queuePriority": "Normal"
+    },
+    {
+     "queue": "QUANTUM_TASKS_QUEUE",
+     "queueSize": "0",
+     "queuePriority": "Priority"
+    },
+    {
+     "queue": "JOBS_QUEUE",
+     "queueSize": "0"
+    }
+   ],
+   "execution_windows_utc": [
+    {
+     "executionDay": "Weekdays",
+     "windowStartHour": "00:00:00",
+     "windowEndHour": "01:29:59"
+    },
+    {
+     "executionDay": "Weekdays",
+     "windowStartHour": "03:15:00",
+     "windowEndHour": "15:29:59"
+    },
+    {
+     "executionDay": "Weekdays",
+     "windowStartHour": "17:15:00",
+     "windowEndHour": "23:59:59"
+    }
+   ],
+   "shots_range": [
+    1,
+    20000
+   ],
+   "native_gates": [
+    "cz",
+    "prx",
+    "cc_prx",
+    "measure_ff",
+    "barrier"
+   ],
+   "qubit_count": 20,
+   "disabledQubitRewiringSupported": false,
+   "supportPhysicalQubits": true,
+   "verbatim": true,
+   "fetched_utc": "2026-10-28T14:46:05.568419+00:00"
+  }
+ },
+ "packing": {
+  "rigetti": {
+   "P": 5,
+   "rings": [
+    [
+     81,
+     82,
+     83,
+     84,
+     93,
+     102,
+     101,
+     100,
+     99,
+     90
+    ],
+    [
+     79,
+     80,
+     89,
+     98,
+     97,
+     96,
+     95,
+     86,
+     87,
+     88
+    ],
+    [
+     55,
+     56,
+     57,
+     58,
+     59,
+     68,
+     67,
+     66,
+     65,
+     64
+    ],
+    [
+     6,
+     7,
+     16,
+     17,
+     26,
+     35,
+     34,
+     25,
+     24,
+     15
+    ],
+    [
+     4,
+     5,
+     14,
+     23,
+     22,
+     31,
+     30,
+     21,
+     12,
+     13
+    ]
+   ],
+   "median_cz_error_device": 0.01167628377355956,
+   "median_cz_error_rings": 0.00826791548929201,
+   "median_readout_fidelity_rings": 0.975,
+   "cz_per_beat_snapshot": [
+    40,
+    80,
+    120,
+    160
+   ],
+   "fid_cz_only_device_median": [
+    0.6251276088869315,
+    0.39078452739269237,
+    0.24429019719900336,
+    0.15271254684952995
+   ],
+   "fid_cz_only_selected_rings_mean": [
+    0.6954226997156684,
+    0.48363200210509677,
+    0.33635544869958434,
+    0.23393711809285458
+   ]
+  },
+  "iqm": {
+   "P": 1,
+   "rings": [
+    [
+     4,
+     5,
+     6,
+     11,
+     12,
+     17,
+     16,
+     15,
+     14,
+     9
+    ]
+   ],
+   "median_cz_error_device": 0.004464254521153177,
+   "median_cz_error_rings": 0.004052562654805969,
+   "median_readout_fidelity_rings": 0.9812000000000001,
+   "cz_per_beat_snapshot": [
+    40,
+    80,
+    120,
+    160
+   ],
+   "fid_cz_only_device_median": [
+    0.8361310143249298,
+    0.6991150731160358,
+    0.5845517952143585,
+    0.48876188545804017
+   ],
+   "fid_cz_only_selected_rings_mean": [
+    0.8268906922193416,
+    0.6837482168789819,
+    0.565385036358802,
+    0.46751162408518737
+   ]
+  }
+ },
+ "cost_options": [
+  {
+   "beats": 24,
+   "device": "rigetti",
+   "P": 5,
+   "circuits": 20,
+   "shots": 1024,
+   "usd_tasks_mode": 14.7,
+   "n_tasks_tasks_mode": 20,
+   "usd_programset_mode": 9.0,
+   "n_tasks_programset_mode": 1,
+   "within_35": true
+  },
+  {
+   "beats": 24,
+   "device": "iqm",
+   "P": 1,
+   "circuits": 96,
+   "shots": 1024,
+   "usd_tasks_mode": 171.34,
+   "n_tasks_tasks_mode": 96,
+   "usd_programset_mode": 142.84,
+   "n_tasks_programset_mode": 1,
+   "within_35": false
+  },
+  {
+   "beats": 48,
+   "device": "rigetti",
+   "P": 5,
+   "circuits": 40,
+   "shots": 1024,
+   "usd_tasks_mode": 29.41,
+   "n_tasks_tasks_mode": 40,
+   "usd_programset_mode": 17.71,
+   "n_tasks_programset_mode": 1,
+   "within_35": true
+  },
+  {
+   "beats": 48,
+   "device": "iqm",
+   "P": 1,
+   "circuits": 192,
+   "shots": 1024,
+   "usd_tasks_mode": 342.68,
+   "n_tasks_tasks_mode": 192,
+   "usd_programset_mode": 285.68,
+   "n_tasks_programset_mode": 2,
+   "within_35": false
+  },
+  {
+   "beats": 96,
+   "device": "rigetti",
+   "P": 5,
+   "circuits": 80,
+   "shots": 1024,
+   "usd_tasks_mode": 58.82,
+   "n_tasks_tasks_mode": 80,
+   "usd_programset_mode": 35.12,
+   "n_tasks_programset_mode": 1,
+   "within_35": false
+  },
+  {
+   "beats": 96,
+   "device": "iqm",
+   "P": 1,
+   "circuits": 384,
+   "shots": 1024,
+   "usd_tasks_mode": 685.36,
+   "n_tasks_tasks_mode": 384,
+   "usd_programset_mode": 571.36,
+   "n_tasks_programset_mode": 4,
+   "within_35": false
+  }
+ ],
+ "validation": {
+  "local_simulator": "amazon-braket-sdk 1.127.6 / default-simulator 1.42.0, braket_sv",
+  "worst_exact_abs_err": 3.4811394366007775e-06,
+  "note_exact": "reference is our complex64 statevector; errors <= 3.5e-6",
+  "packed_2ring_marginals_max_abs_err": [
+   1.3492834726180902e-06,
+   3.106213516179679e-06
+  ],
+  "worst_1024shot_max_abs_err": 0.11511928588151932,
+  "programset_ok": true,
+  "bitorder_control": [
+   [
+    "rigetti_single_0_k4",
+    0.0146,
+    0.1667
+   ],
+   [
+    "rigetti_single_1_k4",
+    0.0221,
+    0.212
+   ],
+   [
+    "rigetti_single_2_k4",
+    0.0269,
+    0.0957
+   ],
+   [
+    "rigetti_single_3_k4",
+    0.0204,
+    0.2156
+   ],
+   [
+    "iqm_single_0_k4",
+    0.0269,
+    0.1648
+   ],
+   [
+    "iqm_single_1_k4",
+    0.0224,
+    0.2221
+   ],
+   [
+    "iqm_single_2_k4",
+    0.0328,
+    0.101
+   ],
+   [
+    "iqm_single_3_k4",
+    0.0198,
+    0.2208
+   ],
+   [
+    "rigetti_packed2_k2",
+    0.0182,
+    0.0382
+   ],
+   [
+    "rigetti_packed2_k4",
+    0.0274,
+    0.1769
+   ]
+  ],
+  "end_to_end_local_24beats": {
+   "n_beats_complete": 24,
+   "devices": [
+    "local:braket_sv"
+   ],
+   "n_tasks": 96,
+   "vs_exact": {
+    "mean_abs_diff": 0.017551915542865323,
+    "mean_abs_diff_by_snapshot": [
+     0.011341235944719025,
+     0.017426349699995954,
+     0.020301900439098422,
+     0.02113817608764789
+    ],
+    "mean_abs_diff_Z": 0.01479206078450564,
+    "mean_abs_diff_ZZ": 0.018165216600278585,
+    "median_feature_corr": 0.9921038340263058,
+    "median_feature_corr_by_snapshot": [
+     0.9718196931696177,
+     0.9962335993459625,
+     0.9931830322064669,
+     0.9933978120040484
+    ],
+    "pooled_corr": 0.9971613867985735,
+    "zz_shrink_slope": 0.9996429867056871
+   },
+   "vs_shot": {
+    "mean_abs_diff": 0.02521750710227273,
+    "mean_abs_diff_by_snapshot": [
+     0.016110321969696965,
+     0.024857954545454544,
+     0.029675662878787878,
+     0.030226089015151517
+    ],
+    "mean_abs_diff_Z": 0.020926920572916667,
+    "mean_abs_diff_ZZ": 0.02617097077546296,
+    "median_feature_corr": 0.9839656231372612,
+    "median_feature_corr_by_snapshot": [
+     0.9474114225830212,
+     0.9912959102466175,
+     0.9857531596953785,
+     0.9882998064508566
+    ],
+    "pooled_corr": 0.9941265782217046,
+    "zz_shrink_slope": 0.9920567001392101
+   },
+   "shot_vs_exact_mean_abs_diff": 0.01776808314025402,
+   "pred_agree_hw_vs_shot": 0.8333333333333334,
+   "pred_agree_hw_vs_exact": 0.9166666666666666,
+   "pred_agree_shot_vs_exact": 0.8333333333333334,
+   "pred_counts": {
+    "hw": {
+     "N": 8,
+     "S": 8,
+     "V": 8
+    },
+    "shot": {
+     "N": 8,
+     "S": 8,
+     "V": 8
+    },
+    "exact": {
+     "N": 10,
+     "S": 6,
+     "V": 8
+    }
+   }
+  }
+ },
+ "beats": {
+  "file": "runs/E019/beats.json",
+  "seed": 20261026,
+  "stratified_by": "seed-0 E003 predicted class (pred_ds2s_seed0.csv)",
+  "nested": "24 < 48 < 96, interleaved N,S,V"
+ },
+ "plans": {
+  "rigetti_b24": {
+   "file": "runs/E019/plan_rigetti_b24.json",
+   "sha16": "dbb3973355571ca1"
+  },
+  "rigetti_b48": {
+   "file": "runs/E019/plan_rigetti_b48.json",
+   "sha16": "e3439913e62a7194"
+  },
+  "rigetti_b96": {
+   "file": "runs/E019/plan_rigetti_b96.json",
+   "sha16": "1413d337ccddc2b1"
+  }
+ },
+ "recommendation": {
+  "device": "rigetti",
+  "beats": 48,
+  "mode": "programset",
+  "tasks": 1,
+  "est_usd": 17.71,
+  "alt": {
+   "beats": 24,
+   "est_usd": 9.0
+  },
+  "approval": {
+   "device_arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+   "mode": "programset",
+   "max_tasks": 1,
+   "max_usd": 18.0
+  },
+  "commands": {
+   "dry_run": ".venv-braket/Scripts/python scripts/braket_submit.py submit --plan runs/E019/plan_rigetti_b48.json --mode programset --dry-run",
+   "submit": "(after runs/E019/approval.json exists) .venv-braket/Scripts/python scripts/braket_submit.py submit --plan runs/E019/plan_rigetti_b48.json --mode programset",
+   "analyse": "CUDA_VISIBLE_DEVICES= PYTHONPATH=src .venv/Scripts/python -m qhc.p4.braket_hw analyse",
+   "cancel": ".venv-braket/Scripts/python scripts/braket_submit.py cancel --plan runs/E019/plan_rigetti_b48.json --mode programset"
+  }
+ },
+ "code": {
+  "src/qhc/p4/braket_hw.py": "4a5dbce596f0a847",
+  "scripts/braket_submit.py": "2c8543eb2d32fb8b"
+ },
+ "availability_tonight_uae": {
+  "rigetti": "window closed now (14:00-15:59 UTC gap); opens 20:00 UAE (16:00 UTC); tasks submitted earlier wait in queue; queue 0 at 14:46 UTC",
+  "iqm": "window open now until 19:30 UAE (15:29:59 UTC), reopens 21:15 UAE",
+  "note": "execution windows read as UTC"
+ },
+ "wall_clock": "queue at window opening unknown; 40,960 shots expected to take minutes (not reported by device); abort and cancel at 21:30 UAE",
+ "risks": [
+  "Rigetti verbatim accepts rx(+-pi/2), rz, cz assumed (declared natives); SDK/program-set path validated on LocalSimulator only",
+  "fidelity estimate counts CZ errors only; T1/T2 ~10 us on Rigetti will further damp k=3-4",
+  "no readout-error mitigation; raw features",
+  "noiseless 1,024-shot resampling already agrees with E003 seed-0 predictions on only 0.83 of the 24 boundary-heavy beats (local test): ceiling for hardware agreement",
+  "EVAL.md hardware track says ~100 beats + subset macro-F1; the later E019 card is label-free, USD 35 cap: card followed",
+  "summary.md not written: the harness blocks Markdown report files from this subagent; content in summary.json and the lane report"
+ ]
+}

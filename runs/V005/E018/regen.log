@@ -1,0 +1,27 @@
+=== build_svdb  20:08:12
+{"split": "svdb", "file": "runs/V005/E018/features/svdb.npz", "n_beats": 184389, "seconds": 10.2, "file_sha256": "a89c7f8859882a37a363664070d147457f6940e7ddc6c0c8b9304c4003e15e12", "arrays_sha256": {"beat_id": "09f39f9c30b7930a0893e439066f38327cf03c36da7aa0b0d27003cfcfe1370e", "record": "7e84d52f73504f60cc2c7b117028aa0af0d306953b0979d58f3fb4e742ba3897", "win": "ea4f9170af3dbdd6ecacda8ffb0c377932a9d62a36a7b28f871e61055006d240", "rel": "bcd9e55b5495285796d9657d051b9dffec6201694ff47a9066631febc6076b9e", "rr": "e4610978233344b7c60799e8b9df54a20b07c540eee9cf22a012f908e1c61b1a"}, "pipe_revision": "55884b1fb66732b9", "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 predict 08dc4140d5d45b6b"}
+=== ds2s_E003  20:08:27
+E003 ds2s seed 0: b1450a4e6c69cc79 artifact a30c951215032d5b unchanged, reservoir arrays equal, 6.1s
+E003 ds2s seed 1: e76ac40d02f1eeb7 artifact 39a56b1b1b3e67de unchanged, reservoir arrays equal, 5.0s
+E003 ds2s seed 2: 24ea20f4a4bc91f1 artifact cb005da3df5429ce unchanged, reservoir arrays equal, 5.1s
+E003 ds2s seed 3: 903d9d6f454e1c20 artifact b23e1025d55cbe88 unchanged, reservoir arrays equal, 5.4s
+E003 ds2s seed 4: ff2c09b9c6f382e7 artifact bc5d6d49ead27e74 unchanged, reservoir arrays equal, 4.5s
+=== ds2s_E002  20:08:58
+E002 ds2s seed 0: 6996d03d8dddc1e2 artifact 0f5b4333465d9e48 unchanged, reservoir arrays equal, 0.9s
+E002 ds2s seed 1: 8a70f0713e25c7b4 artifact 58d5ede9934003b5 unchanged, reservoir arrays equal, 0.5s
+E002 ds2s seed 2: 0cacdc4c2f47ea93 artifact 3d4a76f788c7f69a unchanged, reservoir arrays equal, 0.5s
+E002 ds2s seed 3: cc2cfa437a2861ed artifact ee95d1c4898ad238 unchanged, reservoir arrays equal, 0.5s
+E002 ds2s seed 4: 8511ccea894187a5 artifact d3cf14e13e605dc9 unchanged, reservoir arrays equal, 0.4s
+=== svdb_E003  20:09:06
+E003 svdb seed 0: f071f397ba3341e1 artifact a30c951215032d5b unchanged, reservoir arrays equal, 20.5s
+E003 svdb seed 1: 14011e86962486a4 artifact 39a56b1b1b3e67de unchanged, reservoir arrays equal, 20.6s
+E003 svdb seed 2: e700b93a46cff00c artifact cb005da3df5429ce unchanged, reservoir arrays equal, 20.0s
+E003 svdb seed 3: abb18157e9d3a6e8 artifact b23e1025d55cbe88 unchanged, reservoir arrays equal, 20.1s
+E003 svdb seed 4: 0c800968e0af2841 artifact bc5d6d49ead27e74 unchanged, reservoir arrays equal, 18.8s
+=== svdb_E002  20:10:51
+E002 svdb seed 0: 55da4b6fd2233da1 artifact 0f5b4333465d9e48 unchanged, reservoir arrays equal, 1.7s
+E002 svdb seed 1: cf05f375de00fc73 artifact 58d5ede9934003b5 unchanged, reservoir arrays equal, 1.5s
+E002 svdb seed 2: a19b6a4376ff4244 artifact 3d4a76f788c7f69a unchanged, reservoir arrays equal, 1.5s
+E002 svdb seed 3: ce9aa662eaeb29e9 artifact ee95d1c4898ad238 unchanged, reservoir arrays equal, 1.4s
+E002 svdb seed 4: 59c7ebaf44b268eb artifact d3cf14e13e605dc9 unchanged, reservoir arrays equal, 1.4s
+=== done  20:11:03

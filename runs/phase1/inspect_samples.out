@@ -1,0 +1,82 @@
+
+======== MIT-BIH Arrhythmia
+records: 48
+100 header: fs 360 n_sig 2 sig_len 650000 dur_min 30.1 names ['MLII', 'V5'] comments ['69 M 1085 1629 x1', 'Aldomet, Inderal']
+100 first 2 s: shape (720, 2) range mV [-0.57 -0.47] [0.96 0.7 ] finite True
+lead configs: {('MLII', 'V5'): 2, ('MLII', 'V1'): 40, ('V5', 'V2'): 2, ('MLII', 'V2'): 2, ('V5', 'MLII'): 1, ('MLII', 'V4'): 1}
+AAMI totals (all 48): {'N': 90631, 'S': 2781, 'V': 7236, 'Q': 8043, 'F': 803}
+DS1 22 records: {'N': 45866, 'Q': 8, 'S': 944, 'V': 3788, 'F': 415} | S-beat records: 16
+DS2 22 records: {'N': 44259, 'S': 1837, 'V': 3221, 'Q': 7, 'F': 388} | S-beat records: 16
+paced: {102: {'Q': 2084, 'N': 99, 'V': 4}, 104: {'Q': 2064, 'N': 163, 'V': 2}, 107: {'Q': 2078, 'V': 59}, 217: {'Q': 1802, 'V': 162, 'N': 244}}
+DS2 S-beat concentration (top 3 records): [(1382, 232), (209, 222), (55, 202)] of 1837
+
+======== UCI SPECT Heart
+train (80, 23) test (187, 23) label balance train {1: 40, 0: 40} test {1: 172, 0: 15}
+values [np.int64(0), np.int64(1)] feature means [0.45, 0.25, 0.39, 0.28, 0.4, 0.24, 0.28, 0.43, 0.31, 0.38, 0.24, 0.3, 0.49, 0.3, 0.18, 0.31, 0.14, 0.13, 0.25, 0.32, 0.36, 0.41]
+duplicate rows (all 23 cols): 39 | distinct feature patterns: 219
+
+======== MedMNIST PneumoniaMNIST
+train_images (4708, 28, 28) uint8 (np.uint8(0), np.uint8(255))
+val_images (524, 28, 28) uint8 (np.uint8(0), np.uint8(255))
+test_images (624, 28, 28) uint8 (np.uint8(0), np.uint8(254))
+train_labels (4708, 1) uint8 (array([0, 1], dtype=uint8), array([1214, 3494]))
+val_labels (524, 1) uint8 (array([0, 1], dtype=uint8), array([135, 389]))
+test_labels (624, 1) uint8 (array([0, 1], dtype=uint8), array([234, 390]))
+
+======== MoleculeNet BBBP
+(2050, 4) ['num', 'name', 'p_np', 'smiles'] {1: 1567, 0: 483} dup smiles 0
+   num                  name  p_np                                              smiles
+0    1            Propanolol     1                    [Cl].CC(C)NCC(O)COc1cccc2ccccc12
+1    2  Terbutylchlorambucil     1            C(=O)(OC(C)(C)C)CCCc1ccc(cc1)N(CCCl)CCCl
+2    3                 40730     1  c12c3c(N4CCN(C)CC4)c(F)cc1c(c(C(O)=O)cn2C(C)CO3)=O
+
+======== PTB-XL metadata
+(21799, 28) patients 18869 folds {1: 2175, 2: 2181, 3: 2192, 4: 2174, 5: 2174, 6: 2173, 7: 2176, 8: 2173, 9: 2183, 10: 2198}
+date range 1984-11-09 09:17:34 2001-06-11 16:43:01 cols ['ecg_id', 'patient_id', 'age', 'sex', 'height', 'weight', 'nurse', 'site', 'device', 'recording_date', 'report', 'scp_codes'] ...
+
+======== PhysioNet/CinC 2012 outcomes (set-a)
+(4000, 6) ['RecordID', 'SAPS-I', 'SOFA', 'Length_of_stay', 'Survival', 'In-hospital_death'] mortality {0: 3446, 1: 554}
+
+======== CHB-MIT chb01 summary
+Data Sampling Rate: 256 Hz
+*************************
+
+Channels in EDF Files:
+**********************
+Channel 1: FP1-F7
+Channel 2: F7-T7
+Channel 3: T7-P7
+Channel 4: P7-O1
+Channel 5: FP1-F3
+Channel 6: F3-C3
+Channel 7: C3-P3
+Channel 8: P3-O1
+Channel 9: FP2-F4
+Channel 10: F4-C4
+Channel 11: C4-P4
+Channel 12: P4-O2
+Channel 13: FP2-F8
+Channel 14: F8-T8
+Channel 15: T8-P8
+Channel 16: P8-O2
+Channel 17: FZ-CZ
+Channel 18: CZ-PZ
+Channel 19: P7-T7
+Channel 20: T7-FT9
+Channel 21: FT9-FT10
+Channel 22: FT10-T8
+Channel 23: T8-P8
+
+File Name: chb01_01.edf
+File Start Time: 11:42:54
+File End Time: 12:42:54
+Number of 
+files listed: 42 seizure entries: 7
+
+======== TCGA BRCA (UCSC Xena)
+clinical (1247, 194)
+PAM50Call_RNAseq {'LumA': 434, nan: 291, 'LumB': 194, 'Basal': 142, 'Normal': 119, 'Her2': 67}
+breast_carcinoma_estrogen_receptor_status {'Positive': 912, 'Negative': 266, nan: 66, 'Indeterminate': 3}
+vital_status {'LIVING': 1039, 'DECEASED': 203, nan: 5}
+sample_type {'Primary Tumor': 1101, 'Solid Tissue Normal': 139, 'Metastatic': 7}
+expression: samples 1218 genes 20530 first ids ['TCGA-AR-A5QQ-01', 'TCGA-D8-A1JA-01']

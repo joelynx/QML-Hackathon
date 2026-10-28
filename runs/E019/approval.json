@@ -1,0 +1,10 @@
+{
+ "device_arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+ "mode": "programset",
+ "plan": "runs/E019/plan_rigetti_b48.json",
+ "max_tasks": 1,
+ "max_usd": 18.0,
+ "approved_by": "the human, in this session (AskUserQuestion answer: 'Rigetti 48 beats, $17.71 (Recommended)')",
+ "approved_at_uae": "2026-10-28T19:2x+04:00 (answer received before 19:31)",
+ "retry": "approved by the human ~19:35 UAE: create AWSServiceRoleForAmazonBraket via API, then resubmit the same job (1 task, USD 17.71, cap USD 18)"
+}

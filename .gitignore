@@ -1,0 +1,46 @@
+# Data: raw MIT-BIH / SVDB, TCGA samples and processed units (including the SVDB labels in confirm/).
+# Not redistributed; rebuild with scripts/download_data.py and `python -I -m qhc.units` (ODC-By 1.0, see README).
+runs/data/
+**/confirm/
+runs/V003/probe_tmp/
+
+# Environments
+.venv/
+.venv-*/
+
+# Test and build byproducts
+runs/*/pytest_tmp/
+runs/**/pytest_tmp/
+.pytest_cache/
+__pycache__/
+*.egg-info/
+*.pyc
+
+# Agent session journal (local transcripts; not part of the submission)
+.journal/
+
+# Local agent settings and kit metadata (not part of the submission)
+.claude/
+.kit-install.json
+
+# Third-party paper PDFs (copyrighted; cited in the README instead)
+papers/
+
+# Large derived feature caches (rebuilt by the commands on the cards; GitHub's 50 MB warning)
+runs/E018/features/*.npz
+runs/E015/*/feats_*.npy
+
+# Scratch copies made by evaluation tests and reviews; a vendored third-party library
+**/probe_tmp/
+runs/*/_deps/
+runs/*/features/
+runs/*/features_*/
+runs/*/*/features/
+
+# Label files of any split, wherever copied (derived from the databases; rebuilt by qhc.units)
+**/labels_*.csv
+# Critic scratch: regenerated duplicates of logged prediction files (their hashes are in the V005 logs)
+runs/V005/**/selfcheck_ds2s/
+
+# Unredacted Braket records (hold the AWS account ID; kept locally only)
+runs/E019_unredacted/

@@ -1,0 +1,425 @@
+{
+ "exp": "E014",
+ "result_type": "proxy (DS1 OOF); ds2s predictions of the selected variant written label-free",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 ablate f7fe9f52db014c44",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "shots": 1024,
+ "seeds": {
+  "reservoir": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "shot": [
+   1000,
+   1001,
+   1002,
+   1003,
+   1004
+  ]
+ },
+ "commands": [
+  "CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 .venv/Scripts/python -I -m qhc.p4.ablate e014-check",
+  "CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 .venv/Scripts/python -I -m qhc.p4.ablate e014 --variant n6",
+  "CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 .venv/Scripts/python -I -m qhc.p4.ablate e014 --variant n8",
+  "CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 .venv/Scripts/python -I -m qhc.p4.ablate e014 --variant n12",
+  "CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 .venv/Scripts/python -I -m qhc.p4.ablate e014 --variant z10",
+  "CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 .venv/Scripts/python -I -m qhc.p4.ablate e014-final"
+ ],
+ "mechanism_check": {
+  "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 ablate f7fe9f52db014c44",
+  "n_beats": 3186,
+  "beats": "every 16th DS1 prediction-set beat",
+  "n10": {
+   "seed0_shots1024": {
+    "bit_identical": true,
+    "max_abs_diff": 0.0,
+    "couplings_equal": true,
+    "K": 220,
+    "seconds": 1.0
+   },
+   "seed0_shotsNone": {
+    "bit_identical": true,
+    "max_abs_diff": 0.0,
+    "couplings_equal": true,
+    "K": 220,
+    "seconds": 0.1
+   },
+   "seed3_shots1024": {
+    "bit_identical": true,
+    "max_abs_diff": 0.0,
+    "couplings_equal": true,
+    "K": 220,
+    "seconds": 0.4
+   },
+   "seed3_shotsNone": {
+    "bit_identical": true,
+    "max_abs_diff": 0.0,
+    "couplings_equal": true,
+    "K": 220,
+    "seconds": 0.1
+   }
+  },
+  "dense": {
+   "n6": {
+    "beats": 8,
+    "K": 84,
+    "max_abs_diff": 2.3989226143328324e-06,
+    "seconds": 0.2
+   },
+   "n8": {
+    "beats": 8,
+    "K": 144,
+    "max_abs_diff": 3.675217413734444e-06,
+    "seconds": 0.3
+   },
+   "n10": {
+    "beats": 8,
+    "K": 220,
+    "max_abs_diff": 4.452630876672359e-06,
+    "seconds": 0.4
+   },
+   "n12": {
+    "beats": 8,
+    "K": 312,
+    "max_abs_diff": 5.286871611609456e-06,
+    "seconds": 0.5
+   }
+  },
+  "passed": true
+ },
+ "variants": {
+  "n6": {
+   "n_qubits": 6,
+   "readout": "Z+ZZ",
+   "K": 84,
+   "K_with_rr": 92,
+   "selected_lam": 0.1,
+   "seed0_by_lam": {
+    "0.001": 0.6563013224873696,
+    "0.01": 0.6680368884943902,
+    "0.1": 0.68336118896036,
+    "1.0": 0.660596130271379
+   },
+   "per_seed": {
+    "0": {
+     "macro_f1": 0.68336118896036,
+     "f1_N": 0.9688952289672236,
+     "f1_S": 0.3266649784755634,
+     "f1_V": 0.7545233594382933
+    },
+    "1": {
+     "macro_f1": 0.6756282431640163,
+     "f1_N": 0.9685084964700118,
+     "f1_S": 0.31800863601727203,
+     "f1_V": 0.7403675970047652
+    },
+    "2": {
+     "macro_f1": 0.6820925812175549,
+     "f1_N": 0.968331642719399,
+     "f1_S": 0.3210870659285355,
+     "f1_V": 0.7568590350047304
+    },
+    "3": {
+     "macro_f1": 0.6715207420882199,
+     "f1_N": 0.9681978798586572,
+     "f1_S": 0.3095652173913043,
+     "f1_V": 0.7367991290146979
+    },
+    "4": {
+     "macro_f1": 0.6889890408379548,
+     "f1_N": 0.9690726242050985,
+     "f1_S": 0.3295803480040942,
+     "f1_V": 0.7683141503046717
+    }
+   },
+   "mean": {
+    "macro_f1": 0.6803183592536212,
+    "f1_N": 0.9686011744440781,
+    "f1_S": 0.3209812491633539,
+    "f1_V": 0.7513726541534317
+   },
+   "sd_macro_f1": 0.006837080006504114,
+   "delta_mean_macro_f1_vs_e003": 0.01318719883500008,
+   "timings_s": {
+    "0": 21.2,
+    "1": 8.7,
+    "2": 9.8,
+    "3": 8.5,
+    "4": 8.1
+   }
+  },
+  "n8": {
+   "n_qubits": 8,
+   "readout": "Z+ZZ",
+   "K": 144,
+   "K_with_rr": 152,
+   "selected_lam": 0.1,
+   "seed0_by_lam": {
+    "0.001": 0.648394649830971,
+    "0.01": 0.6590178327076751,
+    "0.1": 0.6630014914144522,
+    "1.0": 0.6424968016470095
+   },
+   "per_seed": {
+    "0": {
+     "macro_f1": 0.6630014914144522,
+     "f1_N": 0.9669983934309175,
+     "f1_S": 0.3019520632567334,
+     "f1_V": 0.7200540175557056
+    },
+    "1": {
+     "macro_f1": 0.6710097650509005,
+     "f1_N": 0.9671410725439458,
+     "f1_S": 0.299800796812749,
+     "f1_V": 0.7460874257960065
+    },
+    "2": {
+     "macro_f1": 0.6590360248430879,
+     "f1_N": 0.9657674958688759,
+     "f1_S": 0.2837220485693676,
+     "f1_V": 0.7276185300910203
+    },
+    "3": {
+     "macro_f1": 0.6717606597103155,
+     "f1_N": 0.9661550834394478,
+     "f1_S": 0.3041021861950381,
+     "f1_V": 0.7450247094964605
+    },
+    "4": {
+     "macro_f1": 0.671748428580742,
+     "f1_N": 0.9675088642597507,
+     "f1_S": 0.3048327137546468,
+     "f1_V": 0.7429037077278283
+    }
+   },
+   "mean": {
+    "macro_f1": 0.6673112739198996,
+    "f1_N": 0.9667141819085876,
+    "f1_S": 0.298881961717707,
+    "f1_V": 0.7363376781334043
+   },
+   "sd_macro_f1": 0.0059206879788124426,
+   "delta_mean_macro_f1_vs_e003": 0.00018011350127855597,
+   "timings_s": {
+    "0": 26.0,
+    "1": 8.0,
+    "2": 9.1,
+    "3": 8.6,
+    "4": 8.4
+   }
+  },
+  "n12": {
+   "n_qubits": 12,
+   "readout": "Z+ZZ",
+   "K": 312,
+   "K_with_rr": 320,
+   "selected_lam": 0.01,
+   "seed0_by_lam": {
+    "0.001": 0.6630713353447272,
+    "0.01": 0.6637018959510823,
+    "0.1": 0.662911798623525,
+    "1.0": 0.6316210600596686
+   },
+   "per_seed": {
+    "0": {
+     "macro_f1": 0.6637018959510823,
+     "f1_N": 0.9618615515924711,
+     "f1_S": 0.279819471308833,
+     "f1_V": 0.7494246649519426
+    },
+    "1": {
+     "macro_f1": 0.6678512439430814,
+     "f1_N": 0.9620418112987115,
+     "f1_S": 0.28361435365326415,
+     "f1_V": 0.7578975668772685
+    },
+    "2": {
+     "macro_f1": 0.6667273277816043,
+     "f1_N": 0.9613408725564037,
+     "f1_S": 0.28381564844587354,
+     "f1_V": 0.7550254623425355
+    },
+    "3": {
+     "macro_f1": 0.6601412983106624,
+     "f1_N": 0.9619524911791806,
+     "f1_S": 0.2796573875802998,
+     "f1_V": 0.7388140161725067
+    },
+    "4": {
+     "macro_f1": 0.6592363947928125,
+     "f1_N": 0.9619621980391496,
+     "f1_S": 0.2734090422112706,
+     "f1_V": 0.7423379441280173
+    }
+   },
+   "mean": {
+    "macro_f1": 0.6635316321558486,
+    "f1_N": 0.9618317849331832,
+    "f1_S": 0.2800631806399082,
+    "f1_V": 0.7486999308944542
+   },
+   "sd_macro_f1": 0.003835489990583936,
+   "delta_mean_macro_f1_vs_e003": -0.0035995282627724334,
+   "timings_s": {
+    "0": 41.3,
+    "1": 16.6,
+    "2": 18.2,
+    "3": 17.7,
+    "4": 17.3
+   }
+  },
+  "z10": {
+   "n_qubits": 10,
+   "readout": "Z",
+   "K": 40,
+   "K_with_rr": 48,
+   "selected_lam": 0.1,
+   "seed0_by_lam": {
+    "0.001": 0.653146341137433,
+    "0.01": 0.6664978270214036,
+    "0.1": 0.6764119558121949,
+    "1.0": 0.6630641016471851
+   },
+   "per_seed": {
+    "0": {
+     "macro_f1": 0.6764119558121949,
+     "f1_N": 0.9700359124314829,
+     "f1_S": 0.3228952772073922,
+     "f1_V": 0.7363046777977094
+    },
+    "1": {
+     "macro_f1": 0.6749965351569219,
+     "f1_N": 0.9696855080041383,
+     "f1_S": 0.32340208810797044,
+     "f1_V": 0.7319020093586568
+    },
+    "2": {
+     "macro_f1": 0.6802141020945798,
+     "f1_N": 0.9699814260768983,
+     "f1_S": 0.32326361993286856,
+     "f1_V": 0.7473972602739726
+    },
+    "3": {
+     "macro_f1": 0.6722078873410632,
+     "f1_N": 0.9697495826377296,
+     "f1_S": 0.31967627718765806,
+     "f1_V": 0.7271978021978022
+    },
+    "4": {
+     "macro_f1": 0.6840818227527583,
+     "f1_N": 0.9707572440008447,
+     "f1_S": 0.3347994825355757,
+     "f1_V": 0.7466887417218543
+    }
+   },
+   "mean": {
+    "macro_f1": 0.6775824606315035,
+    "f1_N": 0.9700419346302187,
+    "f1_S": 0.324807348994293,
+    "f1_V": 0.7378980982699991
+   },
+   "sd_macro_f1": 0.004639783802070227,
+   "delta_mean_macro_f1_vs_e003": 0.01045130021288243,
+   "timings_s": {
+    "0": 14.5,
+    "1": 6.8,
+    "2": 6.7,
+    "3": 6.7,
+    "4": 6.4
+   }
+  }
+ },
+ "e003_ds1_oof": {
+  "source": "runs/E003/oof_ds1_seed{0..4}.csv scored on DS1 units (lambda 0.1, 1,024 shots)",
+  "per_seed": {
+   "0": {
+    "macro_f1": 0.6682421837409803,
+    "f1_N": 0.966731680133742,
+    "f1_S": 0.29707542329399694,
+    "f1_V": 0.7409194477952017
+   },
+   "1": {
+    "macro_f1": 0.6652277265023955,
+    "f1_N": 0.9661589958158996,
+    "f1_S": 0.28865461847389556,
+    "f1_V": 0.7408695652173913
+   },
+   "2": {
+    "macro_f1": 0.6698719129247643,
+    "f1_N": 0.9668113209652048,
+    "f1_S": 0.2935410907263131,
+    "f1_V": 0.7492633270827752
+   },
+   "3": {
+    "macro_f1": 0.6615894306397214,
+    "f1_N": 0.9664869932036559,
+    "f1_S": 0.28876209377325723,
+    "f1_V": 0.7295192049422509
+   },
+   "4": {
+    "macro_f1": 0.6707245482852439,
+    "f1_N": 0.9670562519516438,
+    "f1_S": 0.2968947235546579,
+    "f1_V": 0.7482226693494299
+   }
+  },
+  "mean": {
+   "macro_f1": 0.6671311604186211,
+   "f1_N": 0.9666490484140292,
+   "f1_S": 0.29298558996442414,
+   "f1_V": 0.7417588428774098
+  }
+ },
+ "selection": {
+  "rule": "highest 5-seed mean pooled DS1 OOF macro-F1 among n6/n8/n12, ties to fewer qubits",
+  "means": {
+   "n6": 0.6803183592536212,
+   "n8": 0.6673112739198996,
+   "n12": 0.6635316321558486
+  },
+  "selected": "n6",
+  "lam": 0.1,
+  "check_runs": {
+   "passed": true,
+   "n_runs": 5,
+   "arm_id": "E014-qrc_n6",
+   "config_id": "E014-qrc-cfg15-n6"
+  }
+ },
+ "leakcheck": {
+  "model": "runs/E014/n6/model_seed0.npz",
+  "model_sha256": "4aca5a9a7802f850ea0b1a67e67b2cf027b08a48ab56cb09458508cdf19777fd",
+  "beats_checked": 731,
+  "n_violations": 0,
+  "passed": true,
+  "seconds": 33.7
+ },
+ "artifacts": {
+  "mechanism_check": "runs/E014/mechanism_check.json",
+  "selection": "runs/E014/selection.json",
+  "variant_oof": "runs/E014/{n6,n8,n12,z10}/oof_ds1_seed{0..4}.csv (at the variant's selected lambda)",
+  "variant_results": "runs/E014/{v}/variant_results.json",
+  "ds2s_pred": "runs/E014/n6/pred_ds2s_seed{0..4}.csv",
+  "manifests": "runs/E014/n6/pred_ds2s_seed{0..4}.run.json",
+  "models": "runs/E014/n6/model_seed{0..4}.npz",
+  "leakcheck": "runs/E014/n6/leakcheck_seed0.json"
+ },
+ "notes": [
+  "n = 10 GQRC reproduces reservoirs.QRC bit-identically (max abs diff 0.0) on 3,186 DS1 beats, seeds 0 and 3, finite 1,024 shots and exact; couplings identical.",
+  "Dense sparse-Kronecker complex128 reference vs GQRC exact features (8 beats): max abs diff 2.4e-6 (n6), 3.7e-6 (n8), 4.5e-6 (n10), 5.3e-6 (n12) - float32 statevector level, same at n = 10 where GQRC == QRC.",
+  "Selection (declared): n6 0.6803 > n8 0.6673 > n12 0.6635 -> n6, lambda 0.1.",
+  "Confound: for n != 10 the qubit count is changed together with the input encoding (each 10-sample chunk is linearly resampled to n points; n = 6 is a smoothed/downsampled input) and K; the effect is not attributable to qubit count alone.",
+  "Smaller readouts score higher on DS1 OOF: n6 (K 84) +0.0132 and Z-only (K 40) +0.0105 over E003 (K 220); n12 (K 312) -0.0036. Removing all ZZ correlators does not hurt DS1 OOF (consistent with A016: the gain is not carried by quantum correlations). Proxy, no CI; DS1 record-level uncertainty is ~+/-0.05.",
+  "n6 is chosen after seeing DS1 results of 3 variants (selection on DS1 only, as declared); its ds2s scoring is secondary and descriptive."
+ ]
+}

@@ -1,0 +1,186 @@
+{
+  "source_revision": "9c74cdcb7d673bc7",
+  "source_files": {
+    "__init__.py": "67533a7f8a0d6e67be20fcfb251ee61f6e12ccdbd6cd057ec416725724fd1d72",
+    "evalspec.py": "9542b4a30d70355dbd20ced96ec7524267f464f8a8c7b04e81a708528af2b3cd",
+    "evaluate.py": "27ffd6405a2428646d7b3fbc1a16ce41fc62387be8ad13d54d93e6454528bfb9",
+    "leakcheck.py": "9638c16c65c88c96ad4813300a29983f02396b644409176d4ce9d6e149d68fd8",
+    "scorer.py": "a794c3436e03ba57213a9a617509b97150ee0adc28e1caf8535e1e89001c28ab",
+    "units.py": "377be49dd4c713e31d3c9008d4e8c61aa7963035a4855762ab340e2bd250f245"
+  },
+  "fixture_revision": "ccbe3120d947a5a7",
+  "eval_sha256": "7bb9518db0a93e34e1664f5c7a29972c55fbeb0e3f407b71f75c764717032bf1",
+  "processed_hashes": {
+    "positions_ds1.csv": true,
+    "records_ds1.csv": true,
+    "labels_ds1.csv": true,
+    "ds1_folds.json": true,
+    "positions_ds2s.csv": true,
+    "records_ds2s.csv": true,
+    "labels_ds2s.csv": true,
+    "positions_ds2.csv": true,
+    "records_ds2.csv": true,
+    "labels_ds2.csv": true,
+    "positions_svdb.csv": true,
+    "records_svdb.csv": true
+  },
+  "mitdb_raw_hashes": {
+    "checked": 144,
+    "failed": []
+  },
+  "ds1_other": {
+    "count": 472,
+    "symbols": {
+      "!": 472
+    },
+    "records": {
+      "207": 472
+    }
+  },
+  "removing_flutter_positions_effect": {
+    "207": {
+      "scored_beats_with_changed_pre_rr": 6,
+      "scored_beats_with_changed_post_rr": 6,
+      "example_ids": [
+        "mitdb:207:101423",
+        "mitdb:207:14522",
+        "mitdb:207:18825",
+        "mitdb:207:19579",
+        "mitdb:207:22117",
+        "mitdb:207:554577",
+        "mitdb:207:590585",
+        "mitdb:207:87039"
+      ]
+    }
+  },
+  "independent_reference_scores": {
+    "const_n": 0.3147357848792709,
+    "rr_rule": 0.4548782336921176
+  },
+  "reference_delta": 0.1401424488128467,
+  "ds2s_S_share_232": 0.7754070746771476,
+  "slice_levels": {
+    "default": 0.95,
+    "default_draws": 2000,
+    "explicit_m4": 0.9875,
+    "m4_draws": 8000
+  },
+  "compare_output_fields": [
+    "auprc",
+    "baseline_macro_f1",
+    "baseline_per_seed",
+    "boot_seed",
+    "candidate_macro_f1",
+    "candidate_per_seed",
+    "ci",
+    "ci_level",
+    "delta",
+    "delta_without_dominant_record",
+    "dominant_record",
+    "leave_one_record_out_delta",
+    "n_boot",
+    "n_comparisons",
+    "n_records",
+    "n_seeds",
+    "n_units",
+    "outcome",
+    "outcome_without_dominant_record_condition",
+    "per_class",
+    "suspicious_gain"
+  ],
+  "compare_per_class_fields": [
+    "baseline_f1",
+    "candidate_f1",
+    "ci",
+    "delta"
+  ],
+  "compare_missing_required_diagnostics": [
+    "per-class sensitivity and PPV",
+    "record-averaged sensitivity and PPV",
+    "false flags per hour",
+    "F/Q prediction distribution",
+    "per-record confusion matrices"
+  ],
+  "synthetic_confirmation": {
+    "confirmed": true,
+    "reported_n_seeds": 5,
+    "distinct_candidate_files": 1,
+    "distinct_baseline_files": 1,
+    "warning_emitted": false,
+    "accesses": 1,
+    "has_nonunit_predictions": false,
+    "has_per_record_confusions": false,
+    "has_sensitivity": false
+  },
+  "one_seed_confirmation": {
+    "confirmed": true,
+    "n_seeds": 1
+  },
+  "real_confirmation_log_unchanged": true,
+  "real_svdb_labels_or_annotations_read": false,
+  "small_positive_gain_label": "no detectable change",
+  "supplied_paper_sha256": "164df598535a1018dee8e3c7640b26159dd78cc831cb81e6e6712cfc5a64e940",
+  "paper_table_II_reconciliation": {
+    "ds1": {
+      "paper": {
+        "N": 45868,
+        "S": 942,
+        "V": 3787,
+        "F": 415,
+        "Q": 8
+      },
+      "current_annotations_before_edge_exclusions": {
+        "N": 45866,
+        "S": 944,
+        "V": 3788,
+        "F": 415,
+        "Q": 8
+      },
+      "current_minus_paper": {
+        "N": -2,
+        "S": 2,
+        "V": 1,
+        "F": 0,
+        "Q": 0
+      }
+    },
+    "ds2": {
+      "paper": {
+        "N": 44258,
+        "S": 1837,
+        "V": 3221,
+        "F": 388,
+        "Q": 7
+      },
+      "current_annotations_before_edge_exclusions": {
+        "N": 44259,
+        "S": 1837,
+        "V": 3221,
+        "F": 388,
+        "Q": 7
+      },
+      "current_minus_paper": {
+        "N": 1,
+        "S": 0,
+        "V": 0,
+        "F": 0,
+        "Q": 0
+      }
+    }
+  },
+  "fusion_to_S_example": {
+    "truth": "NSVF",
+    "predictions": "NSVS",
+    "current_S_ppv": 1.0,
+    "paper_table_V_S_ppv": 0.5,
+    "primary_macro_f1": 1.0,
+    "note": "Primary excludes F by design; the mismatch concerns secondary EC57-style naming/definitions."
+  },
+  "sequential_bonferroni_counterexample": {
+    "description": "Independent null tests at step-dependent levels; illustration, not an estimated EV1 error rate",
+    "m": 15,
+    "any_two_sided_rejection_probability": 0.1545943922830738,
+    "any_positive_CI_probability": 0.08006840968646878
+  },
+  "elapsed_seconds": 1.046692300005816
+}

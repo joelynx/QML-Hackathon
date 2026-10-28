@@ -1,0 +1,53 @@
+{
+ "P1": {
+  "score_quantum": "refused: score on ds2s waits until the pre-registered headline pair is logged",
+  "diagnostic_5x5": "refused: on ds2s and ds2, diagnostic scoring is limited to the minimal-reference predictions",
+  "secondary_A": "refused: secondary on ds2s waits until the pre-registered headline pair is logged",
+  "lowdata_A": "refused: lowdata_k5 on ds2s waits until the pre-registered headline pair is logged",
+  "headline_B_first": "accepted",
+  "headline_A_after_B": "refused: the headline must be the first non-reference scoring on the test splits; the log already holds compare headlin"
+ },
+ "P1b": {
+  "headline": "accepted",
+  "lowdata_k5_first": "accepted",
+  "lowdata_k5_other_files": "refused: lowdata_k5 was already evaluated on ds2s (['Q', 'C'], 2026-10-26T19:04:45+04:00) with other runs; it runs once",
+  "lowdata_k5_identical": "accepted"
+ },
+ "P2_P2b": {
+  "copies_same_artifact": "refused: candidate: two runs have byte-identical model artifacts (the same model is not two seeds)",
+  "mixed_configs": "refused: candidate: runs come from different configurations ['c0', 'c1', 'c2', 'c3', 'c4']",
+  "same_arm_id_both_arms": "refused: candidate and baseline carry the same arm_id 'e'",
+  "identical_preds_distinct_artifacts": "accepted"
+ },
+ "P3_P4": {
+  "unwritable_out": "error: FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\\\Users\\\\admin\\\\Desktop\\\\Water Hackathon",
+  "access_log_after_unwritable": 0,
+  "first_access": "accepted",
+  "repair_other_models": "refused: a repair access must score the same model artifacts as the first access; a model change needs --approved-model",
+  "repair_same_models": "accepted",
+  "access_log_final": 2
+ },
+ "P5": {
+  "headline_relative": "accepted",
+  "identical_absolute": "accepted",
+  "arms_swapped": "refused: the headline must be the first non-reference scoring on the test splits; the log already holds compare headlin"
+ },
+ "N1_reference_headline_opens_gate": {
+  "headline_with_reference_copies": "accepted",
+  "score_quantum_before_real_headline": "accepted",
+  "secondary_quantum_pair": "accepted",
+  "lowdata_k5_quantum_pair": "accepted",
+  "real_headline_afterwards": "refused: the headline must be the first non-reference scoring on the test splits; the log already holds score None ['q'"
+ },
+ "N2_confirmation_before_headline": "accepted",
+ "N3_identical_rerun_after_secondary": {
+  "headline": "accepted",
+  "secondary": "accepted",
+  "identical_headline_rerun": "refused: the headline must be the first non-reference scoring on the test splits; the log already holds compare seconda"
+ },
+ "N4_out_overwrites_input": {
+  "run": "accepted",
+  "input_overwritten": true
+ },
+ "N5_load_labels_ds2s_direct": "readable without any order check"
+}

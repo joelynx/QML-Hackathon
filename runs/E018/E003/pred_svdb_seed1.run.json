@@ -1,0 +1,69 @@
+{
+ "arm_id": "E003-qrc",
+ "seed": 1,
+ "split": "svdb",
+ "config_id": "E003-qrc-cfg15",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 predict 08dc4140d5d45b6b",
+ "model_artifact": "runs/E003/model_seed1.npz",
+ "model_artifact_sha256": "39a56b1b1b3e67de84af44c15f26f114903f4519c3643c218dda0ee30dc73808",
+ "reservoir_seed": 1,
+ "shot_seed": 1001,
+ "prediction_sha256": "14011e86962486a4d2e7c4e9a70d4b01506404944868c91518a57386997a5a97",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "lam": 0.1,
+ "predicted_by": "qhc.p4.predict (predict-only from the saved artifact; A018 fix)",
+ "source_manifest": "runs/E003/pred_ds2s_seed1.run.json",
+ "source_manifest_sha256": "784a694433220f4912f9ad68c72a4eafc50b6e3aaf4deb907b3cc7fed52651ca",
+ "source_code_revision": "eval 9a1922c8898b90db / pipe da67af87f8b8fd73",
+ "features_file": "runs/E018/features/svdb.npz",
+ "features_arrays_sha256": {
+  "beat_id": "09f39f9c30b7930a0893e439066f38327cf03c36da7aa0b0d27003cfcfe1370e",
+  "record": "7e84d52f73504f60cc2c7b117028aa0af0d306953b0979d58f3fb4e742ba3897",
+  "win": "ea4f9170af3dbdd6ecacda8ffb0c377932a9d62a36a7b28f871e61055006d240",
+  "rel": "bcd9e55b5495285796d9657d051b9dffec6201694ff47a9066631febc6076b9e",
+  "rr": "e4610978233344b7c60799e8b9df54a20b07c540eee9cf22a012f908e1c61b1a"
+ },
+ "artifact_check": {
+  "sha256_before": "39a56b1b1b3e67de84af44c15f26f114903f4519c3643c218dda0ee30dc73808",
+  "sha256_after_load": "39a56b1b1b3e67de84af44c15f26f114903f4519c3643c218dda0ee30dc73808",
+  "arm": "qrc",
+  "seed": 1,
+  "shot_seed": 1001,
+  "shots": 1024,
+  "lam": 0.1,
+  "artifact_pipe_revision": "da67af87f8b8fd73",
+  "reservoir_arrays": {
+   "couplings": {
+    "shape": [
+     10
+    ],
+    "dtype": "float64",
+    "sha256": "510212d4a20c6f05019ea9ff5e7179a6fce671490dac54887a4fa2066927837e",
+    "equal": true
+   }
+  },
+  "readout_shapes": {
+   "mu": [
+    228
+   ],
+   "sd": [
+    228
+   ],
+   "W_readout": [
+    228,
+    3
+   ],
+   "b_readout": [
+    3
+   ]
+  },
+  "sha256_after_predict": "39a56b1b1b3e67de84af44c15f26f114903f4519c3643c218dda0ee30dc73808"
+ }
+}

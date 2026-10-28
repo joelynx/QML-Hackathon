@@ -1,0 +1,1 @@
+completed arn:aws:braket:us-west-1:<aws-account-id>:quantum-task/73e0c152-76d6-432a-98fb-738ab43b9308

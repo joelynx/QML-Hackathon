@@ -1,0 +1,574 @@
+{
+ "split": "ds2s",
+ "candidate_id": "const_n",
+ "pred_file": "runs/EV1_reference_r4/pred_const_n_ds2s.csv",
+ "pred_sha256": "d16215992953f4fb3f23a4f5bfc64b658c13e40c04d594fc6a9e879a7184a3b5",
+ "labels_sha256": "bc99cc7493340d0ac2727d6347fd7c5f53d7af0f2bd57fa3d25feaf64d924f84",
+ "scorer": {
+  "ev": "EV1",
+  "code_revision": "a2439884ff2f1909",
+  "practical_gain": 0.02,
+  "suspicious_gain": 0.05,
+  "ci_level": 0.95,
+  "slice_ci_level": 0.9875,
+  "slice_family": [
+   "S_f1",
+   "V_f1",
+   "lowdata_k5",
+   "lowdata_k11"
+  ],
+  "n_boot": 8000,
+  "boot_seed": 20261026,
+  "n_seeds": 5,
+  "lookahead_sec": 1.0,
+  "edge_sec": 1.0
+ },
+ "time": "2026-10-26T18:37:36+04:00",
+ "command": "C:\\Users\\admin\\Desktop\\Water Hackathon\\quantum_healthcare\\src\\qhc\\evaluate.py score --split ds2s --pred runs/EV1_reference_r4/pred_const_n_ds2s.csv --id const_n --out runs/EV1_reference_r4/score_const_n_ds2s.json",
+ "macro_f1": 0.3147357848792709,
+ "accuracy": 0.8943113581871035,
+ "per_class": {
+  "N": {
+   "support": 42148,
+   "predicted": 47129,
+   "sensitivity": 1.0,
+   "ppv": 0.8943113581871035,
+   "f1": 0.9442073546378127,
+   "nsv_record_avg_sensitivity": 1.0,
+   "nsv_record_avg_ppv": 0.896184070048346,
+   "nsv_class_false_flags_per_hour": null
+  },
+  "S": {
+   "support": 1781,
+   "predicted": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "f1": 0.0,
+   "nsv_record_avg_sensitivity": 0.0,
+   "nsv_record_avg_ppv": null,
+   "nsv_class_false_flags_per_hour": 0.0,
+   "auprc": 0.037789895817861616
+  },
+  "V": {
+   "support": 3200,
+   "predicted": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "f1": 0.0,
+   "nsv_record_avg_sensitivity": 0.0,
+   "nsv_record_avg_ppv": null,
+   "nsv_class_false_flags_per_hour": 0.0,
+   "auprc": 0.0678987459950349
+  }
+ },
+ "confusion_true_by_pred": [
+  [
+   42148,
+   0,
+   0
+  ],
+  [
+   1781,
+   0,
+   0
+  ],
+  [
+   3200,
+   0,
+   0
+  ]
+ ],
+ "n_predict": 47523,
+ "n_units": 47129,
+ "nonunit_predictions": {
+  "F": {
+   "N": 387,
+   "S": 0,
+   "V": 0
+  },
+  "Q": {
+   "N": 7,
+   "S": 0,
+   "V": 0
+  }
+ },
+ "paper_compatible": {
+  "VEB": {
+   "tp": 0,
+   "fn": 3200,
+   "fp": 0,
+   "tn": 44323,
+   "not_scored": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "fpr": 0.0
+  },
+  "SVEB": {
+   "tp": 0,
+   "fn": 1781,
+   "fp": 0,
+   "tn": 45742,
+   "not_scored": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "fpr": 0.0
+  },
+  "confusion_truth5_by_pred": [
+   [
+    42148,
+    0,
+    0
+   ],
+   [
+    1781,
+    0,
+    0
+   ],
+   [
+    3200,
+    0,
+    0
+   ],
+   [
+    387,
+    0,
+    0
+   ],
+   [
+    7,
+    0,
+    0
+   ]
+  ]
+ },
+ "review_burden": {
+  "hours": 10.532407407407408,
+  "ectopic_flags_per_hour": 0.0,
+  "normal_beats_flagged_per_hour": 0.0,
+  "f_q_beats_flagged_per_hour": 0.0,
+  "s_v_class_swaps_per_hour": 0.0,
+  "missed_ectopic_per_hour": 472.92131868131867
+ },
+ "per_record": {
+  "100": {
+   "confusion_true_by_pred": [
+    [
+     2236,
+     0,
+     0
+    ],
+    [
+     33,
+     0,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ]
+   ],
+   "n": 2270
+  },
+  "103": {
+   "confusion_true_by_pred": [
+    [
+     2080,
+     0,
+     0
+    ],
+    [
+     2,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2082
+  },
+  "105": {
+   "confusion_true_by_pred": [
+    [
+     2524,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     41,
+     0,
+     0
+    ]
+   ],
+   "n": 2565
+  },
+  "111": {
+   "confusion_true_by_pred": [
+    [
+     2121,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ]
+   ],
+   "n": 2122
+  },
+  "113": {
+   "confusion_true_by_pred": [
+    [
+     1786,
+     0,
+     0
+    ],
+    [
+     6,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1792
+  },
+  "117": {
+   "confusion_true_by_pred": [
+    [
+     1532,
+     0,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1533
+  },
+  "121": {
+   "confusion_true_by_pred": [
+    [
+     1859,
+     0,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ]
+   ],
+   "n": 1861
+  },
+  "123": {
+   "confusion_true_by_pred": [
+    [
+     1513,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     3,
+     0,
+     0
+    ]
+   ],
+   "n": 1516
+  },
+  "200": {
+   "confusion_true_by_pred": [
+    [
+     1741,
+     0,
+     0
+    ],
+    [
+     30,
+     0,
+     0
+    ],
+    [
+     825,
+     0,
+     0
+    ]
+   ],
+   "n": 2596
+  },
+  "210": {
+   "confusion_true_by_pred": [
+    [
+     2419,
+     0,
+     0
+    ],
+    [
+     22,
+     0,
+     0
+    ],
+    [
+     195,
+     0,
+     0
+    ]
+   ],
+   "n": 2636
+  },
+  "212": {
+   "confusion_true_by_pred": [
+    [
+     2745,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2745
+  },
+  "213": {
+   "confusion_true_by_pred": [
+    [
+     2637,
+     0,
+     0
+    ],
+    [
+     28,
+     0,
+     0
+    ],
+    [
+     220,
+     0,
+     0
+    ]
+   ],
+   "n": 2885
+  },
+  "214": {
+   "confusion_true_by_pred": [
+    [
+     2000,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     256,
+     0,
+     0
+    ]
+   ],
+   "n": 2256
+  },
+  "219": {
+   "confusion_true_by_pred": [
+    [
+     2080,
+     0,
+     0
+    ],
+    [
+     7,
+     0,
+     0
+    ],
+    [
+     64,
+     0,
+     0
+    ]
+   ],
+   "n": 2151
+  },
+  "221": {
+   "confusion_true_by_pred": [
+    [
+     2029,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     396,
+     0,
+     0
+    ]
+   ],
+   "n": 2425
+  },
+  "222": {
+   "confusion_true_by_pred": [
+    [
+     2272,
+     0,
+     0
+    ],
+    [
+     209,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2481
+  },
+  "228": {
+   "confusion_true_by_pred": [
+    [
+     1686,
+     0,
+     0
+    ],
+    [
+     3,
+     0,
+     0
+    ],
+    [
+     362,
+     0,
+     0
+    ]
+   ],
+   "n": 2051
+  },
+  "231": {
+   "confusion_true_by_pred": [
+    [
+     1566,
+     0,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ],
+    [
+     2,
+     0,
+     0
+    ]
+   ],
+   "n": 1569
+  },
+  "232": {
+   "confusion_true_by_pred": [
+    [
+     397,
+     0,
+     0
+    ],
+    [
+     1381,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1778
+  },
+  "233": {
+   "confusion_true_by_pred": [
+    [
+     2227,
+     0,
+     0
+    ],
+    [
+     7,
+     0,
+     0
+    ],
+    [
+     830,
+     0,
+     0
+    ]
+   ],
+   "n": 3064
+  },
+  "234": {
+   "confusion_true_by_pred": [
+    [
+     2698,
+     0,
+     0
+    ],
+    [
+     50,
+     0,
+     0
+    ],
+    [
+     3,
+     0,
+     0
+    ]
+   ],
+   "n": 2751
+  }
+ }
+}

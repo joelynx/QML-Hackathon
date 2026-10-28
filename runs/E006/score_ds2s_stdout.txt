@@ -1,0 +1,2 @@
+wrote runs/E006/score_ds2s.json
+E006 ds2s: macro-F1 0.6997 | N Se 0.952 PPV 0.989 | S Se 0.471 PPV 0.333 | V Se 0.834 PPV 0.663

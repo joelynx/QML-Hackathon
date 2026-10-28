@@ -1,0 +1,41 @@
+{
+ "rule": "numpy default_rng(20261026) over sorted DS1 records; k=5 then k=11 from the same stream; redraw until the subset has >= 10 S and >= 10 V units",
+ "subsets": {
+  "k5": {
+   "records": [
+    "101",
+    "122",
+    "209",
+    "215",
+    "223"
+   ],
+   "draws": 2,
+   "units": {
+    "N": 12183,
+    "S": 462,
+    "V": 638
+   }
+  },
+  "k11": {
+   "records": [
+    "106",
+    "112",
+    "115",
+    "116",
+    "119",
+    "124",
+    "205",
+    "208",
+    "209",
+    "220",
+    "223"
+   ],
+   "draws": 1,
+   "units": {
+    "N": 22130,
+    "S": 589,
+    "V": 2656
+   }
+  }
+ }
+}

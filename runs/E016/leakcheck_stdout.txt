@@ -1,0 +1,1 @@
+{"exp": "E016", "seed": 0, "arm": "hgb", "model_artifact_sha256": "f8d28b4960a676c210df1aedf7765f8b175e325692cecfe9d5a7b167155c1e64", "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 boost c2c2fc47c011e891", "beats_checked": 731, "passed": true} {'207': (141, 0), '209': (234, 0), '114': (135, 0), '201': (221, 0)}

@@ -1,0 +1,19 @@
+{
+ "url": "https://aws.amazon.com/braket/pricing/",
+ "fetched_utc": "2026-10-28T14:45Z",
+ "fetched_uae": "2026-10-28 18:45",
+ "rigetti_cepheus": {
+  "task_usd": 0.3,
+  "shot_usd": 0.000425
+ },
+ "iqm_garnet": {
+  "task_usd": 0.3,
+  "shot_usd": 0.00145
+ },
+ "iqm_emerald": {
+  "task_usd": 0.3,
+  "shot_usd": 0.0016
+ },
+ "change_vs_2026_10_26": "none",
+ "program_sets": "one per-task fee per program set + per-shot fee on total successful shots (AWS blog 'Amazon Braket introduces program sets...'; up to 100 executables; shots = total over the set); GetDevice: maximumExecutables 100, maximumTotalShots 200000"
+}

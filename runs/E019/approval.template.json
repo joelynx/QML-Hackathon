@@ -1,0 +1,10 @@
+{
+ "_note": "Template only. The coordinator copies this to runs/E019/approval.json ONLY after the human approves.",
+ "device_arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+ "mode": "programset",
+ "plan": "runs/E019/plan_rigetti_b48.json",
+ "max_tasks": 1,
+ "max_usd": 18.00,
+ "approved_by": "<human>",
+ "approved_at_uae": "<time>"
+}

@@ -1,0 +1,6 @@
+E005 qrc seed 0: 30.3s
+E005 qrc seed 1: 25.4s
+E005 qrc seed 2: 25.1s
+E005 qrc seed 3: 24.2s
+E005 qrc seed 4: 26.3s
+{"exp": "E005", "seed": 0, "arm": "qrc", "pipe_revision": "18b08b059ebe6518", "beats_checked": 731, "passed": true} {'207': (141, 0), '209': (234, 0), '114': (135, 0), '201': (221, 0)}

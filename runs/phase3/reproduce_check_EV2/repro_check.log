@@ -1,0 +1,145 @@
+
+=== venv  23:23:43
+
+=== lock  23:23:54
+
+
+=== editable  23:28:25
+
+
+=== revision  23:28:38
+8501643023cd2eb6
+
+=== confirm_absent  23:28:42
+ls: cannot access 'runs/data/processed/EV1/confirm': No such file or directory
+
+=== reproduce  23:28:42
+
+$ -m pytest -q -p no:cacheprovider
+...........................................                              [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\wfdb\io\annotation.py:3062
+  C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin-Desktop-Water-Hackathon-quantum-healthcare\edc20777-a2e3-4383-a16c-f4326f4ffe4d\scratchpad\repro_copy\.venv\Lib\site-packages\wfdb\io\annotation.py:3062: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+  See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+    ann_class_table.set_index(
+
+.venv\Lib\site-packages\wfdb\io\annotation.py:3232
+  C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin-Desktop-Water-Hackathon-quantum-healthcare\edc20777-a2e3-4383-a16c-f4326f4ffe4d\scratchpad\repro_copy\.venv\Lib\site-packages\wfdb\io\annotation.py:3232: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+  See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+    ann_label_table.set_index(ann_label_table["label_store"].values, inplace=True)
+
+tests/test_scorer.py::test_rr_rule_reference_uses_positions_only
+  C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin-Desktop-Water-Hackathon-quantum-healthcare\edc20777-a2e3-4383-a16c-f4326f4ffe4d\scratchpad\repro_copy\tests\test_scorer.py:243: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+    assert (pred[[f"prob_{c}" for c in E.CLASSES]].sum(1) == 1).all()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+43 passed, 3 warnings in 47.65s
+
+$ -m qhc.pipe.features --splits ds1 ds2s
+C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin-Desktop-Water-Hackathon-quantum-healthcare\edc20777-a2e3-4383-a16c-f4326f4ffe4d\scratchpad\repro_copy\runs\features\EV1\ds1.npz 50964
+C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin-Desktop-Water-Hackathon-quantum-healthcare\edc20777-a2e3-4383-a16c-f4326f4ffe4d\scratchpad\repro_copy\runs\features\EV1\ds2s.npz 47523
+
+$ -m qhc.pipe.run tune --arm esn --exp E002
+esn cfg00 best 0.6705 (lam 0.001) 14.1s {'size': 110, 'rho': 0.9406914185637194, 'leak': 0.9176431079676046, 'in_scale': 0.406291926664866, 'density': 0.06892013579180603, 'bias': 0.5325044186347108}
+esn cfg01 best 0.6437 (lam 0.01) 11.8s {'size': 220, 'rho': 1.044484531992674, 'leak': 0.9717234072762663, 'in_scale': 0.9829190562935326, 'density': 0.389633027100038, 'bias': 0.27019466402706316}
+esn cfg02 best 0.6324 (lam 0.01) 9.9s {'size': 110, 'rho': 0.5702513538496369, 'leak': 0.7139054415544882, 'in_scale': 1.9647623360110367, 'density': 0.6801176223766534, 'bias': 0.9665840563909842}
+esn cfg03 best 0.6556 (lam 0.001) 10.0s {'size': 220, 'rho': 1.176198439359777, 'leak': 0.6359541039249768, 'in_scale': 0.6874550580658285, 'density': 0.6754300898012545, 'bias': 0.3880222719615245}
+esn cfg04 best 0.6219 (lam 0.01) 12.3s {'size': 110, 'rho': 0.9603115117830617, 'leak': 0.48019039951269515, 'in_scale': 0.5131979999289242, 'density': 0.22411992013434562, 'bias': 0.06525779888991745}
+esn cfg05 best 0.6065 (lam 0.01) 10.0s {'size': 110, 'rho': 0.7750174112032255, 'leak': 0.7607377735501326, 'in_scale': 1.6644616291043581, 'density': 0.4785603108235436, 'bias': 0.41187768781909884}
+esn cfg06 best 0.6418 (lam 0.01) 10.5s {'size': 110, 'rho': 1.0971557878187053, 'leak': 0.34577130730306416, 'in_scale': 1.4323886464798872, 'density': 0.6117321943401607, 'bias': 0.75618561173846}
+esn cfg07 best 0.6560 (lam 0.001) 11.7s {'size': 55, 'rho': 0.6754693922487305, 'leak': 0.514862129457725, 'in_scale': 0.8100188177818871, 'density': 0.4716738810652251, 'bias': 0.16216079269162886}
+esn cfg08 best 0.6702 (lam 0.001) 10.7s {'size': 55, 'rho': 0.7612907273530736, 'leak': 0.6996526736499171, 'in_scale': 0.3904383049727229, 'density': 0.9751216558888348, 'bias': 0.690191419155354}
+esn cfg09 best 0.6344 (lam 0.1) 11.1s {'size': 110, 'rho': 0.8004566637136824, 'leak': 0.4665348902680978, 'in_scale': 0.9792584618395013, 'density': 0.31734146732984625, 'bias': 0.49282712206240775}
+esn cfg10 best 0.6709 (lam 0.001) 11.8s {'size': 55, 'rho': 0.7472098144751604, 'leak': 0.9849084383603781, 'in_scale': 0.19025706447576513, 'density': 0.29760507335048486, 'bias': 0.3920102672404937}
+esn cfg11 best 0.6577 (lam 0.01) 10.2s {'size': 55, 'rho': 0.8615028299204914, 'leak': 0.6955285765422926, 'in_scale': 0.980085224844274, 'density': 0.8037740780783542, 'bias': 0.7551088164963147}
+esn cfg12 best 0.6260 (lam 0.01) 10.1s {'size': 220, 'rho': 1.1490861777643357, 'leak': 0.7285565543250099, 'in_scale': 1.4202129028939559, 'density': 0.09483112658542034, 'bias': 0.35793407114306763}
+esn cfg13 best 0.6268 (lam 0.01) 11.6s {'size': 220, 'rho': 1.0933465452711593, 'leak': 0.6119459197363022, 'in_scale': 0.2165863127149476, 'density': 0.41575840831132405, 'bias': 0.0043744802310548}
+esn cfg14 best 0.6281 (lam 0.001) 16.7s {'size': 110, 'rho': 1.0387907808307268, 'leak': 0.4785829412847621, 'in_scale': 0.256377745358959, 'density': 0.17098718291747872, 'bias': 0.0243254437733208}
+esn cfg15 best 0.6330 (lam 0.001) 17.2s {'size': 55, 'rho': 0.6769182851193866, 'leak': 0.3936067005250705, 'in_scale': 0.11118408990490147, 'density': 0.1740681295306073, 'bias': 0.1907218080489046}
+esn cfg16 best 0.6458 (lam 0.001) 16.4s {'size': 220, 'rho': 0.6294447836974012, 'leak': 0.46469477074439736, 'in_scale': 0.12325075796712337, 'density': 0.7540756918536617, 'bias': 0.22548165897969508}
+esn cfg17 best 0.6536 (lam 0.001) 16.9s {'size': 220, 'rho': 0.5282388989603234, 'leak': 0.1580378993317417, 'in_scale': 0.1522090079790616, 'density': 0.5733102419910452, 'bias': 0.4131833940289361}
+esn cfg18 best 0.6125 (lam 0.001) 15.1s {'size': 110, 'rho': 0.790668618048656, 'leak': 0.6604391110334709, 'in_scale': 0.936037186483559, 'density': 0.664513855808944, 'bias': 0.20996557519543246}
+esn cfg19 best 0.6378 (lam 0.001) 14.8s {'size': 220, 'rho': 0.8545730533192288, 'leak': 0.8378763396067893, 'in_scale': 1.2278633147355396, 'density': 0.9930297432888243, 'bias': 0.3094619413472659}
+esn cfg20 best 0.6365 (lam 0.01) 16.5s {'size': 55, 'rho': 1.0575307952196678, 'leak': 0.6875419683398324, 'in_scale': 1.1670445405210343, 'density': 0.11362537132561522, 'bias': 0.0603921124126201}
+esn cfg21 best 0.6696 (lam 0.01) 15.5s {'size': 55, 'rho': 0.5963916003956424, 'leak': 0.58876454377838, 'in_scale': 1.3238867086674304, 'density': 0.06353752297766038, 'bias': 0.6811893065977487}
+esn cfg22 best 0.6673 (lam 0.01) 15.9s {'size': 55, 'rho': 0.5760449761306431, 'leak': 0.7382840769259881, 'in_scale': 0.4924886266812889, 'density': 0.9441945255290055, 'bias': 0.5867373212727859}
+esn cfg23 best 0.6703 (lam 0.01) 16.1s {'size': 55, 'rho': 0.644972907699911, 'leak': 0.9783115933841301, 'in_scale': 0.43102466025335967, 'density': 0.7047518107829293, 'bias': 0.7058423986670994}
+esn cfg24 best 0.6458 (lam 0.001) 18.6s {'size': 220, 'rho': 0.6626417301536913, 'leak': 0.25658625767490084, 'in_scale': 0.10902226472452714, 'density': 0.638639046164695, 'bias': 0.39745040640240326}
+esn cfg25 best 0.6293 (lam 0.001) 16.4s {'size': 110, 'rho': 1.1272908901631227, 'leak': 0.6069926419394508, 'in_scale': 0.7840997530111066, 'density': 0.5369791398308726, 'bias': 0.27168021017385213}
+esn cfg26 best 0.6708 (lam 0.001) 17.1s {'size': 55, 'rho': 0.5409696102308653, 'leak': 0.46298223891346624, 'in_scale': 0.31374472078526944, 'density': 0.7958819046474939, 'bias': 0.6813693191573059}
+esn cfg27 best 0.5986 (lam 0.1) 16.1s {'size': 110, 'rho': 1.0159905579347042, 'leak': 0.7491733183314858, 'in_scale': 1.032797826856307, 'density': 0.9914476073174214, 'bias': 0.0402262390093604}
+esn cfg28 best 0.6745 (lam 0.001) 17.6s {'size': 55, 'rho': 0.6801305020819445, 'leak': 0.10244788459973231, 'in_scale': 0.9796057536708305, 'density': 0.05409639694101503, 'bias': 0.5368532157292856}
+esn cfg29 best 0.6313 (lam 0.1) 18.8s {'size': 220, 'rho': 0.7135114312115041, 'leak': 0.2391190607243211, 'in_scale': 0.1405691650532616, 'density': 0.21212228738148448, 'bias': 0.04721727390155428}
+best: {'index': 28, 'arm': 'esn', 'config': {'size': 55, 'rho': 0.6801305020819445, 'leak': 0.10244788459973231, 'in_scale': 0.9796057536708305, 'density': 0.05409639694101503, 'bias': 0.5368532157292856}, 'lam': 0.001, 'score': 0.6744868148588367, 'n_configs': 30}
+
+$ -m qhc.pipe.run final --exp E002 --seeds 0 1 2 3 4 --oof --splits ds2s
+E002 esn seed 0: 14.9s
+E002 esn seed 1: 11.6s
+E002 esn seed 2: 11.3s
+E002 esn seed 3: 11.3s
+E002 esn seed 4: 12.4s
+
+$ -m qhc.pipe.run leakcheck --exp E002 --seed 0
+{"exp": "E002", "seed": 0, "arm": "esn", "pipe_revision": "55884b1fb66732b9", "beats_checked": 731, "passed": true} {'207': (141, 0), '209': (234, 0), '114': (135, 0), '201': (221, 0)}
+
+$ -m qhc.pipe.run tune --arm qrc --exp E003
+qrc cfg00 best 0.6296 (lam 0.01) 25.7s {'in_scale': 1.056379351910438, 'J': 0.9813828371274387, 'h': 1.3718892790607182, 'depth': 1, 'topology': 'chain', 'disorder': 0.019915932412427395}
+qrc cfg01 best 0.6315 (lam 0.01) 16.7s {'in_scale': 0.49295153291970606, 'J': 1.1889690639853483, 'h': 1.4560141890964142, 'depth': 2, 'topology': 'ring', 'disorder': 0.3575084495789874}
+qrc cfg02 best 0.6580 (lam 0.01) 20.2s {'in_scale': 0.22466290104041925, 'J': 1.0651332989854607, 'h': 0.24050270769927376, 'depth': 2, 'topology': 'ring', 'disorder': 0.9940662617599684}
+qrc cfg03 best 0.6306 (lam 0.01) 16.3s {'in_scale': 0.7293725211186706, 'J': 1.4532176789473779, 'h': 1.4523968787195543, 'depth': 2, 'topology': 'ring', 'disorder': 0.6435242188858121}
+qrc cfg04 best 0.6524 (lam 0.01) 21.6s {'in_scale': 0.7186704645390406, 'J': 0.6432311807461343, 'h': 0.7558074028001852, 'depth': 3, 'topology': 'ring', 'disorder': 0.4224337772363279}
+qrc cfg05 best 0.6668 (lam 0.01) 22.9s {'in_scale': 0.5131979999289242, 'J': 0.3565977770400883, 'h': 0.19136091844588443, 'depth': 3, 'topology': 'chain', 'disorder': 0.7341530817223696}
+qrc cfg06 best 0.6422 (lam 0.01) 23.6s {'in_scale': 1.6644616291043581, 'J': 0.7315625633189063, 'h': 0.6766287629467383, 'depth': 2, 'topology': 'chain', 'disorder': 0.8530796968838648}
+qrc cfg07 best 0.6520 (lam 0.01) 20.1s {'in_scale': 0.22661271283214762, 'J': 1.3440030002464076, 'h': 0.9278158653433946, 'depth': 1, 'topology': 'ring', 'disorder': 0.2506705603553293}
+qrc cfg08 best 0.6562 (lam 0.01) 20.4s {'in_scale': 0.3978506599187336, 'J': 1.0776047867785064, 'h': 0.7214141405171739, 'depth': 1, 'topology': 'chain', 'disorder': 0.5965486446572399}
+qrc cfg09 best 0.6483 (lam 0.001) 20.6s {'in_scale': 0.30594170098614654, 'J': 1.032793047899871, 'h': 0.7365521078805932, 'depth': 1, 'topology': 'ring', 'disorder': 0.690191419155354}
+qrc cfg10 best 0.6613 (lam 0.1) 16.4s {'in_scale': 0.3617704129010364, 'J': 0.6701653848614854, 'h': 1.1662753901368161, 'depth': 1, 'topology': 'chain', 'disorder': 0.49282712206240775}
+qrc cfg11 best 0.6213 (lam 0.1) 13.8s {'in_scale': 0.25478705682868064, 'J': 0.5944196289503207, 'h': 1.4765242374494771, 'depth': 1, 'topology': 'chain', 'disorder': 0.26063691931629984}
+qrc cfg12 best 0.6427 (lam 0.01) 19.1s {'in_scale': 0.32360641056028305, 'J': 0.823005659840983, 'h': 1.0263777857324552, 'depth': 2, 'topology': 'ring', 'disorder': 0.793446397977215}
+qrc cfg13 best 0.6365 (lam 0.01) 17.4s {'in_scale': 0.960327178763834, 'J': 1.4728425429172034, 'h': 1.3981723555286714, 'depth': 1, 'topology': 'ring', 'disorder': 0.8857239708661283}
+qrc cfg14 best 0.6544 (lam 0.1) 11.6s {'in_scale': 0.11518514241510447, 'J': 0.6011076996002946, 'h': 1.2866930905423188, 'depth': 3, 'topology': 'ring', 'disorder': 0.25797330484973235}
+qrc cfg15 best 0.6669 (lam 0.1) 21.9s {'in_scale': 0.3168896563622144, 'J': 0.10612427232347672, 'h': 0.15868034322631924, 'depth': 2, 'topology': 'ring', 'disorder': 0.42064771253862454}
+qrc cfg16 best 0.6606 (lam 0.1) 22.0s {'in_scale': 0.256377745358959, 'J': 0.2782969011415476, 'h': 0.1340556212826491, 'depth': 3, 'topology': 'chain', 'disorder': 0.3262296672500783}
+qrc cfg17 best 0.6379 (lam 0.1) 21.3s {'in_scale': 0.11118408990490147, 'J': 0.2828372435187897, 'h': 0.3670105312684664, 'depth': 3, 'topology': 'ring', 'disorder': 0.18492111956771606}
+qrc cfg18 best 0.6496 (lam 0.01) 22.3s {'in_scale': 0.3366655717738964, 'J': 0.19769600909745105, 'h': 1.137585230100133, 'depth': 1, 'topology': 'chain', 'disorder': 0.04034128422903338}
+qrc cfg19 best 0.6284 (lam 0.1) 15.5s {'in_scale': 0.1213106534585782, 'J': 0.2963186848030943, 'h': 0.8711940408289086, 'depth': 2, 'topology': 'chain', 'disorder': 0.9006149257742216}
+qrc cfg20 best 0.6363 (lam 0.1) 22.2s {'in_scale': 0.3469291915778344, 'J': 0.9717941727187325, 'h': 1.1451798560338735, 'depth': 1, 'topology': 'ring', 'disorder': 0.20996557519543246}
+qrc cfg21 best 0.6394 (lam 0.01) 15.5s {'in_scale': 0.4560521841683233, 'J': 1.247807639388339, 'h': 1.272002212621656, 'depth': 2, 'topology': 'ring', 'disorder': 0.3094619413472659}
+qrc cfg22 best 0.6419 (lam 0.1) 13.4s {'in_scale': 0.21258090512405223, 'J': 1.2150615904393354, 'h': 1.0139541729730726, 'depth': 2, 'topology': 'ring', 'disorder': 0.06697407507959496}
+qrc cfg23 best 0.6417 (lam 0.1) 11.0s {'in_scale': 0.11983176325345525, 'J': 0.2927832007912849, 'h': 0.8603004014330354, 'depth': 3, 'topology': 'ring', 'disorder': 0.014250024187010935}
+qrc cfg24 best 0.6522 (lam 0.01) 14.3s {'in_scale': 0.769569275727313, 'J': 0.42787197430365687, 'h': 0.2520899522612863, 'depth': 1, 'topology': 'ring', 'disorder': 0.5321908087043729}
+qrc cfg25 best 0.6290 (lam 0.001) 14.1s {'in_scale': 1.6772743477210126, 'J': 0.9214322497819002, 'h': 0.389945815399822, 'depth': 1, 'topology': 'ring', 'disorder': 0.48769215184597003}
+qrc cfg26 best 0.6464 (lam 0.01) 13.1s {'in_scale': 0.7882900556635798, 'J': 1.0881793581339392, 'h': 0.8583834811468836, 'depth': 2, 'topology': 'chain', 'disorder': 0.17398473074988985}
+qrc cfg27 best 0.6289 (lam 0.01) 18.3s {'in_scale': 0.10902226472452714, 'J': 0.967468068032182, 'h': 0.6564305689633645, 'depth': 1, 'topology': 'ring', 'disorder': 0.5633251577105008}
+qrc cfg28 best 0.6589 (lam 0.01) 14.5s {'in_scale': 0.7840997530111066, 'J': 0.8176534692244439, 'h': 0.480352294243393, 'depth': 1, 'topology': 'ring', 'disorder': 0.05852801461552182}
+qrc cfg29 best 0.6524 (lam 0.01) 10.2s {'in_scale': 0.33475193006809145, 'J': 0.6343512447754303, 'h': 1.1991943857963068, 'depth': 1, 'topology': 'ring', 'disorder': 0.7371293684781489}
+best: {'index': 15, 'arm': 'qrc', 'config': {'in_scale': 0.3168896563622144, 'J': 0.10612427232347672, 'h': 0.15868034322631924, 'depth': 2, 'topology': 'ring', 'disorder': 0.42064771253862454}, 'lam': 0.1, 'score': 0.6668913778861573, 'n_configs': 30}
+
+$ -m qhc.pipe.run final --exp E003 --seeds 0 1 2 3 4 --oof --splits ds2s
+E003 qrc seed 0: 15.7s
+E003 qrc seed 1: 12.9s
+E003 qrc seed 2: 12.7s
+E003 qrc seed 3: 12.8s
+E003 qrc seed 4: 12.2s
+
+$ -m qhc.pipe.run leakcheck --exp E003 --seed 0
+{"exp": "E003", "seed": 0, "arm": "qrc", "pipe_revision": "55884b1fb66732b9", "beats_checked": 731, "passed": true} {'207': (141, 0), '209': (234, 0), '114': (135, 0), '201': (221, 0)}
+runs\E003\pred_ds2s_seed0.csv: identical to the logged headline input
+runs\E003\pred_ds2s_seed1.csv: identical to the logged headline input
+runs\E003\pred_ds2s_seed2.csv: identical to the logged headline input
+runs\E003\pred_ds2s_seed3.csv: identical to the logged headline input
+runs\E003\pred_ds2s_seed4.csv: identical to the logged headline input
+runs\E002\pred_ds2s_seed0.csv: identical to the logged headline input
+runs\E002\pred_ds2s_seed1.csv: identical to the logged headline input
+runs\E002\pred_ds2s_seed2.csv: identical to the logged headline input
+runs\E002\pred_ds2s_seed3.csv: identical to the logged headline input
+runs\E002\pred_ds2s_seed4.csv: identical to the logged headline input
+
+$ -m qhc.pipe.tables --cmp runs\E003\compare_ds2s_headline_EV2.json --out runs\tables\headline_ds2s.md
+wrote runs\tables\headline_ds2s.md
+reproduce exit 0
+
+=== tables_diff  23:49:28
+headline table identical
+
+=== done  23:49:28

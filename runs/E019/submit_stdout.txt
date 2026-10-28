@@ -1,0 +1,38 @@
+device arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q mode programset beats 48 P 5 circuits 40 tasks 1 shots/executable 1024 est USD 17.71 (ledger so far USD 0.00)
+  task 0: 40 executables rigetti_b48_k1_c000..rigetti_b48_k4_c009 est USD 17.7080
+device status ONLINE
+Traceback (most recent call last):
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 337, in <module>
+    main()
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 333, in main
+    {"localsim": localsim, "submit": submit, "fetch": fetch, "simplan": simplan, "cancel": cancel}[a.cmd](a)
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 237, in submit
+    t = device.run(prog, shots=plan["shots"] * len(sub))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_device.py", line 211, in run
+    return AwsQuantumTask.create(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_quantum_task.py", line 228, in create
+    return _create_internal(
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\functools.py", line 912, in wrapper
+    return dispatch(args[0].__class__)(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_quantum_task.py", line 717, in _
+    task_arn = _create_program_set_task(aws_session, **create_task_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_quantum_task.py", line 928, in _create_program_set_task
+    return aws_session.create_quantum_task(**create_task_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_session.py", line 273, in create_quantum_task
+    response = self.braket_client.create_quantum_task(**boto3_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\client.py", line 606, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\context.py", line 123, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\client.py", line 1094, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.AccessDeniedException: An error occurred (AccessDeniedException) when calling the CreateQuantumTask operation: AWSServiceRoleForAmazonBraket role doesn't exist. Please visit https://console.aws.amazon.com/braket/home?#/permissions?tab=executionRoles to create AWSServiceRoleForAmazonBraket role.

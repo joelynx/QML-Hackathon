@@ -1,0 +1,21 @@
+{
+ "arm_id": "E004-mf",
+ "seed": 0,
+ "split": "ds2s",
+ "config_id": "E004-mf-cfg15",
+ "code_revision": "eval 9a1922c8898b90db / pipe 18b08b059ebe6518",
+ "model_artifact": "runs/E004/model_seed0.npz",
+ "model_artifact_sha256": "dc448250050ffce93d6840b29601bc0a7f832bbd226101d670748ada74c32a92",
+ "reservoir_seed": 0,
+ "shot_seed": 1000,
+ "prediction_sha256": "d11888cf9e61293aa19257e88d026a0c5f14dafab802183ce1386c98d131cdb6",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "lam": 0.1
+}

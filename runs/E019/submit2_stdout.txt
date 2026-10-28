@@ -1,0 +1,69 @@
+device arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q mode programset beats 48 P 5 circuits 40 tasks 1 shots/executable 1024 est USD 17.71 (ledger so far USD 0.00)
+  task 0: 40 executables rigetti_b48_k1_c000..rigetti_b48_k4_c009 est USD 17.7080
+device status ONLINE
+submitted arn:aws:braket:us-west-1:<aws-account-id>:quantum-task/73e0c152-76d6-432a-98fb-738ab43b9308
+Traceback (most recent call last):
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 340, in <module>
+    main()
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 336, in main
+    {"localsim": localsim, "submit": submit, "fetch": fetch, "simplan": simplan, "cancel": cancel}[a.cmd](a)
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 248, in submit
+    collect(plan, tasks, a.mode, a.deadline_utc)
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\scripts\braket_submit.py", line 259, in collect
+    save_results(plan, sub, t.id, t.result(), mode)
+                                  ^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_quantum_task.py", line 451, in result
+    return self._download_result()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_quantum_task.py", line 568, in _download_result
+    self._result = _format_result(
+                   ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\aws\aws_quantum_task.py", line 952, in _format_result
+    return ProgramSetQuantumTaskResult.from_object(result, program_set=task_specification)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\tasks\program_set_quantum_task_result.py", line 450, in from_object
+    metadata: ProgramSetTaskMetadata = ProgramSetQuantumTaskResult._get_metadata(
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\tasks\program_set_quantum_task_result.py", line 603, in _get_metadata
+    meta_string = _retrieve_s3_object_body(s3_bucket, f"{s3_prefix}/{metadata}", s3_client)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\braket\tasks\program_set_quantum_task_result.py", line 791, in _retrieve_s3_object_body
+    return s3_client.get_object(Bucket=s3_bucket, Key=s3_object_key)["Body"].read().decode("utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\client.py", line 606, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\context.py", line 123, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\client.py", line 1076, in _make_api_call
+    http, parsed_response = self._make_request(
+                            ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\client.py", line 1100, in _make_request
+    return self._endpoint.make_request(operation_model, request_dict)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\endpoint.py", line 119, in make_request
+    return self._send_request(request_dict, operation_model)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\endpoint.py", line 198, in _send_request
+    request = self.create_request(request_dict, operation_model)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\endpoint.py", line 132, in create_request
+    self._event_emitter.emit(
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\hooks.py", line 412, in emit
+    return self._emitter.emit(aliased_event_name, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\hooks.py", line 256, in emit
+    return self._emit(event_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\hooks.py", line 239, in _emit
+    response = handler(**kwargs)
+               ^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\signers.py", line 108, in handler
+    return self.sign(operation_name, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\signers.py", line 200, in sign
+    auth.add_auth(request)
+  File "C:\Users\admin\Desktop\Water Hackathon\quantum_healthcare\.venv-braket\Lib\site-packages\botocore\auth.py", line 432, in add_auth
+    raise NoCredentialsError()
+botocore.exceptions.NoCredentialsError: Unable to locate credentials

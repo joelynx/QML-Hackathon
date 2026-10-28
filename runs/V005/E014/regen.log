@@ -1,0 +1,9 @@
+20:09:20
+0 True {'lam': True, 'mu': True, 'sd': True, 'W_readout': True, 'b_readout': True, 'res_couplings': True}
+1 True {'lam': True, 'mu': True, 'sd': True, 'W_readout': True, 'b_readout': True, 'res_couplings': True}
+2 True {'lam': True, 'mu': True, 'sd': True, 'W_readout': True, 'b_readout': True, 'res_couplings': True}
+3 True {'lam': True, 'mu': True, 'sd': True, 'W_readout': True, 'b_readout': True, 'res_couplings': True}
+4 True {'lam': True, 'mu': True, 'sd': True, 'W_readout': True, 'b_readout': True, 'res_couplings': True}
+ALL MATCH True
+EXIT 0
+20:10:18

@@ -1,0 +1,17 @@
+{
+ "written": "2026-10-26 ~22:01 UAE, before opening runs/E002/packet-selfrating.md",
+ "basis": "packet.md (claim, raw results, open-mode material: README.md 'Result so far', demo, code) and the anchors in EVAL.md 'Scorecard'; one build exists (the R0 vertical slice), so a single rating per criterion",
+ "ratings": {
+  "performance": {"rating": 1, "why": "matched comparison run (E003 vs E002), primary no detectable change; analysed further (per-class, LORO, slices), V_f1 slice lower bound > 0 but only 2 of the 4 slice-family members reported, so anchor 2's 'all four reported' is not met; no SVDB"},
+  "ingenuity": {"rating": 1, "why": "README states the question (training-free quantum reservoir vs matched ESN) and mentions mean-field / entangling-coupling controls, but the deliverable neither ties the quantum block to a specific limitation of the classical approach nor cites the literature gap (anchor 2); no hardware link"},
+  "depth": {"rating": 1, "why": "per-class metrics plus one ablation axis (entanglement: mean-field and separable, DS1 proxy only, A012); no readout-size, qubit-count or shot/noise axis reported; no mechanism analysis"},
+  "soundness": {"rating": 2, "why": "patient-held-out (202 removed), equal N = 30, record + seed two-level CIs, lookahead check passed, pre-registered order enforced, some limitations stated; no SVDB confirmation, no critic PASS yet, so not 3. A010 (ESN lambda at the grid edge) is a stated fairness caveat, not a veto"},
+  "gate_deliverables": {"rating": 0, "why": "codebase with both approaches, comparative evaluation and reproduction instructions are present; the explanation of methods and of the quantum purpose is only the README paragraph (no write-up), so not all four items are present"},
+  "gate_reproducible": {"rating": 2, "why": "provisional at writing: one command (scripts/reproduce.py) exists and my own rerun in the existing environment is in progress; 3 needs a clean environment plus fresh download checked by the critic (clean-environment results not yet appended to the packet)"}
+ },
+ "addendum_before_opening_selfrating": {
+  "written": "2026-10-26 ~22:08 UAE, still before opening packet-selfrating.md",
+  "gate_reproducible": {"rating": 2, "why": "final: the packet's clean-environment section (fresh venv, fresh MIT-BIH download, pipeline 75e043aa) and my retune on the current pipeline 55884b1f both regenerate the ds2s predictions byte-identically, and the tables regenerate identically from the logged comparison. Still 2, not 3: the one-command path (scripts/reproduce.py) was not run end to end in either, README does not name it, the clean copy is not the current pipeline revision and passed 37/38 fixtures (no SVDB), and the critic did not run the clean-environment build itself"},
+  "other criteria": "unchanged"
+ }
+}

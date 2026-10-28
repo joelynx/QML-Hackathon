@@ -1,0 +1,68 @@
+{
+ "n_beats_complete": 48,
+ "devices": [
+  "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q"
+ ],
+ "n_tasks": 40,
+ "vs_exact": {
+  "mean_abs_diff": 0.34741479068515096,
+  "mean_abs_diff_by_snapshot": [
+   0.3729049829371047,
+   0.3697493981498294,
+   0.3354392219830488,
+   0.3115655596706209
+  ],
+  "mean_abs_diff_Z": 0.31775149578249207,
+  "mean_abs_diff_ZZ": 0.35400663399685295,
+  "median_feature_corr": 0.5322205548487593,
+  "median_feature_corr_by_snapshot": [
+   0.38631686154711026,
+   0.6284784034255531,
+   0.5204078471102636,
+   0.47804796402876587
+  ],
+  "pooled_corr": 0.7048223394545265,
+  "zz_shrink_slope": 0.46456955916227644
+ },
+ "vs_shot": {
+  "mean_abs_diff": 0.3479473691998107,
+  "mean_abs_diff_by_snapshot": [
+   0.37390654592803024,
+   0.3701645359848485,
+   0.3372351444128788,
+   0.3104832504734848
+  ],
+  "mean_abs_diff_Z": 0.3180308024088542,
+  "mean_abs_diff_ZZ": 0.3545954951533565,
+  "median_feature_corr": 0.5240090018685066,
+  "median_feature_corr_by_snapshot": [
+   0.4327585354037806,
+   0.6067170324922186,
+   0.5128958359524399,
+   0.4751632873062446
+  ],
+  "pooled_corr": 0.7035361769297983,
+  "zz_shrink_slope": 0.4622516719159883
+ },
+ "shot_vs_exact_mean_abs_diff": 0.017563601955771446,
+ "pred_agree_hw_vs_shot": 0.4166666666666667,
+ "pred_agree_hw_vs_exact": 0.375,
+ "pred_agree_shot_vs_exact": 0.875,
+ "pred_counts": {
+  "hw": {
+   "N": 3,
+   "S": 35,
+   "V": 10
+  },
+  "shot": {
+   "N": 16,
+   "S": 16,
+   "V": 16
+  },
+  "exact": {
+   "N": 20,
+   "S": 12,
+   "V": 16
+  }
+ }
+}

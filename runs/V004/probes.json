@@ -1,0 +1,154 @@
+{
+ "P1_numpy_reimplementation": {
+  "0": {
+   "max_abs_prob_diff": 4.999990513972998e-07,
+   "argmax_disagreements": 0,
+   "meta_seed": 0,
+   "meta_config_index": 28,
+   "lam": 0.001,
+   "res_W_shape": [
+    55,
+    55
+   ]
+  },
+  "1": {
+   "max_abs_prob_diff": 4.999997554322455e-07,
+   "argmax_disagreements": 0,
+   "meta_seed": 1,
+   "meta_config_index": 28,
+   "lam": 0.001,
+   "res_W_shape": [
+    55,
+    55
+   ]
+  },
+  "2": {
+   "max_abs_prob_diff": 4.999985003806273e-07,
+   "argmax_disagreements": 0,
+   "meta_seed": 2,
+   "meta_config_index": 28,
+   "lam": 0.001,
+   "res_W_shape": [
+    55,
+    55
+   ]
+  },
+  "3": {
+   "max_abs_prob_diff": 4.999929609783571e-07,
+   "argmax_disagreements": 0,
+   "meta_seed": 3,
+   "meta_config_index": 28,
+   "lam": 0.001,
+   "res_W_shape": [
+    55,
+    55
+   ]
+  },
+  "4": {
+   "max_abs_prob_diff": 4.999930590252532e-07,
+   "argmax_disagreements": 0,
+   "meta_seed": 4,
+   "meta_config_index": 28,
+   "lam": 0.001,
+   "res_W_shape": [
+    55,
+    55
+   ]
+  }
+ },
+ "P2_validity": {
+  "runs\\E002\\pred_ds2s_seed0.csv": {
+   "rows": 47523,
+   "valid": true,
+   "pred_ne_argmax_rounded": 0,
+   "pred_counts": {
+    "N": 39055,
+    "V": 4545,
+    "S": 3923
+   }
+  },
+  "runs\\E002\\pred_ds2s_seed1.csv": {
+   "rows": 47523,
+   "valid": true,
+   "pred_ne_argmax_rounded": 0,
+   "pred_counts": {
+    "N": 38945,
+    "V": 4510,
+    "S": 4068
+   }
+  },
+  "runs\\E002\\pred_ds2s_seed2.csv": {
+   "rows": 47523,
+   "valid": true,
+   "pred_ne_argmax_rounded": 0,
+   "pred_counts": {
+    "N": 39226,
+    "V": 4518,
+    "S": 3779
+   }
+  },
+  "runs\\E002\\pred_ds2s_seed3.csv": {
+   "rows": 47523,
+   "valid": true,
+   "pred_ne_argmax_rounded": 0,
+   "pred_counts": {
+    "N": 38964,
+    "V": 4565,
+    "S": 3994
+   }
+  },
+  "runs\\E002\\pred_ds2s_seed4.csv": {
+   "rows": 47523,
+   "valid": true,
+   "pred_ne_argmax_rounded": 0,
+   "pred_counts": {
+    "N": 38985,
+    "V": 4491,
+    "S": 4047
+   }
+  },
+  "check_runs": {
+   "passed": true,
+   "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "config_ids": [
+    "E002-esn-cfg28"
+   ]
+  },
+  "prediction_set_size": 47523
+ },
+ "P3_per_record_vs_batch": {
+  "232": {
+   "beats": 1778,
+   "max_abs_diff_vs_scored_file": 5.609627872771306e-07
+  },
+  "213": {
+   "beats": 3247,
+   "max_abs_diff_vs_scored_file": 5.242079494927054e-07
+  },
+  "222": {
+   "beats": 2481,
+   "max_abs_diff_vs_scored_file": 5.3190574766937e-07
+  }
+ },
+ "P4_lookahead_ds2s": {
+  "232": {
+   "beats_checked": 145,
+   "violations": []
+  },
+  "213": {
+   "beats_checked": 274,
+   "violations": []
+  }
+ },
+ "P5_readout_norm": {
+  "n_ds1_units": 50542,
+  "mu_max_abs_diff": 0.0,
+  "sd_max_abs_diff": 0.0
+ }
+}

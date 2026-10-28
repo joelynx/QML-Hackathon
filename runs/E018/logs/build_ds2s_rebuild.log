@@ -1,0 +1,5 @@
+{"split": "ds2s", "file": "runs/E018/features_ds2s_rebuild/ds2s.npz", "n_beats": 47523, "seconds": 3.2, "file_sha256": "10aaa7973feae040b51beebc202afaf51ac18f2ac6b3d6c331d3965759a87adf", "arrays_sha256": {"beat_id": "a8912d9a598d84a4c09aaec5f57c7344442597d1c87c184bb630499949a477ce", "record": "106dda7bd30804d344b2137860097e074619673c56cc91aba29d38ee108c0035", "win": "a0d1eab304a4d8f5409defd0d64825d8a28785116a7feb5a5568b5d5771ed656", "rel": "d7b81f177af6ea11afd6ac546284dd7b91050b2e0340c7552987cee759a4867f", "rr": "202195b393211bc589b6d7bdfaa51d5aeecf724bac54bb6e801ba8c0d7cd16be"}, "pipe_revision": "55884b1fb66732b9", "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 predict 08dc4140d5d45b6b"}
+
+real	0m7.602s
+user	0m0.000s
+sys	0m0.015s

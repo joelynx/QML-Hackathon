@@ -1,0 +1,16 @@
+features qrc: 6.6s
+features qrc_exact: 0.6s
+features mf: 36.7s
+features sep: 0.7s
+features esn: 0.1s
+features qrc_shot1001: 4.9s
+features qrc_res1: 0.7s
+features mf_exact: 0.1s
+features esn_res1: 0.1s
+provenance (regenerated seed-0 reservoirs == saved artifacts): {'qrc': True, 'mf': True, 'sep': True, 'esn': True}
+CKA done 21.7s
+KTA done 10.4s
+geo seed 20261026 done 7.6s
+geo seed 20261027 done 15.0s
+geo seed 20261028 done 22.7s
+{"timings": {"features_s": {"qrc": 6.6, "qrc_exact": 0.6, "mf": 36.7, "sep": 0.7, "esn": 0.1, "qrc_shot1001": 4.9, "qrc_res1": 0.7, "mf_exact": 0.1, "esn_res1": 0.1}, "cka_s": 21.7, "kta_s": 10.4, "geo_s": 22.7, "total_s": 108.4}, "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 kernels 647cb96976578b0d"}

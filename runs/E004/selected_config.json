@@ -1,0 +1,18 @@
+{
+ "index": 15,
+ "arm": "mf",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "lam": 0.1,
+ "score": null,
+ "n_configs": 0,
+ "control_of": "E003",
+ "control": "mf",
+ "description": "classical-spin (mean-field) reservoir of the same gates and couplings"
+}

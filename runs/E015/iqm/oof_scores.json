@@ -1,0 +1,123 @@
+{
+ "device": "iqm",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 noise 8b1226919f8ca395",
+ "trajectories": 32,
+ "rates": {
+  "device": "iqm",
+  "device_name": "IQM Garnet",
+  "device_arn": "arn:aws:braket:eu-north-1::device/qpu/iqm/Garnet",
+  "fetched_utc": "2026-10-28T14:45:55.643982+00:00",
+  "region": "eu-north-1",
+  "source": "runs/E015/calibration_iqm_garnet.json",
+  "r1": 0.0006220396040341747,
+  "r2": 0.004464254521153177,
+  "two_qubit_gate": "CZ",
+  "e01": 0.009999999999999998,
+  "e10": 0.027299999999999998,
+  "q1": 0.000933059406051262,
+  "q2": 0.005580318151441471,
+  "fields": {
+   "r1": "1 - median over qubits of standardized.oneQubitProperties[*].oneQubitFidelity[SIMULTANEOUS_RANDOMIZED_BENCHMARKING] (n = 20)",
+   "r2": "1 - median over edges of standardized.twoQubitProperties[*].twoQubitGateFidelity[CZ/SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING] (n = 30); gate CZ",
+   "readout": "median over qubits of oneQubitFidelity[READOUT_ERROR_0_TO_1] and [READOUT_ERROR_1_TO_0] (these entries hold error probabilities; asymmetric)"
+  },
+  "all_medians": {
+   "SIMULTANEOUS_RANDOMIZED_BENCHMARKING": {
+    "n": 20,
+    "median": 0.9993779603959658,
+    "min": 0.9970591949760071,
+    "max": 0.9996550868084284
+   },
+   "READOUT_ERROR_0_TO_1": {
+    "n": 20,
+    "median": 0.009999999999999998,
+    "min": 0.0052,
+    "max": 0.0286
+   },
+   "READOUT_ERROR_1_TO_0": {
+    "n": 20,
+    "median": 0.027299999999999998,
+    "min": 0.0124,
+    "max": 0.045
+   },
+   "READOUT": {
+    "n": 20,
+    "median": 0.9803,
+    "min": 0.9706,
+    "max": 0.9911
+   },
+   "CZ/SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING": {
+    "n": 30,
+    "median": 0.9955357454788468,
+    "min": 0.9881449909262416,
+    "max": 0.998102805244906
+   },
+   "Two_Qubit_Clifford/SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING": {
+    "n": 30,
+    "median": 0.9884156134095303,
+    "min": 0.9759387992901448,
+    "max": 0.9944047987762948
+   }
+  }
+ },
+ "seeds": {
+  "0": {
+   "macro_f1": 0.6493123697894815,
+   "f1": {
+    "N": 0.9650653068527465,
+    "S": 0.2771501037583583,
+    "V": 0.7057216987573399
+   },
+   "feature_seconds_ds1": 111.2,
+   "total_seconds": 133.6
+  },
+  "1": {
+   "macro_f1": 0.6542055540413423,
+   "f1": {
+    "N": 0.963289707907435,
+    "S": 0.2719559734005962,
+    "V": 0.7273709808159957
+   },
+   "feature_seconds_ds1": 98.1,
+   "total_seconds": 101.5
+  },
+  "2": {
+   "macro_f1": 0.6524608552213967,
+   "f1": {
+    "N": 0.9637574875440855,
+    "S": 0.27299703264094954,
+    "V": 0.7206280454791554
+   },
+   "feature_seconds_ds1": 108.1,
+   "total_seconds": 112.1
+  },
+  "3": {
+   "macro_f1": 0.6510417079461656,
+   "f1": {
+    "N": 0.9655234092027009,
+    "S": 0.2764304214739816,
+    "V": 0.7111712931618145
+   },
+   "feature_seconds_ds1": 109.0,
+   "total_seconds": 114.0
+  },
+  "4": {
+   "macro_f1": 0.656452843758129,
+   "f1": {
+    "N": 0.9648630205944537,
+    "S": 0.28303182963132584,
+    "V": 0.7214636810486074
+   },
+   "feature_seconds_ds1": 118.8,
+   "total_seconds": 122.6
+  }
+ },
+ "lambda_grid_seed0": {
+  "0.001": 0.6317849315899253,
+  "0.01": 0.6435452356053296,
+  "0.1": 0.6493123697894815,
+  "1.0": 0.6225300229258476
+ },
+ "lam": 0.1,
+ "mean_macro_f1": 0.652694666151303
+}

@@ -1,0 +1,2 @@
+[diagnostic] E002-seeds0-4 vs E002-seeds5-9 on ds1: delta +0.0039 CI0.9500 [-0.0152, +0.0217] (without None: None) -> no detectable change (CI includes 0)
+wrote runs/E002/seed_noise_ds1.json

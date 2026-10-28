@@ -1,0 +1,40 @@
+{
+ "arm_id": "E015-qrc_noise_rigetti",
+ "seed": 0,
+ "split": "ds2s",
+ "config_id": "E015-qrc-cfg15-rigetti",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 noise 8b1226919f8ca395",
+ "model_artifact": "runs/E015/rigetti/model_seed0.npz",
+ "model_artifact_sha256": "3a49eebaf8aa79a8a8837ebbd2874b746e31e49bb82d13f660509b026d99486d",
+ "reservoir_seed": 0,
+ "shot_seed": 1000,
+ "prediction_sha256": "b12511ff638b5c0f6cbc2a96f2254acaa8cad2888a884a5b601f55d1210654c5",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "lam": 0.1,
+ "noise": {
+  "q1": 0.00453044353041776,
+  "q2": 0.014595354716949449,
+  "e01": 0.031000000000000028,
+  "e10": 0.031000000000000028,
+  "trajectories": 32,
+  "shots_per_trajectory": 32
+ },
+ "rates": {
+  "r1": 0.0030202956869451736,
+  "r2": 0.01167628377355956,
+  "e01": 0.031000000000000028,
+  "e10": 0.031000000000000028,
+  "q1": 0.00453044353041776,
+  "q2": 0.014595354716949449,
+  "two_qubit_gate": "CZ",
+  "fetched_utc": "2026-10-28T14:45:52.271404+00:00",
+  "source": "runs/E015/calibration_rigetti.json"
+ }
+}

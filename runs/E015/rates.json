@@ -1,0 +1,106 @@
+{
+ "rigetti": {
+  "device": "rigetti",
+  "device_name": "Rigetti Cepheus-1-108Q",
+  "device_arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+  "fetched_utc": "2026-10-28T14:45:52.271404+00:00",
+  "region": "us-west-1",
+  "source": "runs/E015/calibration_rigetti.json",
+  "r1": 0.0030202956869451736,
+  "r2": 0.01167628377355956,
+  "two_qubit_gate": "CZ",
+  "e01": 0.031000000000000028,
+  "e10": 0.031000000000000028,
+  "q1": 0.00453044353041776,
+  "q2": 0.014595354716949449,
+  "fields": {
+   "r1": "1 - median over qubits of standardized.oneQubitProperties[*].oneQubitFidelity[SIMULTANEOUS_RANDOMIZED_BENCHMARKING] (n = 107)",
+   "r2": "1 - median over edges of standardized.twoQubitProperties[*].twoQubitGateFidelity[CZ/INTERLEAVED_RANDOMIZED_BENCHMARKING] (n = 193); gate CZ",
+   "readout": "1 - median over qubits of oneQubitFidelity[READOUT] (n = 107); symmetric (no asymmetric fields published)"
+  },
+  "all_medians": {
+   "RANDOMIZED_BENCHMARKING": {
+    "n": 107,
+    "median": 0.9985636437137728,
+    "min": 0.5,
+    "max": 0.9994432571727532
+   },
+   "SIMULTANEOUS_RANDOMIZED_BENCHMARKING": {
+    "n": 107,
+    "median": 0.9969797043130548,
+    "min": 0.5,
+    "max": 0.9989419897333106
+   },
+   "READOUT": {
+    "n": 107,
+    "median": 0.969,
+    "min": 0.615,
+    "max": 0.994
+   },
+   "CZ/INTERLEAVED_RANDOMIZED_BENCHMARKING": {
+    "n": 193,
+    "median": 0.9883237162264404,
+    "min": 0.5,
+    "max": 0.9963402028845144
+   }
+  }
+ },
+ "iqm": {
+  "device": "iqm",
+  "device_name": "IQM Garnet",
+  "device_arn": "arn:aws:braket:eu-north-1::device/qpu/iqm/Garnet",
+  "fetched_utc": "2026-10-28T14:45:55.643982+00:00",
+  "region": "eu-north-1",
+  "source": "runs/E015/calibration_iqm_garnet.json",
+  "r1": 0.0006220396040341747,
+  "r2": 0.004464254521153177,
+  "two_qubit_gate": "CZ",
+  "e01": 0.009999999999999998,
+  "e10": 0.027299999999999998,
+  "q1": 0.000933059406051262,
+  "q2": 0.005580318151441471,
+  "fields": {
+   "r1": "1 - median over qubits of standardized.oneQubitProperties[*].oneQubitFidelity[SIMULTANEOUS_RANDOMIZED_BENCHMARKING] (n = 20)",
+   "r2": "1 - median over edges of standardized.twoQubitProperties[*].twoQubitGateFidelity[CZ/SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING] (n = 30); gate CZ",
+   "readout": "median over qubits of oneQubitFidelity[READOUT_ERROR_0_TO_1] and [READOUT_ERROR_1_TO_0] (these entries hold error probabilities; asymmetric)"
+  },
+  "all_medians": {
+   "SIMULTANEOUS_RANDOMIZED_BENCHMARKING": {
+    "n": 20,
+    "median": 0.9993779603959658,
+    "min": 0.9970591949760071,
+    "max": 0.9996550868084284
+   },
+   "READOUT_ERROR_0_TO_1": {
+    "n": 20,
+    "median": 0.009999999999999998,
+    "min": 0.0052,
+    "max": 0.0286
+   },
+   "READOUT_ERROR_1_TO_0": {
+    "n": 20,
+    "median": 0.027299999999999998,
+    "min": 0.0124,
+    "max": 0.045
+   },
+   "READOUT": {
+    "n": 20,
+    "median": 0.9803,
+    "min": 0.9706,
+    "max": 0.9911
+   },
+   "CZ/SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING": {
+    "n": 30,
+    "median": 0.9955357454788468,
+    "min": 0.9881449909262416,
+    "max": 0.998102805244906
+   },
+   "Two_Qubit_Clifford/SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING": {
+    "n": 30,
+    "median": 0.9884156134095303,
+    "min": 0.9759387992901448,
+    "max": 0.9944047987762948
+   }
+  }
+ }
+}

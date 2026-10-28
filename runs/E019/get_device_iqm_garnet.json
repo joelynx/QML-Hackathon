@@ -1,0 +1,2235 @@
+{
+ "deviceArn": "arn:aws:braket:eu-north-1::device/qpu/iqm/Garnet",
+ "deviceName": "Garnet",
+ "providerName": "IQM",
+ "deviceType": "QPU",
+ "deviceStatus": "ONLINE",
+ "deviceCapabilities": "{\"service\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.device_service_properties\", \"version\": \"1\"}, \"executionWindows\": [{\"executionDay\": \"Weekdays\", \"windowStartHour\": \"00:00:00\", \"windowEndHour\": \"01:29:59\"}, {\"executionDay\": \"Weekdays\", \"windowStartHour\": \"03:15:00\", \"windowEndHour\": \"15:29:59\"}, {\"executionDay\": \"Weekdays\", \"windowStartHour\": \"17:15:00\", \"windowEndHour\": \"23:59:59\"}], \"shotsRange\": [1, 20000], \"deviceCost\": {\"price\": 0.00145, \"unit\": \"shot\"}, \"deviceDocumentation\": {\"imageUrl\": \"\", \"summary\": \"Universal gate-model QPU based on superconducting qubits\", \"externalDocumentationUrl\": \"https://www.iqmacademy.com/qpu/\"}, \"deviceLocation\": \"Espoo, Finland\", \"updatedAt\": \"2026-10-28T02:39:55.922610+00:00\"}, \"action\": {\"braket.ir.openqasm.program\": {\"version\": [\"1.0\"], \"actionType\": \"braket.ir.openqasm.program\", \"supportedOperations\": [\"ccnot\", \"cnot\", \"cphaseshift\", \"cphaseshift00\", \"cphaseshift01\", \"cphaseshift10\", \"cswap\", \"swap\", \"iswap\", \"pswap\", \"ecr\", \"cy\", \"cz\", \"xy\", \"xx\", \"yy\", \"zz\", \"h\", \"i\", \"phaseshift\", \"rx\", \"ry\", \"rz\", \"s\", \"si\", \"t\", \"ti\", \"v\", \"vi\", \"x\", \"y\", \"z\", \"prx\", \"cc_prx\", \"measure_ff\", \"barrier\", \"if\"], \"supportedModifiers\": [], \"supportedPragmas\": [\"verbatim\", \"braket_result_type_sample\", \"braket_result_type_expectation\", \"braket_result_type_variance\", \"braket_result_type_probability\"], \"forbiddenPragmas\": [\"braket_unitary_matrix\", \"braket_result_type_state_vector\", \"braket_result_type_density_matrix\", \"braket_result_type_amplitude\"], \"maximumQubitArrays\": 1, \"maximumClassicalArrays\": 1, \"forbiddenArrayOperations\": [\"concatenation\", \"negativeIndex\", \"range\", \"rangeWithStep\", \"slicing\", \"selection\"], \"requiresAllQubitsMeasurement\": false, \"supportPhysicalQubits\": true, \"requiresContiguousQubitIndices\": false, \"supportsPartialVerbatimBox\": true, \"supportsUnassignedMeasurements\": false, \"disabledQubitRewiringSupported\": false, \"supportedResultTypes\": [{\"name\": \"Sample\", \"observables\": [\"x\", \"y\", \"z\", \"h\", \"i\"], \"minShots\": 1, \"maxShots\": 20000}, {\"name\": \"Expectation\", \"observables\": [\"x\", \"y\", \"z\", \"h\", \"i\"], \"minShots\": 1, \"maxShots\": 20000}, {\"name\": \"Variance\", \"observables\": [\"x\", \"y\", \"z\", \"h\", \"i\"], \"minShots\": 1, \"maxShots\": 20000}, {\"name\": \"Probability\", \"minShots\": 1, \"maxShots\": 20000}]}, \"braket.ir.openqasm.program_set\": {\"version\": [\"1\"], \"actionType\": \"braket.ir.openqasm.program_set\", \"maximumExecutables\": 100, \"maximumTotalShots\": 200000}}, \"deviceParameters\": {\"title\": \"IqmDeviceParameters\", \"description\": \"This defines the parameters common to all the IQM devices.\\n\\nAttributes:\\n    paradigmParameters: Parameters that are common to gatemodel paradigm\", \"type\": \"object\", \"properties\": {\"braketSchemaHeader\": {\"title\": \"Braketschemaheader\", \"default\": {\"name\": \"braket.device_schema.iqm.iqm_device_parameters\", \"version\": \"1\"}, \"const\": {\"name\": \"braket.device_schema.iqm.iqm_device_parameters\", \"version\": \"1\"}}, \"paradigmParameters\": {\"$ref\": \"#/definitions/GateModelParameters\"}}, \"required\": [\"paradigmParameters\"], \"definitions\": {\"GateModelParameters\": {\"title\": \"GateModelParameters\", \"description\": \"Defines parameters common to all gate model devices.\\n\\nAttributes:\\n    qubitCount: Number of qubits used by the circuit.\\n    disableQubitRewiring: Whether to run the circuit with the exact qubits chosen,\\n        without any rewiring downstream.\\n        If ``True``, no qubit rewiring is allowed; if ``False``, qubit rewiring is allowed.\\n\\nExamples:\\n    >>> import json\\n    >>> input_json = {\\n    ...    \\\"braketSchemaHeader\\\": {\\n    ...        \\\"name\\\": \\\"braket.device_schema.gate_model_parameters\\\",\\n    ...        \\\"version\\\": \\\"1\\\",\\n    ...    },\\n    ...    \\\"qubitCount\\\": 1,\\n    ...    \\\"disableQubitRewiring\\\": True\\n    ... }\\n    >>> GateModelParameters.parse_raw_schema(json.dumps(input_json))\", \"type\": \"object\", \"properties\": {\"braketSchemaHeader\": {\"title\": \"Braketschemaheader\", \"default\": {\"name\": \"braket.device_schema.gate_model_parameters\", \"version\": \"1\"}, \"const\": {\"name\": \"braket.device_schema.gate_model_parameters\", \"version\": \"1\"}}, \"qubitCount\": {\"title\": \"Qubitcount\", \"minimum\": 0, \"type\": \"integer\"}, \"disableQubitRewiring\": {\"title\": \"Disablequbitrewiring\", \"default\": false, \"type\": \"boolean\"}}, \"required\": [\"qubitCount\"]}}}, \"braketSchemaHeader\": {\"name\": \"braket.device_schema.iqm.iqm_device_capabilities\", \"version\": \"1\"}, \"paradigm\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.gate_model_qpu_paradigm_properties\", \"version\": \"1\"}, \"connectivity\": {\"fullyConnected\": false, \"connectivityGraph\": {\"1\": [\"2\", \"4\"], \"2\": [\"1\", \"5\"], \"4\": [\"1\", \"3\", \"5\", \"9\"], \"5\": [\"2\", \"4\", \"6\", \"10\"], \"3\": [\"4\", \"8\"], \"8\": [\"3\", \"9\", \"13\"], \"9\": [\"4\", \"8\", \"10\", \"14\"], \"6\": [\"5\", \"7\", \"11\"], \"10\": [\"5\", \"9\", \"11\", \"15\"], \"7\": [\"6\", \"12\"], \"11\": [\"6\", \"10\", \"12\", \"16\"], \"12\": [\"7\", \"11\", \"17\"], \"13\": [\"8\", \"14\"], \"14\": [\"9\", \"13\", \"15\", \"18\"], \"15\": [\"10\", \"14\", \"16\", \"19\"], \"16\": [\"11\", \"15\", \"17\", \"20\"], \"17\": [\"12\", \"16\"], \"18\": [\"14\", \"19\"], \"19\": [\"15\", \"18\", \"20\"], \"20\": [\"16\", \"19\"]}}, \"qubitCount\": 20, \"nativeGateSet\": [\"cz\", \"prx\", \"cc_prx\", \"measure_ff\", \"barrier\"]}, \"provider\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.iqm.iqm_provider_properties\", \"version\": \"1\"}, \"properties\": {\"one_qubit\": {\"1\": {\"f1Q_simultaneous_RB\": 0.9976041899924726, \"f1Q_simultaneous_RB_std_err\": 3.376369447290731e-05, \"readout_error_0_to_1\": 0.0062, \"readout_error_1_to_0\": 0.0278, \"fRO\": 0.983, \"T1\": 1.2005096989235188e-05, \"T1_std_err\": 1.489724946798275e-06, \"T2_echo\": 1.1702031307982912e-05, \"T2_echo_std_err\": 2.0466715206926297e-06, \"T2\": 2.9190310578775573e-06, \"T2_std_err\": 8.648627184284058e-07}, \"2\": {\"f1Q_simultaneous_RB\": 0.9993711861783016, \"f1Q_simultaneous_RB_std_err\": 1.2422301913149352e-05, \"readout_error_0_to_1\": 0.0068, \"readout_error_1_to_0\": 0.0436, \"fRO\": 0.9748, \"T1\": 3.046548442133252e-05, \"T1_std_err\": 1.4821444732308629e-06, \"T2_echo\": 1.5055415311185135e-05, \"T2_echo_std_err\": 1.4187124730559892e-06, \"T2\": 7.330645726644038e-06, \"T2_std_err\": 4.48909424284845e-07}, \"3\": {\"f1Q_simultaneous_RB\": 0.9993437236645288, \"f1Q_simultaneous_RB_std_err\": 1.4755807741639278e-05, \"readout_error_0_to_1\": 0.012, \"readout_error_1_to_0\": 0.0312, \"fRO\": 0.9784, \"T1\": 2.735168328911513e-05, \"T1_std_err\": 1.6469251112054034e-06, \"T2_echo\": 2.0666405313469475e-05, \"T2_echo_std_err\": 1.5014661577974884e-06, \"T2\": 1.0180881030040424e-05, \"T2_std_err\": 8.78700899406205e-07}, \"4\": {\"f1Q_simultaneous_RB\": 0.9994597674713516, \"f1Q_simultaneous_RB_std_err\": 2.0636266970370212e-05, \"readout_error_0_to_1\": 0.0052, \"readout_error_1_to_0\": 0.0126, \"fRO\": 0.9911, \"T1\": 2.621198029886543e-05, \"T1_std_err\": 2.496524345057785e-06, \"T2_echo\": 1.5642726254394124e-05, \"T2_echo_std_err\": 1.2064652561818643e-06, \"T2\": 8.755723769335373e-06, \"T2_std_err\": 5.207082558474968e-07}, \"5\": {\"f1Q_simultaneous_RB\": 0.9993708845547749, \"f1Q_simultaneous_RB_std_err\": 2.2981813023451384e-05, \"readout_error_0_to_1\": 0.0078, \"readout_error_1_to_0\": 0.0324, \"fRO\": 0.9799, \"T1\": 3.949148399044779e-05, \"T1_std_err\": 8.956417228516202e-06, \"T2_echo\": 1.833417777476427e-05, \"T2_echo_std_err\": 1.4449391368952338e-06, \"T2\": 8.55306077298422e-06, \"T2_std_err\": 5.077951214653903e-07}, \"6\": {\"f1Q_simultaneous_RB\": 0.9983388579030866, \"f1Q_simultaneous_RB_std_err\": 7.141150000688266e-05, \"readout_error_0_to_1\": 0.0076, \"readout_error_1_to_0\": 0.026, \"fRO\": 0.9832, \"T1\": 5.018785685511442e-05, \"T1_std_err\": 4.696625234661275e-06, \"T2_echo\": 2.149609617760857e-05, \"T2_echo_std_err\": 1.1239425840201148e-06, \"T2\": 8.514810373016253e-06, \"T2_std_err\": 4.164268135748763e-07}, \"7\": {\"f1Q_simultaneous_RB\": 0.9979081848738396, \"f1Q_simultaneous_RB_std_err\": 0.0001578517408452498, \"readout_error_0_to_1\": 0.0166, \"readout_error_1_to_0\": 0.0422, \"fRO\": 0.9706, \"T1\": 5.206594797541076e-05, \"T1_std_err\": 3.3267180171255784e-06, \"T2_echo\": 1.8982341807824153e-05, \"T2_echo_std_err\": 1.2790067133901415e-06, \"T2\": 9.127192258274994e-06, \"T2_std_err\": 5.178456220082536e-07}, \"8\": {\"f1Q_simultaneous_RB\": 0.99938473461363, \"f1Q_simultaneous_RB_std_err\": 1.9400703102443302e-05, \"readout_error_0_to_1\": 0.0096, \"readout_error_1_to_0\": 0.045, \"fRO\": 0.9727, \"T1\": 2.9127970609274e-05, \"T1_std_err\": 1.159818589204003e-06, \"T2_echo\": 1.8816972078459272e-05, \"T2_echo_std_err\": 1.2499534532266905e-06, \"T2\": 8.488510365544706e-06, \"T2_std_err\": 5.880901742204063e-07}, \"9\": {\"f1Q_simultaneous_RB\": 0.9988423459955044, \"f1Q_simultaneous_RB_std_err\": 3.3914597283545276e-05, \"readout_error_0_to_1\": 0.0182, \"readout_error_1_to_0\": 0.0322, \"fRO\": 0.9748, \"T1\": 4.432926378571912e-05, \"T1_std_err\": 2.5802250138709873e-06, \"T2_echo\": 2.483936364998397e-05, \"T2_echo_std_err\": 1.7858727546214437e-06, \"T2\": 9.459736372454206e-06, \"T2_std_err\": 7.409003032775102e-07}, \"10\": {\"f1Q_simultaneous_RB\": 0.9994763416597134, \"f1Q_simultaneous_RB_std_err\": 1.98640970634105e-05, \"readout_error_0_to_1\": 0.0152, \"readout_error_1_to_0\": 0.035, \"fRO\": 0.9749, \"T1\": 3.748010742306009e-05, \"T1_std_err\": 1.690688460466692e-06, \"T2_echo\": 2.4235385695666724e-05, \"T2_echo_std_err\": 1.5479743353206712e-06, \"T2\": 9.139304196425507e-06, \"T2_std_err\": 5.163574470706196e-07}, \"11\": {\"f1Q_simultaneous_RB\": 0.999031990685681, \"f1Q_simultaneous_RB_std_err\": 3.092641871353659e-05, \"readout_error_0_to_1\": 0.0142, \"readout_error_1_to_0\": 0.0244, \"fRO\": 0.9807, \"T1\": 6.12502342785434e-05, \"T1_std_err\": 3.3178563682364947e-06, \"T2_echo\": 2.504274776464581e-05, \"T2_echo_std_err\": 1.3514168475264048e-06, \"T2\": 7.182121849275348e-06, \"T2_std_err\": 1.037689585413363e-06}, \"12\": {\"f1Q_simultaneous_RB\": 0.9970591949760071, \"f1Q_simultaneous_RB_std_err\": 0.00019034127771609175, \"readout_error_0_to_1\": 0.0162, \"readout_error_1_to_0\": 0.0218, \"fRO\": 0.981, \"T1\": 4.771955287618282e-05, \"T1_std_err\": 6.747641318670682e-06, \"T2_echo\": 3.188555235380409e-05, \"T2_echo_std_err\": 1.8168044169944625e-06, \"T2\": 6.216932914767062e-06, \"T2_std_err\": 1.1166836167076152e-06}, \"13\": {\"f1Q_simultaneous_RB\": 0.9994199063041036, \"f1Q_simultaneous_RB_std_err\": 1.938367880002119e-05, \"readout_error_0_to_1\": 0.0222, \"readout_error_1_to_0\": 0.0242, \"fRO\": 0.9768, \"T1\": 3.378887131350183e-05, \"T1_std_err\": 3.3877797040729766e-06, \"T2_echo\": 2.4931743581518857e-05, \"T2_echo_std_err\": 1.5483123528323329e-06, \"T2\": 1.3213668181613262e-05, \"T2_std_err\": 8.138770159601633e-07}, \"14\": {\"f1Q_simultaneous_RB\": 0.9996550868084284, \"f1Q_simultaneous_RB_std_err\": 1.2791292858579908e-05, \"readout_error_0_to_1\": 0.0074, \"readout_error_1_to_0\": 0.0162, \"fRO\": 0.9882, \"T1\": 3.312780368711456e-05, \"T1_std_err\": 1.5985992019850572e-06, \"T2_echo\": 1.8341422262817465e-05, \"T2_echo_std_err\": 9.77902625397071e-07, \"T2\": 6.689316325766137e-06, \"T2_std_err\": 3.255492529429157e-07}, \"15\": {\"f1Q_simultaneous_RB\": 0.9996137177181036, \"f1Q_simultaneous_RB_std_err\": 1.6546123777713706e-05, \"readout_error_0_to_1\": 0.0084, \"readout_error_1_to_0\": 0.0366, \"fRO\": 0.9775, \"T1\": 3.677208242689232e-05, \"T1_std_err\": 1.2162672474214522e-06, \"T2_echo\": 3.318772325929333e-05, \"T2_echo_std_err\": 2.1290762018609654e-06, \"T2\": 1.5185404108503502e-05, \"T2_std_err\": 8.41015416008975e-07}, \"16\": {\"f1Q_simultaneous_RB\": 0.9996102200609616, \"f1Q_simultaneous_RB_std_err\": 1.1884795009302954e-05, \"readout_error_0_to_1\": 0.0104, \"readout_error_1_to_0\": 0.0268, \"fRO\": 0.9814, \"T1\": 4.479261538404326e-05, \"T1_std_err\": 2.19063398902535e-06, \"T2_echo\": 2.18460728617322e-05, \"T2_echo_std_err\": 1.3645845771968457e-06, \"T2\": 8.27639010560612e-06, \"T2_std_err\": 4.4217602243625514e-07}, \"17\": {\"f1Q_simultaneous_RB\": 0.9995377200927748, \"f1Q_simultaneous_RB_std_err\": 2.7809705253033667e-05, \"readout_error_0_to_1\": 0.0122, \"readout_error_1_to_0\": 0.0172, \"fRO\": 0.9853, \"T1\": 4.8483399135476355e-05, \"T1_std_err\": 7.11563798559542e-06, \"T2_echo\": 2.9959074724215377e-05, \"T2_echo_std_err\": 2.539060936560709e-06, \"T2\": 1.3284111853888734e-05, \"T2_std_err\": 5.323654472717848e-07}, \"18\": {\"f1Q_simultaneous_RB\": 0.9972648317522111, \"f1Q_simultaneous_RB_std_err\": 0.00015899316595641708, \"readout_error_0_to_1\": 0.0092, \"readout_error_1_to_0\": 0.0124, \"fRO\": 0.9892, \"T1\": 5.939080276377773e-06, \"T1_std_err\": 1.058756537852598e-06, \"T2_echo\": 3.948406516574463e-06, \"T2_echo_std_err\": 3.885052596657068e-07, \"T2\": 2.602489031781254e-06, \"T2_std_err\": 1.6280719299397616e-07}, \"19\": {\"f1Q_simultaneous_RB\": 0.9996472900051248, \"f1Q_simultaneous_RB_std_err\": 1.5684579366010917e-05, \"readout_error_0_to_1\": 0.0286, \"readout_error_1_to_0\": 0.0288, \"fRO\": 0.9713, \"T1\": 5.4149716346291665e-05, \"T1_std_err\": 3.0218603302331133e-06, \"T2_echo\": 2.3571581663540066e-05, \"T2_echo_std_err\": 1.0842461485893607e-06, \"T2\": 8.664486164076506e-06, \"T2_std_err\": 5.468454360591636e-07}, \"20\": {\"f1Q_simultaneous_RB\": 0.9996232934091532, \"f1Q_simultaneous_RB_std_err\": 1.396360788141265e-05, \"readout_error_0_to_1\": 0.0064, \"readout_error_1_to_0\": 0.0186, \"fRO\": 0.9875, \"T1\": 4.285819824249254e-05, \"T1_std_err\": 4.117002870868833e-06, \"T2_echo\": 4.036267929319056e-05, \"T2_echo_std_err\": 3.047113162415484e-06, \"T2\": 1.752198211907628e-05, \"T2_std_err\": 7.278527306999954e-06}}, \"two_qubit\": {\"1-2\": {\"fCZ\": 0.993339973475831, \"fCZ_std_err\": 0.00042542537565111856, \"f2Q_simultaneous_RB_Clifford\": 0.9836643625996532, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00024406764114880876}, \"2-5\": {\"fCZ\": 0.9959866319299256, \"fCZ_std_err\": 0.00020888462076075752, \"f2Q_simultaneous_RB_Clifford\": 0.9901409897028172, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00011969039704275692}, \"1-4\": {\"fCZ\": 0.9938194942242228, \"fCZ_std_err\": 0.00030451168114387366, \"f2Q_simultaneous_RB_Clifford\": 0.9852446274047258, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00017391741943882937}, \"3-4\": {\"fCZ\": 0.9955584014573948, \"fCZ_std_err\": 0.0002463533017363961, \"f2Q_simultaneous_RB_Clifford\": 0.9888331441881014, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00014198084303132017}, \"4-5\": {\"fCZ\": 0.9963817851900892, \"fCZ_std_err\": 0.0002809658289015536, \"f2Q_simultaneous_RB_Clifford\": 0.9890434217424704, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00016701952849784552}, \"4-9\": {\"fCZ\": 0.9918229095635156, \"fCZ_std_err\": 0.0004845612347934733, \"f2Q_simultaneous_RB_Clifford\": 0.9819193323120876, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00027247690085012075}, \"5-6\": {\"fCZ\": 0.9922522559107944, \"fCZ_std_err\": 0.0005209766559331772, \"f2Q_simultaneous_RB_Clifford\": 0.9790601478902928, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0003032228229909225}, \"6-7\": {\"fCZ\": 0.9901016929775128, \"fCZ_std_err\": 0.0005733907401401157, \"f2Q_simultaneous_RB_Clifford\": 0.97832799573722, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0003214211397053358}, \"6-11\": {\"fCZ\": 0.9914568130949726, \"fCZ_std_err\": 0.0005203320323486669, \"f2Q_simultaneous_RB_Clifford\": 0.978980113251373, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0002980969911367983}, \"3-8\": {\"fCZ\": 0.995947037720578, \"fCZ_std_err\": 0.0002591749913716968, \"f2Q_simultaneous_RB_Clifford\": 0.9885338025682638, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00015245653026855406}, \"8-9\": {\"fCZ\": 0.9961110237888386, \"fCZ_std_err\": 0.0002856771308020491, \"f2Q_simultaneous_RB_Clifford\": 0.9881504822607472, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0001700329480097371}, \"8-13\": {\"fCZ\": 0.9971093968656736, \"fCZ_std_err\": 0.00018004369020176871, \"f2Q_simultaneous_RB_Clifford\": 0.9923230940850656, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00010397743016038244}, \"5-10\": {\"fCZ\": 0.9891726440886228, \"fCZ_std_err\": 0.0006320563006298148, \"f2Q_simultaneous_RB_Clifford\": 0.9814978757005124, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00033589465977411186}, \"9-10\": {\"fCZ\": 0.9881449909262416, \"fCZ_std_err\": 0.0005296142504473898, \"f2Q_simultaneous_RB_Clifford\": 0.97917061550953, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.000283286772617125}, \"10-11\": {\"fCZ\": 0.9892370129282486, \"fCZ_std_err\": 0.00048605149571134256, \"f2Q_simultaneous_RB_Clifford\": 0.980042108282313, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0002632638845042859}, \"10-15\": {\"fCZ\": 0.9900466592094768, \"fCZ_std_err\": 0.0004223636520455654, \"f2Q_simultaneous_RB_Clifford\": 0.9835191246299052, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00022269991797158403}, \"7-12\": {\"fCZ\": 0.998102805244906, \"fCZ_std_err\": 0.0003239147986331867, \"f2Q_simultaneous_RB_Clifford\": 0.9886285649176793, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00020801262727003576}, \"11-12\": {\"fCZ\": 0.996915718600202, \"fCZ_std_err\": 0.00041465959606677634, \"f2Q_simultaneous_RB_Clifford\": 0.9854880935559484, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00026014182004440876}, \"12-17\": {\"fCZ\": 0.9979375602653638, \"fCZ_std_err\": 0.0004041899938265764, \"f2Q_simultaneous_RB_Clifford\": 0.9882974242507968, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0002583672619093093}, \"9-14\": {\"fCZ\": 0.9969426628342676, \"fCZ_std_err\": 0.00022253215590192172, \"f2Q_simultaneous_RB_Clifford\": 0.9907678401680732, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00013196127661168402}, \"13-14\": {\"fCZ\": 0.9959243548290038, \"fCZ_std_err\": 0.0002368737154455712, \"f2Q_simultaneous_RB_Clifford\": 0.9921007191982266, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00012827933009034828}, \"14-15\": {\"fCZ\": 0.995458885540768, \"fCZ_std_err\": 0.00021504810043308025, \"f2Q_simultaneous_RB_Clifford\": 0.9925527663972498, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00011131288935959174}, \"14-18\": {\"fCZ\": 0.9901627493165888, \"fCZ_std_err\": 0.0011382645625579795, \"f2Q_simultaneous_RB_Clifford\": 0.9759387992901448, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0006505150613427704}, \"11-16\": {\"fCZ\": 0.9952723677585076, \"fCZ_std_err\": 0.00029824773595417024, \"f2Q_simultaneous_RB_Clifford\": 0.9895252803265544, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00016763874882659696}, \"15-16\": {\"fCZ\": 0.997938822011368, \"fCZ_std_err\": 0.00016667456979089072, \"f2Q_simultaneous_RB_Clifford\": 0.9944047987762948, \"f2Q_simultaneous_RB_Clifford_std_err\": 9.539359452637396e-05}, \"16-17\": {\"fCZ\": 0.9955130895002988, \"fCZ_std_err\": 0.0002915685808838084, \"f2Q_simultaneous_RB_Clifford\": 0.991560461164134, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00015719206357079442}, \"16-20\": {\"fCZ\": 0.9966664300393596, \"fCZ_std_err\": 0.00027712670654469123, \"f2Q_simultaneous_RB_Clifford\": 0.9931787991510448, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00015092258506234382}, \"15-19\": {\"fCZ\": 0.9968062084446072, \"fCZ_std_err\": 0.00022441239228042711, \"f2Q_simultaneous_RB_Clifford\": 0.9923941580302612, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.00012689601211948016}, \"18-19\": {\"fCZ\": 0.9905175609683669, \"fCZ_std_err\": 0.0015187352433679614, \"f2Q_simultaneous_RB_Clifford\": 0.9779198178093031, \"f2Q_simultaneous_RB_Clifford_std_err\": 0.0008611416216733392}, \"19-20\": {\"fCZ\": 0.9969047991405292, \"fCZ_std_err\": 0.00015951241439481298, \"f2Q_simultaneous_RB_Clifford\": 0.9934625778656104, \"f2Q_simultaneous_RB_Clifford_std_err\": 8.730561027445339e-05}}}}, \"standardized\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.standardized_gate_model_qpu_device_properties\", \"version\": \"1\"}, \"oneQubitProperties\": {\"1\": {\"T1\": {\"value\": 1.2005096989235188e-05, \"standardError\": 1.489724946798275e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 2.9190310578775573e-06, \"standardError\": 8.648627184284058e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9976041899924726, \"standardError\": 3.376369447290731e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0062}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0278}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.983, \"standardError\": 0.0012855877088487429}]}, \"2\": {\"T1\": {\"value\": 3.046548442133252e-05, \"standardError\": 1.4821444732308629e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 7.330645726644038e-06, \"standardError\": 4.48909424284845e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9993711861783016, \"standardError\": 1.2422301913149352e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0068}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0436}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9748, \"standardError\": 0.0015513864268693498}]}, \"3\": {\"T1\": {\"value\": 2.735168328911513e-05, \"standardError\": 1.6469251112054034e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 1.0180881030040424e-05, \"standardError\": 8.78700899406205e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9993437236645288, \"standardError\": 1.4755807741639278e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.012}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0312}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9784, \"standardError\": 0.0014464092877270887}]}, \"4\": {\"T1\": {\"value\": 2.621198029886543e-05, \"standardError\": 2.496524345057785e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 8.755723769335373e-06, \"standardError\": 5.207082558474968e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9994597674713516, \"standardError\": 2.0636266970370212e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0052}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0126}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9911, \"standardError\": 0.000939860240607832}]}, \"5\": {\"T1\": {\"value\": 3.949148399044779e-05, \"standardError\": 8.956417228516202e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 8.55306077298422e-06, \"standardError\": 5.077951214653903e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9993708845547749, \"standardError\": 2.2981813023451384e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0078}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0324}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9799, \"standardError\": 0.0013943584554702937}]}, \"6\": {\"T1\": {\"value\": 5.018785685511442e-05, \"standardError\": 4.696625234661275e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 8.514810373016253e-06, \"standardError\": 4.164268135748763e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9983388579030866, \"standardError\": 7.141150000688266e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0076}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.026}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9832, \"standardError\": 0.0012793763473946537}]}, \"7\": {\"T1\": {\"value\": 5.206594797541076e-05, \"standardError\": 3.3267180171255784e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 9.127192258274994e-06, \"standardError\": 5.178456220082536e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9979081848738396, \"standardError\": 0.0001578517408452498}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0166}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0422}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9706, \"standardError\": 0.0016782052332543877}]}, \"8\": {\"T1\": {\"value\": 2.9127970609274e-05, \"standardError\": 1.159818589204003e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 8.488510365544706e-06, \"standardError\": 5.880901742204063e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.99938473461363, \"standardError\": 1.9400703102443302e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0096}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.045}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9727, \"standardError\": 0.0016142761160070664}]}, \"9\": {\"T1\": {\"value\": 4.432926378571912e-05, \"standardError\": 2.5802250138709873e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 9.459736372454206e-06, \"standardError\": 7.409003032775102e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9988423459955044, \"standardError\": 3.3914597283545276e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0182}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0322}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9748, \"standardError\": 0.0015605787442824442}]}, \"10\": {\"T1\": {\"value\": 3.748010742306009e-05, \"standardError\": 1.690688460466692e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 9.139304196425507e-06, \"standardError\": 5.163574470706196e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9994763416597134, \"standardError\": 1.98640970634105e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0152}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.035}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9749, \"standardError\": 0.0015560143750002052}]}, \"11\": {\"T1\": {\"value\": 6.12502342785434e-05, \"standardError\": 3.3178563682364947e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 7.182121849275348e-06, \"standardError\": 1.037689585413363e-06, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.999031990685681, \"standardError\": 3.092641871353659e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0142}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0244}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9807, \"standardError\": 0.0013713803042745248}]}, \"12\": {\"T1\": {\"value\": 4.771955287618282e-05, \"standardError\": 6.747641318670682e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 6.216932914767062e-06, \"standardError\": 1.1166836167076152e-06, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9970591949760071, \"standardError\": 0.00019034127771609175}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0162}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0218}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.981, \"standardError\": 0.0013616069601330846}]}, \"13\": {\"T1\": {\"value\": 3.378887131350183e-05, \"standardError\": 3.3877797040729766e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 1.3213668181613262e-05, \"standardError\": 8.138770159601633e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9994199063041036, \"standardError\": 1.938367880002119e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0222}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0242}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9768, \"standardError\": 0.001500702342536416}]}, \"14\": {\"T1\": {\"value\": 3.312780368711456e-05, \"standardError\": 1.5985992019850572e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 6.689316325766137e-06, \"standardError\": 3.255492529429157e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9996550868084284, \"standardError\": 1.2791292858579908e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0074}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0162}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9882, \"standardError\": 0.0010785966021441256}]}, \"15\": {\"T1\": {\"value\": 3.677208242689232e-05, \"standardError\": 1.2162672474214522e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 1.5185404108503502e-05, \"standardError\": 8.41015416008975e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9996137177181036, \"standardError\": 1.6546123777713706e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0084}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0366}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9775, \"standardError\": 0.001471925442246757}]}, \"16\": {\"T1\": {\"value\": 4.479261538404326e-05, \"standardError\": 2.19063398902535e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 8.27639010560612e-06, \"standardError\": 4.4217602243625514e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9996102200609616, \"standardError\": 1.1884795009302954e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0104}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0268}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9814, \"standardError\": 0.0013453886298376411}]}, \"17\": {\"T1\": {\"value\": 4.8483399135476355e-05, \"standardError\": 7.11563798559542e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 1.3284111853888734e-05, \"standardError\": 5.323654472717848e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9995377200927748, \"standardError\": 2.7809705253033667e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0122}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0172}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9853, \"standardError\": 0.0012014983508289135}]}, \"18\": {\"T1\": {\"value\": 5.939080276377773e-06, \"standardError\": 1.058756537852598e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 2.602489031781254e-06, \"standardError\": 1.6280719299397616e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9972648317522111, \"standardError\": 0.00015899316595641708}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0092}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0124}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9892, \"standardError\": 0.0010336636884637916}]}, \"19\": {\"T1\": {\"value\": 5.4149716346291665e-05, \"standardError\": 3.0218603302331133e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 8.664486164076506e-06, \"standardError\": 5.468454360591636e-07, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9996472900051248, \"standardError\": 1.5684579366010917e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0286}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0288}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9713, \"standardError\": 0.0016635551103955058}]}, \"20\": {\"T1\": {\"value\": 4.285819824249254e-05, \"standardError\": 4.117002870868833e-06, \"unit\": \"S\"}, \"T2\": {\"value\": 1.752198211907628e-05, \"standardError\": 7.278527306999954e-06, \"unit\": \"S\"}, \"oneQubitFidelity\": [{\"fidelityType\": {\"name\": \"SIMULTANEOUS_RANDOMIZED_BENCHMARKING\"}, \"fidelity\": 0.9996232934091532, \"standardError\": 1.396360788141265e-05}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_0_TO_1\"}, \"fidelity\": 0.0064}, {\"fidelityType\": {\"name\": \"READOUT_ERROR_1_TO_0\"}, \"fidelity\": 0.0186}, {\"fidelityType\": {\"name\": \"READOUT\"}, \"fidelity\": 0.9875, \"standardError\": 0.0011086427023110034}]}}, \"twoQubitProperties\": {\"1-2\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.993339973475831, \"standardError\": 0.00042542537565111856, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9836643625996532, \"standardError\": 0.00024406764114880876, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"2-5\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9959866319299256, \"standardError\": 0.00020888462076075752, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9901409897028172, \"standardError\": 0.00011969039704275692, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"1-4\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9938194942242228, \"standardError\": 0.00030451168114387366, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9852446274047258, \"standardError\": 0.00017391741943882937, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"3-4\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9955584014573948, \"standardError\": 0.0002463533017363961, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9888331441881014, \"standardError\": 0.00014198084303132017, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"4-5\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9963817851900892, \"standardError\": 0.0002809658289015536, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9890434217424704, \"standardError\": 0.00016701952849784552, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"4-9\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9918229095635156, \"standardError\": 0.0004845612347934733, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9819193323120876, \"standardError\": 0.00027247690085012075, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"5-6\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9922522559107944, \"standardError\": 0.0005209766559331772, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9790601478902928, \"standardError\": 0.0003032228229909225, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"6-7\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9901016929775128, \"standardError\": 0.0005733907401401157, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.97832799573722, \"standardError\": 0.0003214211397053358, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"6-11\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9914568130949726, \"standardError\": 0.0005203320323486669, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.978980113251373, \"standardError\": 0.0002980969911367983, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"3-8\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.995947037720578, \"standardError\": 0.0002591749913716968, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9885338025682638, \"standardError\": 0.00015245653026855406, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"8-9\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9961110237888386, \"standardError\": 0.0002856771308020491, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9881504822607472, \"standardError\": 0.0001700329480097371, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"8-13\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9971093968656736, \"standardError\": 0.00018004369020176871, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9923230940850656, \"standardError\": 0.00010397743016038244, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"5-10\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9891726440886228, \"standardError\": 0.0006320563006298148, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9814978757005124, \"standardError\": 0.00033589465977411186, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"9-10\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9881449909262416, \"standardError\": 0.0005296142504473898, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.97917061550953, \"standardError\": 0.000283286772617125, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"10-11\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9892370129282486, \"standardError\": 0.00048605149571134256, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.980042108282313, \"standardError\": 0.0002632638845042859, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"10-15\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9900466592094768, \"standardError\": 0.0004223636520455654, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9835191246299052, \"standardError\": 0.00022269991797158403, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"7-12\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.998102805244906, \"standardError\": 0.0003239147986331867, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9886285649176793, \"standardError\": 0.00020801262727003576, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"11-12\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.996915718600202, \"standardError\": 0.00041465959606677634, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9854880935559484, \"standardError\": 0.00026014182004440876, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"12-17\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9979375602653638, \"standardError\": 0.0004041899938265764, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9882974242507968, \"standardError\": 0.0002583672619093093, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"9-14\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9969426628342676, \"standardError\": 0.00022253215590192172, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9907678401680732, \"standardError\": 0.00013196127661168402, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"13-14\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9959243548290038, \"standardError\": 0.0002368737154455712, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9921007191982266, \"standardError\": 0.00012827933009034828, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"14-15\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.995458885540768, \"standardError\": 0.00021504810043308025, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9925527663972498, \"standardError\": 0.00011131288935959174, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"14-18\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9901627493165888, \"standardError\": 0.0011382645625579795, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9759387992901448, \"standardError\": 0.0006505150613427704, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"11-16\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9952723677585076, \"standardError\": 0.00029824773595417024, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9895252803265544, \"standardError\": 0.00016763874882659696, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"15-16\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.997938822011368, \"standardError\": 0.00016667456979089072, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9944047987762948, \"standardError\": 9.539359452637396e-05, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"16-17\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9955130895002988, \"standardError\": 0.0002915685808838084, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.991560461164134, \"standardError\": 0.00015719206357079442, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"16-20\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9966664300393596, \"standardError\": 0.00027712670654469123, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9931787991510448, \"standardError\": 0.00015092258506234382, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"15-19\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9968062084446072, \"standardError\": 0.00022441239228042711, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9923941580302612, \"standardError\": 0.00012689601211948016, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"18-19\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9905175609683669, \"standardError\": 0.0015187352433679614, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9779198178093031, \"standardError\": 0.0008611416216733392, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}, \"19-20\": {\"twoQubitGateFidelity\": [{\"gateName\": \"CZ\", \"fidelity\": 0.9969047991405292, \"standardError\": 0.00015951241439481298, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}, {\"gateName\": \"Two_Qubit_Clifford\", \"fidelity\": 0.9934625778656104, \"standardError\": 8.730561027445339e-05, \"fidelityType\": {\"name\": \"SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING\"}}]}}}}",
+ "deviceQueueInfo": [
+  {
+   "queue": "QUANTUM_TASKS_QUEUE",
+   "queueSize": "0",
+   "queuePriority": "Normal"
+  },
+  {
+   "queue": "QUANTUM_TASKS_QUEUE",
+   "queueSize": "0",
+   "queuePriority": "Priority"
+  },
+  {
+   "queue": "JOBS_QUEUE",
+   "queueSize": "0"
+  }
+ ],
+ "fetched_utc": "2026-10-28T14:46:05.568419+00:00",
+ "deviceCapabilities_parsed": {
+  "service": {
+   "braketSchemaHeader": {
+    "name": "braket.device_schema.device_service_properties",
+    "version": "1"
+   },
+   "executionWindows": [
+    {
+     "executionDay": "Weekdays",
+     "windowStartHour": "00:00:00",
+     "windowEndHour": "01:29:59"
+    },
+    {
+     "executionDay": "Weekdays",
+     "windowStartHour": "03:15:00",
+     "windowEndHour": "15:29:59"
+    },
+    {
+     "executionDay": "Weekdays",
+     "windowStartHour": "17:15:00",
+     "windowEndHour": "23:59:59"
+    }
+   ],
+   "shotsRange": [
+    1,
+    20000
+   ],
+   "deviceCost": {
+    "price": 0.00145,
+    "unit": "shot"
+   },
+   "deviceDocumentation": {
+    "imageUrl": "",
+    "summary": "Universal gate-model QPU based on superconducting qubits",
+    "externalDocumentationUrl": "https://www.iqmacademy.com/qpu/"
+   },
+   "deviceLocation": "Espoo, Finland",
+   "updatedAt": "2026-10-28T02:39:55.922610+00:00"
+  },
+  "action": {
+   "braket.ir.openqasm.program": {
+    "version": [
+     "1.0"
+    ],
+    "actionType": "braket.ir.openqasm.program",
+    "supportedOperations": [
+     "ccnot",
+     "cnot",
+     "cphaseshift",
+     "cphaseshift00",
+     "cphaseshift01",
+     "cphaseshift10",
+     "cswap",
+     "swap",
+     "iswap",
+     "pswap",
+     "ecr",
+     "cy",
+     "cz",
+     "xy",
+     "xx",
+     "yy",
+     "zz",
+     "h",
+     "i",
+     "phaseshift",
+     "rx",
+     "ry",
+     "rz",
+     "s",
+     "si",
+     "t",
+     "ti",
+     "v",
+     "vi",
+     "x",
+     "y",
+     "z",
+     "prx",
+     "cc_prx",
+     "measure_ff",
+     "barrier",
+     "if"
+    ],
+    "supportedModifiers": [],
+    "supportedPragmas": [
+     "verbatim",
+     "braket_result_type_sample",
+     "braket_result_type_expectation",
+     "braket_result_type_variance",
+     "braket_result_type_probability"
+    ],
+    "forbiddenPragmas": [
+     "braket_unitary_matrix",
+     "braket_result_type_state_vector",
+     "braket_result_type_density_matrix",
+     "braket_result_type_amplitude"
+    ],
+    "maximumQubitArrays": 1,
+    "maximumClassicalArrays": 1,
+    "forbiddenArrayOperations": [
+     "concatenation",
+     "negativeIndex",
+     "range",
+     "rangeWithStep",
+     "slicing",
+     "selection"
+    ],
+    "requiresAllQubitsMeasurement": false,
+    "supportPhysicalQubits": true,
+    "requiresContiguousQubitIndices": false,
+    "supportsPartialVerbatimBox": true,
+    "supportsUnassignedMeasurements": false,
+    "disabledQubitRewiringSupported": false,
+    "supportedResultTypes": [
+     {
+      "name": "Sample",
+      "observables": [
+       "x",
+       "y",
+       "z",
+       "h",
+       "i"
+      ],
+      "minShots": 1,
+      "maxShots": 20000
+     },
+     {
+      "name": "Expectation",
+      "observables": [
+       "x",
+       "y",
+       "z",
+       "h",
+       "i"
+      ],
+      "minShots": 1,
+      "maxShots": 20000
+     },
+     {
+      "name": "Variance",
+      "observables": [
+       "x",
+       "y",
+       "z",
+       "h",
+       "i"
+      ],
+      "minShots": 1,
+      "maxShots": 20000
+     },
+     {
+      "name": "Probability",
+      "minShots": 1,
+      "maxShots": 20000
+     }
+    ]
+   },
+   "braket.ir.openqasm.program_set": {
+    "version": [
+     "1"
+    ],
+    "actionType": "braket.ir.openqasm.program_set",
+    "maximumExecutables": 100,
+    "maximumTotalShots": 200000
+   }
+  },
+  "deviceParameters": {
+   "title": "IqmDeviceParameters",
+   "description": "This defines the parameters common to all the IQM devices.\n\nAttributes:\n    paradigmParameters: Parameters that are common to gatemodel paradigm",
+   "type": "object",
+   "properties": {
+    "braketSchemaHeader": {
+     "title": "Braketschemaheader",
+     "default": {
+      "name": "braket.device_schema.iqm.iqm_device_parameters",
+      "version": "1"
+     },
+     "const": {
+      "name": "braket.device_schema.iqm.iqm_device_parameters",
+      "version": "1"
+     }
+    },
+    "paradigmParameters": {
+     "$ref": "#/definitions/GateModelParameters"
+    }
+   },
+   "required": [
+    "paradigmParameters"
+   ],
+   "definitions": {
+    "GateModelParameters": {
+     "title": "GateModelParameters",
+     "description": "Defines parameters common to all gate model devices.\n\nAttributes:\n    qubitCount: Number of qubits used by the circuit.\n    disableQubitRewiring: Whether to run the circuit with the exact qubits chosen,\n        without any rewiring downstream.\n        If ``True``, no qubit rewiring is allowed; if ``False``, qubit rewiring is allowed.\n\nExamples:\n    >>> import json\n    >>> input_json = {\n    ...    \"braketSchemaHeader\": {\n    ...        \"name\": \"braket.device_schema.gate_model_parameters\",\n    ...        \"version\": \"1\",\n    ...    },\n    ...    \"qubitCount\": 1,\n    ...    \"disableQubitRewiring\": True\n    ... }\n    >>> GateModelParameters.parse_raw_schema(json.dumps(input_json))",
+     "type": "object",
+     "properties": {
+      "braketSchemaHeader": {
+       "title": "Braketschemaheader",
+       "default": {
+        "name": "braket.device_schema.gate_model_parameters",
+        "version": "1"
+       },
+       "const": {
+        "name": "braket.device_schema.gate_model_parameters",
+        "version": "1"
+       }
+      },
+      "qubitCount": {
+       "title": "Qubitcount",
+       "minimum": 0,
+       "type": "integer"
+      },
+      "disableQubitRewiring": {
+       "title": "Disablequbitrewiring",
+       "default": false,
+       "type": "boolean"
+      }
+     },
+     "required": [
+      "qubitCount"
+     ]
+    }
+   }
+  },
+  "braketSchemaHeader": {
+   "name": "braket.device_schema.iqm.iqm_device_capabilities",
+   "version": "1"
+  },
+  "paradigm": {
+   "braketSchemaHeader": {
+    "name": "braket.device_schema.gate_model_qpu_paradigm_properties",
+    "version": "1"
+   },
+   "connectivity": {
+    "fullyConnected": false,
+    "connectivityGraph": {
+     "1": [
+      "2",
+      "4"
+     ],
+     "2": [
+      "1",
+      "5"
+     ],
+     "4": [
+      "1",
+      "3",
+      "5",
+      "9"
+     ],
+     "5": [
+      "2",
+      "4",
+      "6",
+      "10"
+     ],
+     "3": [
+      "4",
+      "8"
+     ],
+     "8": [
+      "3",
+      "9",
+      "13"
+     ],
+     "9": [
+      "4",
+      "8",
+      "10",
+      "14"
+     ],
+     "6": [
+      "5",
+      "7",
+      "11"
+     ],
+     "10": [
+      "5",
+      "9",
+      "11",
+      "15"
+     ],
+     "7": [
+      "6",
+      "12"
+     ],
+     "11": [
+      "6",
+      "10",
+      "12",
+      "16"
+     ],
+     "12": [
+      "7",
+      "11",
+      "17"
+     ],
+     "13": [
+      "8",
+      "14"
+     ],
+     "14": [
+      "9",
+      "13",
+      "15",
+      "18"
+     ],
+     "15": [
+      "10",
+      "14",
+      "16",
+      "19"
+     ],
+     "16": [
+      "11",
+      "15",
+      "17",
+      "20"
+     ],
+     "17": [
+      "12",
+      "16"
+     ],
+     "18": [
+      "14",
+      "19"
+     ],
+     "19": [
+      "15",
+      "18",
+      "20"
+     ],
+     "20": [
+      "16",
+      "19"
+     ]
+    }
+   },
+   "qubitCount": 20,
+   "nativeGateSet": [
+    "cz",
+    "prx",
+    "cc_prx",
+    "measure_ff",
+    "barrier"
+   ]
+  },
+  "provider": {
+   "braketSchemaHeader": {
+    "name": "braket.device_schema.iqm.iqm_provider_properties",
+    "version": "1"
+   },
+   "properties": {
+    "one_qubit": {
+     "1": {
+      "f1Q_simultaneous_RB": 0.9976041899924726,
+      "f1Q_simultaneous_RB_std_err": 3.376369447290731e-05,
+      "readout_error_0_to_1": 0.0062,
+      "readout_error_1_to_0": 0.0278,
+      "fRO": 0.983,
+      "T1": 1.2005096989235188e-05,
+      "T1_std_err": 1.489724946798275e-06,
+      "T2_echo": 1.1702031307982912e-05,
+      "T2_echo_std_err": 2.0466715206926297e-06,
+      "T2": 2.9190310578775573e-06,
+      "T2_std_err": 8.648627184284058e-07
+     },
+     "2": {
+      "f1Q_simultaneous_RB": 0.9993711861783016,
+      "f1Q_simultaneous_RB_std_err": 1.2422301913149352e-05,
+      "readout_error_0_to_1": 0.0068,
+      "readout_error_1_to_0": 0.0436,
+      "fRO": 0.9748,
+      "T1": 3.046548442133252e-05,
+      "T1_std_err": 1.4821444732308629e-06,
+      "T2_echo": 1.5055415311185135e-05,
+      "T2_echo_std_err": 1.4187124730559892e-06,
+      "T2": 7.330645726644038e-06,
+      "T2_std_err": 4.48909424284845e-07
+     },
+     "3": {
+      "f1Q_simultaneous_RB": 0.9993437236645288,
+      "f1Q_simultaneous_RB_std_err": 1.4755807741639278e-05,
+      "readout_error_0_to_1": 0.012,
+      "readout_error_1_to_0": 0.0312,
+      "fRO": 0.9784,
+      "T1": 2.735168328911513e-05,
+      "T1_std_err": 1.6469251112054034e-06,
+      "T2_echo": 2.0666405313469475e-05,
+      "T2_echo_std_err": 1.5014661577974884e-06,
+      "T2": 1.0180881030040424e-05,
+      "T2_std_err": 8.78700899406205e-07
+     },
+     "4": {
+      "f1Q_simultaneous_RB": 0.9994597674713516,
+      "f1Q_simultaneous_RB_std_err": 2.0636266970370212e-05,
+      "readout_error_0_to_1": 0.0052,
+      "readout_error_1_to_0": 0.0126,
+      "fRO": 0.9911,
+      "T1": 2.621198029886543e-05,
+      "T1_std_err": 2.496524345057785e-06,
+      "T2_echo": 1.5642726254394124e-05,
+      "T2_echo_std_err": 1.2064652561818643e-06,
+      "T2": 8.755723769335373e-06,
+      "T2_std_err": 5.207082558474968e-07
+     },
+     "5": {
+      "f1Q_simultaneous_RB": 0.9993708845547749,
+      "f1Q_simultaneous_RB_std_err": 2.2981813023451384e-05,
+      "readout_error_0_to_1": 0.0078,
+      "readout_error_1_to_0": 0.0324,
+      "fRO": 0.9799,
+      "T1": 3.949148399044779e-05,
+      "T1_std_err": 8.956417228516202e-06,
+      "T2_echo": 1.833417777476427e-05,
+      "T2_echo_std_err": 1.4449391368952338e-06,
+      "T2": 8.55306077298422e-06,
+      "T2_std_err": 5.077951214653903e-07
+     },
+     "6": {
+      "f1Q_simultaneous_RB": 0.9983388579030866,
+      "f1Q_simultaneous_RB_std_err": 7.141150000688266e-05,
+      "readout_error_0_to_1": 0.0076,
+      "readout_error_1_to_0": 0.026,
+      "fRO": 0.9832,
+      "T1": 5.018785685511442e-05,
+      "T1_std_err": 4.696625234661275e-06,
+      "T2_echo": 2.149609617760857e-05,
+      "T2_echo_std_err": 1.1239425840201148e-06,
+      "T2": 8.514810373016253e-06,
+      "T2_std_err": 4.164268135748763e-07
+     },
+     "7": {
+      "f1Q_simultaneous_RB": 0.9979081848738396,
+      "f1Q_simultaneous_RB_std_err": 0.0001578517408452498,
+      "readout_error_0_to_1": 0.0166,
+      "readout_error_1_to_0": 0.0422,
+      "fRO": 0.9706,
+      "T1": 5.206594797541076e-05,
+      "T1_std_err": 3.3267180171255784e-06,
+      "T2_echo": 1.8982341807824153e-05,
+      "T2_echo_std_err": 1.2790067133901415e-06,
+      "T2": 9.127192258274994e-06,
+      "T2_std_err": 5.178456220082536e-07
+     },
+     "8": {
+      "f1Q_simultaneous_RB": 0.99938473461363,
+      "f1Q_simultaneous_RB_std_err": 1.9400703102443302e-05,
+      "readout_error_0_to_1": 0.0096,
+      "readout_error_1_to_0": 0.045,
+      "fRO": 0.9727,
+      "T1": 2.9127970609274e-05,
+      "T1_std_err": 1.159818589204003e-06,
+      "T2_echo": 1.8816972078459272e-05,
+      "T2_echo_std_err": 1.2499534532266905e-06,
+      "T2": 8.488510365544706e-06,
+      "T2_std_err": 5.880901742204063e-07
+     },
+     "9": {
+      "f1Q_simultaneous_RB": 0.9988423459955044,
+      "f1Q_simultaneous_RB_std_err": 3.3914597283545276e-05,
+      "readout_error_0_to_1": 0.0182,
+      "readout_error_1_to_0": 0.0322,
+      "fRO": 0.9748,
+      "T1": 4.432926378571912e-05,
+      "T1_std_err": 2.5802250138709873e-06,
+      "T2_echo": 2.483936364998397e-05,
+      "T2_echo_std_err": 1.7858727546214437e-06,
+      "T2": 9.459736372454206e-06,
+      "T2_std_err": 7.409003032775102e-07
+     },
+     "10": {
+      "f1Q_simultaneous_RB": 0.9994763416597134,
+      "f1Q_simultaneous_RB_std_err": 1.98640970634105e-05,
+      "readout_error_0_to_1": 0.0152,
+      "readout_error_1_to_0": 0.035,
+      "fRO": 0.9749,
+      "T1": 3.748010742306009e-05,
+      "T1_std_err": 1.690688460466692e-06,
+      "T2_echo": 2.4235385695666724e-05,
+      "T2_echo_std_err": 1.5479743353206712e-06,
+      "T2": 9.139304196425507e-06,
+      "T2_std_err": 5.163574470706196e-07
+     },
+     "11": {
+      "f1Q_simultaneous_RB": 0.999031990685681,
+      "f1Q_simultaneous_RB_std_err": 3.092641871353659e-05,
+      "readout_error_0_to_1": 0.0142,
+      "readout_error_1_to_0": 0.0244,
+      "fRO": 0.9807,
+      "T1": 6.12502342785434e-05,
+      "T1_std_err": 3.3178563682364947e-06,
+      "T2_echo": 2.504274776464581e-05,
+      "T2_echo_std_err": 1.3514168475264048e-06,
+      "T2": 7.182121849275348e-06,
+      "T2_std_err": 1.037689585413363e-06
+     },
+     "12": {
+      "f1Q_simultaneous_RB": 0.9970591949760071,
+      "f1Q_simultaneous_RB_std_err": 0.00019034127771609175,
+      "readout_error_0_to_1": 0.0162,
+      "readout_error_1_to_0": 0.0218,
+      "fRO": 0.981,
+      "T1": 4.771955287618282e-05,
+      "T1_std_err": 6.747641318670682e-06,
+      "T2_echo": 3.188555235380409e-05,
+      "T2_echo_std_err": 1.8168044169944625e-06,
+      "T2": 6.216932914767062e-06,
+      "T2_std_err": 1.1166836167076152e-06
+     },
+     "13": {
+      "f1Q_simultaneous_RB": 0.9994199063041036,
+      "f1Q_simultaneous_RB_std_err": 1.938367880002119e-05,
+      "readout_error_0_to_1": 0.0222,
+      "readout_error_1_to_0": 0.0242,
+      "fRO": 0.9768,
+      "T1": 3.378887131350183e-05,
+      "T1_std_err": 3.3877797040729766e-06,
+      "T2_echo": 2.4931743581518857e-05,
+      "T2_echo_std_err": 1.5483123528323329e-06,
+      "T2": 1.3213668181613262e-05,
+      "T2_std_err": 8.138770159601633e-07
+     },
+     "14": {
+      "f1Q_simultaneous_RB": 0.9996550868084284,
+      "f1Q_simultaneous_RB_std_err": 1.2791292858579908e-05,
+      "readout_error_0_to_1": 0.0074,
+      "readout_error_1_to_0": 0.0162,
+      "fRO": 0.9882,
+      "T1": 3.312780368711456e-05,
+      "T1_std_err": 1.5985992019850572e-06,
+      "T2_echo": 1.8341422262817465e-05,
+      "T2_echo_std_err": 9.77902625397071e-07,
+      "T2": 6.689316325766137e-06,
+      "T2_std_err": 3.255492529429157e-07
+     },
+     "15": {
+      "f1Q_simultaneous_RB": 0.9996137177181036,
+      "f1Q_simultaneous_RB_std_err": 1.6546123777713706e-05,
+      "readout_error_0_to_1": 0.0084,
+      "readout_error_1_to_0": 0.0366,
+      "fRO": 0.9775,
+      "T1": 3.677208242689232e-05,
+      "T1_std_err": 1.2162672474214522e-06,
+      "T2_echo": 3.318772325929333e-05,
+      "T2_echo_std_err": 2.1290762018609654e-06,
+      "T2": 1.5185404108503502e-05,
+      "T2_std_err": 8.41015416008975e-07
+     },
+     "16": {
+      "f1Q_simultaneous_RB": 0.9996102200609616,
+      "f1Q_simultaneous_RB_std_err": 1.1884795009302954e-05,
+      "readout_error_0_to_1": 0.0104,
+      "readout_error_1_to_0": 0.0268,
+      "fRO": 0.9814,
+      "T1": 4.479261538404326e-05,
+      "T1_std_err": 2.19063398902535e-06,
+      "T2_echo": 2.18460728617322e-05,
+      "T2_echo_std_err": 1.3645845771968457e-06,
+      "T2": 8.27639010560612e-06,
+      "T2_std_err": 4.4217602243625514e-07
+     },
+     "17": {
+      "f1Q_simultaneous_RB": 0.9995377200927748,
+      "f1Q_simultaneous_RB_std_err": 2.7809705253033667e-05,
+      "readout_error_0_to_1": 0.0122,
+      "readout_error_1_to_0": 0.0172,
+      "fRO": 0.9853,
+      "T1": 4.8483399135476355e-05,
+      "T1_std_err": 7.11563798559542e-06,
+      "T2_echo": 2.9959074724215377e-05,
+      "T2_echo_std_err": 2.539060936560709e-06,
+      "T2": 1.3284111853888734e-05,
+      "T2_std_err": 5.323654472717848e-07
+     },
+     "18": {
+      "f1Q_simultaneous_RB": 0.9972648317522111,
+      "f1Q_simultaneous_RB_std_err": 0.00015899316595641708,
+      "readout_error_0_to_1": 0.0092,
+      "readout_error_1_to_0": 0.0124,
+      "fRO": 0.9892,
+      "T1": 5.939080276377773e-06,
+      "T1_std_err": 1.058756537852598e-06,
+      "T2_echo": 3.948406516574463e-06,
+      "T2_echo_std_err": 3.885052596657068e-07,
+      "T2": 2.602489031781254e-06,
+      "T2_std_err": 1.6280719299397616e-07
+     },
+     "19": {
+      "f1Q_simultaneous_RB": 0.9996472900051248,
+      "f1Q_simultaneous_RB_std_err": 1.5684579366010917e-05,
+      "readout_error_0_to_1": 0.0286,
+      "readout_error_1_to_0": 0.0288,
+      "fRO": 0.9713,
+      "T1": 5.4149716346291665e-05,
+      "T1_std_err": 3.0218603302331133e-06,
+      "T2_echo": 2.3571581663540066e-05,
+      "T2_echo_std_err": 1.0842461485893607e-06,
+      "T2": 8.664486164076506e-06,
+      "T2_std_err": 5.468454360591636e-07
+     },
+     "20": {
+      "f1Q_simultaneous_RB": 0.9996232934091532,
+      "f1Q_simultaneous_RB_std_err": 1.396360788141265e-05,
+      "readout_error_0_to_1": 0.0064,
+      "readout_error_1_to_0": 0.0186,
+      "fRO": 0.9875,
+      "T1": 4.285819824249254e-05,
+      "T1_std_err": 4.117002870868833e-06,
+      "T2_echo": 4.036267929319056e-05,
+      "T2_echo_std_err": 3.047113162415484e-06,
+      "T2": 1.752198211907628e-05,
+      "T2_std_err": 7.278527306999954e-06
+     }
+    },
+    "two_qubit": {
+     "1-2": {
+      "fCZ": 0.993339973475831,
+      "fCZ_std_err": 0.00042542537565111856,
+      "f2Q_simultaneous_RB_Clifford": 0.9836643625996532,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00024406764114880876
+     },
+     "2-5": {
+      "fCZ": 0.9959866319299256,
+      "fCZ_std_err": 0.00020888462076075752,
+      "f2Q_simultaneous_RB_Clifford": 0.9901409897028172,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00011969039704275692
+     },
+     "1-4": {
+      "fCZ": 0.9938194942242228,
+      "fCZ_std_err": 0.00030451168114387366,
+      "f2Q_simultaneous_RB_Clifford": 0.9852446274047258,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00017391741943882937
+     },
+     "3-4": {
+      "fCZ": 0.9955584014573948,
+      "fCZ_std_err": 0.0002463533017363961,
+      "f2Q_simultaneous_RB_Clifford": 0.9888331441881014,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00014198084303132017
+     },
+     "4-5": {
+      "fCZ": 0.9963817851900892,
+      "fCZ_std_err": 0.0002809658289015536,
+      "f2Q_simultaneous_RB_Clifford": 0.9890434217424704,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00016701952849784552
+     },
+     "4-9": {
+      "fCZ": 0.9918229095635156,
+      "fCZ_std_err": 0.0004845612347934733,
+      "f2Q_simultaneous_RB_Clifford": 0.9819193323120876,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00027247690085012075
+     },
+     "5-6": {
+      "fCZ": 0.9922522559107944,
+      "fCZ_std_err": 0.0005209766559331772,
+      "f2Q_simultaneous_RB_Clifford": 0.9790601478902928,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0003032228229909225
+     },
+     "6-7": {
+      "fCZ": 0.9901016929775128,
+      "fCZ_std_err": 0.0005733907401401157,
+      "f2Q_simultaneous_RB_Clifford": 0.97832799573722,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0003214211397053358
+     },
+     "6-11": {
+      "fCZ": 0.9914568130949726,
+      "fCZ_std_err": 0.0005203320323486669,
+      "f2Q_simultaneous_RB_Clifford": 0.978980113251373,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0002980969911367983
+     },
+     "3-8": {
+      "fCZ": 0.995947037720578,
+      "fCZ_std_err": 0.0002591749913716968,
+      "f2Q_simultaneous_RB_Clifford": 0.9885338025682638,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00015245653026855406
+     },
+     "8-9": {
+      "fCZ": 0.9961110237888386,
+      "fCZ_std_err": 0.0002856771308020491,
+      "f2Q_simultaneous_RB_Clifford": 0.9881504822607472,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0001700329480097371
+     },
+     "8-13": {
+      "fCZ": 0.9971093968656736,
+      "fCZ_std_err": 0.00018004369020176871,
+      "f2Q_simultaneous_RB_Clifford": 0.9923230940850656,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00010397743016038244
+     },
+     "5-10": {
+      "fCZ": 0.9891726440886228,
+      "fCZ_std_err": 0.0006320563006298148,
+      "f2Q_simultaneous_RB_Clifford": 0.9814978757005124,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00033589465977411186
+     },
+     "9-10": {
+      "fCZ": 0.9881449909262416,
+      "fCZ_std_err": 0.0005296142504473898,
+      "f2Q_simultaneous_RB_Clifford": 0.97917061550953,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.000283286772617125
+     },
+     "10-11": {
+      "fCZ": 0.9892370129282486,
+      "fCZ_std_err": 0.00048605149571134256,
+      "f2Q_simultaneous_RB_Clifford": 0.980042108282313,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0002632638845042859
+     },
+     "10-15": {
+      "fCZ": 0.9900466592094768,
+      "fCZ_std_err": 0.0004223636520455654,
+      "f2Q_simultaneous_RB_Clifford": 0.9835191246299052,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00022269991797158403
+     },
+     "7-12": {
+      "fCZ": 0.998102805244906,
+      "fCZ_std_err": 0.0003239147986331867,
+      "f2Q_simultaneous_RB_Clifford": 0.9886285649176793,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00020801262727003576
+     },
+     "11-12": {
+      "fCZ": 0.996915718600202,
+      "fCZ_std_err": 0.00041465959606677634,
+      "f2Q_simultaneous_RB_Clifford": 0.9854880935559484,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00026014182004440876
+     },
+     "12-17": {
+      "fCZ": 0.9979375602653638,
+      "fCZ_std_err": 0.0004041899938265764,
+      "f2Q_simultaneous_RB_Clifford": 0.9882974242507968,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0002583672619093093
+     },
+     "9-14": {
+      "fCZ": 0.9969426628342676,
+      "fCZ_std_err": 0.00022253215590192172,
+      "f2Q_simultaneous_RB_Clifford": 0.9907678401680732,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00013196127661168402
+     },
+     "13-14": {
+      "fCZ": 0.9959243548290038,
+      "fCZ_std_err": 0.0002368737154455712,
+      "f2Q_simultaneous_RB_Clifford": 0.9921007191982266,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00012827933009034828
+     },
+     "14-15": {
+      "fCZ": 0.995458885540768,
+      "fCZ_std_err": 0.00021504810043308025,
+      "f2Q_simultaneous_RB_Clifford": 0.9925527663972498,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00011131288935959174
+     },
+     "14-18": {
+      "fCZ": 0.9901627493165888,
+      "fCZ_std_err": 0.0011382645625579795,
+      "f2Q_simultaneous_RB_Clifford": 0.9759387992901448,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0006505150613427704
+     },
+     "11-16": {
+      "fCZ": 0.9952723677585076,
+      "fCZ_std_err": 0.00029824773595417024,
+      "f2Q_simultaneous_RB_Clifford": 0.9895252803265544,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00016763874882659696
+     },
+     "15-16": {
+      "fCZ": 0.997938822011368,
+      "fCZ_std_err": 0.00016667456979089072,
+      "f2Q_simultaneous_RB_Clifford": 0.9944047987762948,
+      "f2Q_simultaneous_RB_Clifford_std_err": 9.539359452637396e-05
+     },
+     "16-17": {
+      "fCZ": 0.9955130895002988,
+      "fCZ_std_err": 0.0002915685808838084,
+      "f2Q_simultaneous_RB_Clifford": 0.991560461164134,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00015719206357079442
+     },
+     "16-20": {
+      "fCZ": 0.9966664300393596,
+      "fCZ_std_err": 0.00027712670654469123,
+      "f2Q_simultaneous_RB_Clifford": 0.9931787991510448,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00015092258506234382
+     },
+     "15-19": {
+      "fCZ": 0.9968062084446072,
+      "fCZ_std_err": 0.00022441239228042711,
+      "f2Q_simultaneous_RB_Clifford": 0.9923941580302612,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.00012689601211948016
+     },
+     "18-19": {
+      "fCZ": 0.9905175609683669,
+      "fCZ_std_err": 0.0015187352433679614,
+      "f2Q_simultaneous_RB_Clifford": 0.9779198178093031,
+      "f2Q_simultaneous_RB_Clifford_std_err": 0.0008611416216733392
+     },
+     "19-20": {
+      "fCZ": 0.9969047991405292,
+      "fCZ_std_err": 0.00015951241439481298,
+      "f2Q_simultaneous_RB_Clifford": 0.9934625778656104,
+      "f2Q_simultaneous_RB_Clifford_std_err": 8.730561027445339e-05
+     }
+    }
+   }
+  },
+  "standardized": {
+   "braketSchemaHeader": {
+    "name": "braket.device_schema.standardized_gate_model_qpu_device_properties",
+    "version": "1"
+   },
+   "oneQubitProperties": {
+    "1": {
+     "T1": {
+      "value": 1.2005096989235188e-05,
+      "standardError": 1.489724946798275e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 2.9190310578775573e-06,
+      "standardError": 8.648627184284058e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9976041899924726,
+       "standardError": 3.376369447290731e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0062
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0278
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.983,
+       "standardError": 0.0012855877088487429
+      }
+     ]
+    },
+    "2": {
+     "T1": {
+      "value": 3.046548442133252e-05,
+      "standardError": 1.4821444732308629e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 7.330645726644038e-06,
+      "standardError": 4.48909424284845e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9993711861783016,
+       "standardError": 1.2422301913149352e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0068
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0436
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9748,
+       "standardError": 0.0015513864268693498
+      }
+     ]
+    },
+    "3": {
+     "T1": {
+      "value": 2.735168328911513e-05,
+      "standardError": 1.6469251112054034e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 1.0180881030040424e-05,
+      "standardError": 8.78700899406205e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9993437236645288,
+       "standardError": 1.4755807741639278e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.012
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0312
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9784,
+       "standardError": 0.0014464092877270887
+      }
+     ]
+    },
+    "4": {
+     "T1": {
+      "value": 2.621198029886543e-05,
+      "standardError": 2.496524345057785e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 8.755723769335373e-06,
+      "standardError": 5.207082558474968e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9994597674713516,
+       "standardError": 2.0636266970370212e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0052
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0126
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9911,
+       "standardError": 0.000939860240607832
+      }
+     ]
+    },
+    "5": {
+     "T1": {
+      "value": 3.949148399044779e-05,
+      "standardError": 8.956417228516202e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 8.55306077298422e-06,
+      "standardError": 5.077951214653903e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9993708845547749,
+       "standardError": 2.2981813023451384e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0078
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0324
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9799,
+       "standardError": 0.0013943584554702937
+      }
+     ]
+    },
+    "6": {
+     "T1": {
+      "value": 5.018785685511442e-05,
+      "standardError": 4.696625234661275e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 8.514810373016253e-06,
+      "standardError": 4.164268135748763e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9983388579030866,
+       "standardError": 7.141150000688266e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0076
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.026
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9832,
+       "standardError": 0.0012793763473946537
+      }
+     ]
+    },
+    "7": {
+     "T1": {
+      "value": 5.206594797541076e-05,
+      "standardError": 3.3267180171255784e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 9.127192258274994e-06,
+      "standardError": 5.178456220082536e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9979081848738396,
+       "standardError": 0.0001578517408452498
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0166
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0422
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9706,
+       "standardError": 0.0016782052332543877
+      }
+     ]
+    },
+    "8": {
+     "T1": {
+      "value": 2.9127970609274e-05,
+      "standardError": 1.159818589204003e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 8.488510365544706e-06,
+      "standardError": 5.880901742204063e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.99938473461363,
+       "standardError": 1.9400703102443302e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0096
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.045
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9727,
+       "standardError": 0.0016142761160070664
+      }
+     ]
+    },
+    "9": {
+     "T1": {
+      "value": 4.432926378571912e-05,
+      "standardError": 2.5802250138709873e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 9.459736372454206e-06,
+      "standardError": 7.409003032775102e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9988423459955044,
+       "standardError": 3.3914597283545276e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0182
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0322
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9748,
+       "standardError": 0.0015605787442824442
+      }
+     ]
+    },
+    "10": {
+     "T1": {
+      "value": 3.748010742306009e-05,
+      "standardError": 1.690688460466692e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 9.139304196425507e-06,
+      "standardError": 5.163574470706196e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9994763416597134,
+       "standardError": 1.98640970634105e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0152
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.035
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9749,
+       "standardError": 0.0015560143750002052
+      }
+     ]
+    },
+    "11": {
+     "T1": {
+      "value": 6.12502342785434e-05,
+      "standardError": 3.3178563682364947e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 7.182121849275348e-06,
+      "standardError": 1.037689585413363e-06,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.999031990685681,
+       "standardError": 3.092641871353659e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0142
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0244
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9807,
+       "standardError": 0.0013713803042745248
+      }
+     ]
+    },
+    "12": {
+     "T1": {
+      "value": 4.771955287618282e-05,
+      "standardError": 6.747641318670682e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 6.216932914767062e-06,
+      "standardError": 1.1166836167076152e-06,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9970591949760071,
+       "standardError": 0.00019034127771609175
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0162
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0218
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.981,
+       "standardError": 0.0013616069601330846
+      }
+     ]
+    },
+    "13": {
+     "T1": {
+      "value": 3.378887131350183e-05,
+      "standardError": 3.3877797040729766e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 1.3213668181613262e-05,
+      "standardError": 8.138770159601633e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9994199063041036,
+       "standardError": 1.938367880002119e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0222
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0242
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9768,
+       "standardError": 0.001500702342536416
+      }
+     ]
+    },
+    "14": {
+     "T1": {
+      "value": 3.312780368711456e-05,
+      "standardError": 1.5985992019850572e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 6.689316325766137e-06,
+      "standardError": 3.255492529429157e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9996550868084284,
+       "standardError": 1.2791292858579908e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0074
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0162
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9882,
+       "standardError": 0.0010785966021441256
+      }
+     ]
+    },
+    "15": {
+     "T1": {
+      "value": 3.677208242689232e-05,
+      "standardError": 1.2162672474214522e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 1.5185404108503502e-05,
+      "standardError": 8.41015416008975e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9996137177181036,
+       "standardError": 1.6546123777713706e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0084
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0366
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9775,
+       "standardError": 0.001471925442246757
+      }
+     ]
+    },
+    "16": {
+     "T1": {
+      "value": 4.479261538404326e-05,
+      "standardError": 2.19063398902535e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 8.27639010560612e-06,
+      "standardError": 4.4217602243625514e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9996102200609616,
+       "standardError": 1.1884795009302954e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0104
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0268
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9814,
+       "standardError": 0.0013453886298376411
+      }
+     ]
+    },
+    "17": {
+     "T1": {
+      "value": 4.8483399135476355e-05,
+      "standardError": 7.11563798559542e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 1.3284111853888734e-05,
+      "standardError": 5.323654472717848e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9995377200927748,
+       "standardError": 2.7809705253033667e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0122
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0172
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9853,
+       "standardError": 0.0012014983508289135
+      }
+     ]
+    },
+    "18": {
+     "T1": {
+      "value": 5.939080276377773e-06,
+      "standardError": 1.058756537852598e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 2.602489031781254e-06,
+      "standardError": 1.6280719299397616e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9972648317522111,
+       "standardError": 0.00015899316595641708
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0092
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0124
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9892,
+       "standardError": 0.0010336636884637916
+      }
+     ]
+    },
+    "19": {
+     "T1": {
+      "value": 5.4149716346291665e-05,
+      "standardError": 3.0218603302331133e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 8.664486164076506e-06,
+      "standardError": 5.468454360591636e-07,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9996472900051248,
+       "standardError": 1.5684579366010917e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0286
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0288
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9713,
+       "standardError": 0.0016635551103955058
+      }
+     ]
+    },
+    "20": {
+     "T1": {
+      "value": 4.285819824249254e-05,
+      "standardError": 4.117002870868833e-06,
+      "unit": "S"
+     },
+     "T2": {
+      "value": 1.752198211907628e-05,
+      "standardError": 7.278527306999954e-06,
+      "unit": "S"
+     },
+     "oneQubitFidelity": [
+      {
+       "fidelityType": {
+        "name": "SIMULTANEOUS_RANDOMIZED_BENCHMARKING"
+       },
+       "fidelity": 0.9996232934091532,
+       "standardError": 1.396360788141265e-05
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_0_TO_1"
+       },
+       "fidelity": 0.0064
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT_ERROR_1_TO_0"
+       },
+       "fidelity": 0.0186
+      },
+      {
+       "fidelityType": {
+        "name": "READOUT"
+       },
+       "fidelity": 0.9875,
+       "standardError": 0.0011086427023110034
+      }
+     ]
+    }
+   },
+   "twoQubitProperties": {
+    "1-2": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.993339973475831,
+       "standardError": 0.00042542537565111856,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9836643625996532,
+       "standardError": 0.00024406764114880876,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "2-5": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9959866319299256,
+       "standardError": 0.00020888462076075752,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9901409897028172,
+       "standardError": 0.00011969039704275692,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "1-4": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9938194942242228,
+       "standardError": 0.00030451168114387366,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9852446274047258,
+       "standardError": 0.00017391741943882937,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "3-4": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9955584014573948,
+       "standardError": 0.0002463533017363961,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9888331441881014,
+       "standardError": 0.00014198084303132017,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "4-5": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9963817851900892,
+       "standardError": 0.0002809658289015536,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9890434217424704,
+       "standardError": 0.00016701952849784552,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "4-9": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9918229095635156,
+       "standardError": 0.0004845612347934733,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9819193323120876,
+       "standardError": 0.00027247690085012075,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "5-6": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9922522559107944,
+       "standardError": 0.0005209766559331772,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9790601478902928,
+       "standardError": 0.0003032228229909225,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "6-7": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9901016929775128,
+       "standardError": 0.0005733907401401157,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.97832799573722,
+       "standardError": 0.0003214211397053358,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "6-11": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9914568130949726,
+       "standardError": 0.0005203320323486669,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.978980113251373,
+       "standardError": 0.0002980969911367983,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "3-8": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.995947037720578,
+       "standardError": 0.0002591749913716968,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9885338025682638,
+       "standardError": 0.00015245653026855406,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "8-9": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9961110237888386,
+       "standardError": 0.0002856771308020491,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9881504822607472,
+       "standardError": 0.0001700329480097371,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "8-13": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9971093968656736,
+       "standardError": 0.00018004369020176871,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9923230940850656,
+       "standardError": 0.00010397743016038244,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "5-10": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9891726440886228,
+       "standardError": 0.0006320563006298148,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9814978757005124,
+       "standardError": 0.00033589465977411186,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "9-10": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9881449909262416,
+       "standardError": 0.0005296142504473898,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.97917061550953,
+       "standardError": 0.000283286772617125,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "10-11": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9892370129282486,
+       "standardError": 0.00048605149571134256,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.980042108282313,
+       "standardError": 0.0002632638845042859,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "10-15": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9900466592094768,
+       "standardError": 0.0004223636520455654,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9835191246299052,
+       "standardError": 0.00022269991797158403,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "7-12": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.998102805244906,
+       "standardError": 0.0003239147986331867,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9886285649176793,
+       "standardError": 0.00020801262727003576,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "11-12": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.996915718600202,
+       "standardError": 0.00041465959606677634,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9854880935559484,
+       "standardError": 0.00026014182004440876,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "12-17": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9979375602653638,
+       "standardError": 0.0004041899938265764,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9882974242507968,
+       "standardError": 0.0002583672619093093,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "9-14": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9969426628342676,
+       "standardError": 0.00022253215590192172,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9907678401680732,
+       "standardError": 0.00013196127661168402,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "13-14": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9959243548290038,
+       "standardError": 0.0002368737154455712,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9921007191982266,
+       "standardError": 0.00012827933009034828,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "14-15": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.995458885540768,
+       "standardError": 0.00021504810043308025,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9925527663972498,
+       "standardError": 0.00011131288935959174,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "14-18": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9901627493165888,
+       "standardError": 0.0011382645625579795,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9759387992901448,
+       "standardError": 0.0006505150613427704,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "11-16": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9952723677585076,
+       "standardError": 0.00029824773595417024,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9895252803265544,
+       "standardError": 0.00016763874882659696,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "15-16": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.997938822011368,
+       "standardError": 0.00016667456979089072,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9944047987762948,
+       "standardError": 9.539359452637396e-05,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "16-17": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9955130895002988,
+       "standardError": 0.0002915685808838084,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.991560461164134,
+       "standardError": 0.00015719206357079442,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "16-20": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9966664300393596,
+       "standardError": 0.00027712670654469123,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9931787991510448,
+       "standardError": 0.00015092258506234382,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "15-19": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9968062084446072,
+       "standardError": 0.00022441239228042711,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9923941580302612,
+       "standardError": 0.00012689601211948016,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "18-19": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9905175609683669,
+       "standardError": 0.0015187352433679614,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9779198178093031,
+       "standardError": 0.0008611416216733392,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    },
+    "19-20": {
+     "twoQubitGateFidelity": [
+      {
+       "gateName": "CZ",
+       "fidelity": 0.9969047991405292,
+       "standardError": 0.00015951241439481298,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      },
+      {
+       "gateName": "Two_Qubit_Clifford",
+       "fidelity": 0.9934625778656104,
+       "standardError": 8.730561027445339e-05,
+       "fidelityType": {
+        "name": "SIMULTANEOUS_INTERLEAVED_RANDOMIZED_BENCHMARKING"
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+}

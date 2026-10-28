@@ -1,0 +1,246 @@
+{
+ "time_utc": "2026-10-28T14:55:15.552563+00:00",
+ "items": [
+  {
+   "name": "rigetti_single_0_k1",
+   "n_cz": 40,
+   "n_1q": 265,
+   "max_abs_err_exact": 5.210921865117513e-07
+  },
+  {
+   "name": "rigetti_single_0_k2",
+   "n_cz": 80,
+   "n_1q": 505,
+   "max_abs_err_exact": 1.2561814886069556e-06
+  },
+  {
+   "name": "rigetti_single_0_k3",
+   "n_cz": 120,
+   "n_1q": 745,
+   "max_abs_err_exact": 2.1499182005779716e-06
+  },
+  {
+   "name": "rigetti_single_0_k4",
+   "n_cz": 160,
+   "n_1q": 985,
+   "max_abs_err_exact": 3.1062136216508662e-06,
+   "max_abs_err_1024shots": 0.0421411395072937,
+   "mean_abs_err_1024shots": 0.014596319740468806,
+   "mean_abs_err_reversed_control": 0.16668787381865763
+  },
+  {
+   "name": "rigetti_single_1_k1",
+   "n_cz": 40,
+   "n_1q": 275,
+   "max_abs_err_exact": 8.681085531536681e-07
+  },
+  {
+   "name": "rigetti_single_1_k2",
+   "n_cz": 80,
+   "n_1q": 515,
+   "max_abs_err_exact": 1.3492835083672716e-06
+  },
+  {
+   "name": "rigetti_single_1_k3",
+   "n_cz": 120,
+   "n_1q": 755,
+   "max_abs_err_exact": 1.6421618533879467e-06
+  },
+  {
+   "name": "rigetti_single_1_k4",
+   "n_cz": 160,
+   "n_1q": 995,
+   "max_abs_err_exact": 2.463842518340975e-06,
+   "max_abs_err_1024shots": 0.06637758761644363,
+   "mean_abs_err_1024shots": 0.022077660567381165,
+   "mean_abs_err_reversed_control": 0.2119864107194272
+  },
+  {
+   "name": "rigetti_single_2_k1",
+   "n_cz": 40,
+   "n_1q": 275,
+   "max_abs_err_exact": 8.61453218981012e-07
+  },
+  {
+   "name": "rigetti_single_2_k2",
+   "n_cz": 80,
+   "n_1q": 515,
+   "max_abs_err_exact": 1.8042729718059647e-06
+  },
+  {
+   "name": "rigetti_single_2_k3",
+   "n_cz": 120,
+   "n_1q": 755,
+   "max_abs_err_exact": 2.230356500043662e-06
+  },
+  {
+   "name": "rigetti_single_2_k4",
+   "n_cz": 160,
+   "n_1q": 995,
+   "max_abs_err_exact": 2.5024341162582786e-06,
+   "max_abs_err_1024shots": 0.07511822879314423,
+   "mean_abs_err_1024shots": 0.026900531666549134,
+   "mean_abs_err_reversed_control": 0.0956831121792096
+  },
+  {
+   "name": "rigetti_single_3_k1",
+   "n_cz": 40,
+   "n_1q": 269,
+   "max_abs_err_exact": 1.1944267748198456e-06
+  },
+  {
+   "name": "rigetti_single_3_k2",
+   "n_cz": 80,
+   "n_1q": 509,
+   "max_abs_err_exact": 1.8658575506869113e-06
+  },
+  {
+   "name": "rigetti_single_3_k3",
+   "n_cz": 120,
+   "n_1q": 749,
+   "max_abs_err_exact": 2.73504040015915e-06
+  },
+  {
+   "name": "rigetti_single_3_k4",
+   "n_cz": 160,
+   "n_1q": 989,
+   "max_abs_err_exact": 3.4811393639921917e-06,
+   "max_abs_err_1024shots": 0.05137917399406433,
+   "mean_abs_err_1024shots": 0.020418179847977377,
+   "mean_abs_err_reversed_control": 0.2155663704330271
+  },
+  {
+   "name": "iqm_single_0_k1",
+   "n_cz": 40,
+   "n_1q": 70,
+   "max_abs_err_exact": 5.21092209160301e-07
+  },
+  {
+   "name": "iqm_single_0_k2",
+   "n_cz": 80,
+   "n_1q": 130,
+   "max_abs_err_exact": 1.2561815282419175e-06
+  },
+  {
+   "name": "iqm_single_0_k3",
+   "n_cz": 120,
+   "n_1q": 190,
+   "max_abs_err_exact": 2.149918255756056e-06
+  },
+  {
+   "name": "iqm_single_0_k4",
+   "n_cz": 160,
+   "n_1q": 250,
+   "max_abs_err_exact": 3.1062136914838945e-06,
+   "max_abs_err_1024shots": 0.06201741099357605,
+   "mean_abs_err_1024shots": 0.02690726572817022,
+   "mean_abs_err_reversed_control": 0.16483347578482194
+  },
+  {
+   "name": "iqm_single_1_k1",
+   "n_cz": 40,
+   "n_1q": 70,
+   "max_abs_err_exact": 8.681085739148386e-07
+  },
+  {
+   "name": "iqm_single_1_k2",
+   "n_cz": 80,
+   "n_1q": 130,
+   "max_abs_err_exact": 1.3492835427841854e-06
+  },
+  {
+   "name": "iqm_single_1_k3",
+   "n_cz": 120,
+   "n_1q": 190,
+   "max_abs_err_exact": 1.6421618944661986e-06
+  },
+  {
+   "name": "iqm_single_1_k4",
+   "n_cz": 160,
+   "n_1q": 250,
+   "max_abs_err_exact": 2.4638425728529256e-06,
+   "max_abs_err_1024shots": 0.06725341081619263,
+   "mean_abs_err_1024shots": 0.022406670214100317,
+   "mean_abs_err_reversed_control": 0.22214411114427177
+  },
+  {
+   "name": "iqm_single_2_k1",
+   "n_cz": 40,
+   "n_1q": 70,
+   "max_abs_err_exact": 8.614532414075171e-07
+  },
+  {
+   "name": "iqm_single_2_k2",
+   "n_cz": 80,
+   "n_1q": 130,
+   "max_abs_err_exact": 1.8042730046685662e-06
+  },
+  {
+   "name": "iqm_single_2_k3",
+   "n_cz": 120,
+   "n_1q": 190,
+   "max_abs_err_exact": 2.2303565412329363e-06
+  },
+  {
+   "name": "iqm_single_2_k4",
+   "n_cz": 160,
+   "n_1q": 250,
+   "max_abs_err_exact": 2.5024341635537795e-06,
+   "max_abs_err_1024shots": 0.11511928588151932,
+   "mean_abs_err_1024shots": 0.03275580260286171,
+   "mean_abs_err_reversed_control": 0.10104885739578591
+  },
+  {
+   "name": "iqm_single_3_k1",
+   "n_cz": 40,
+   "n_1q": 70,
+   "max_abs_err_exact": 1.1944267981345291e-06
+  },
+  {
+   "name": "iqm_single_3_k2",
+   "n_cz": 80,
+   "n_1q": 130,
+   "max_abs_err_exact": 1.865857590210851e-06
+  },
+  {
+   "name": "iqm_single_3_k3",
+   "n_cz": 120,
+   "n_1q": 190,
+   "max_abs_err_exact": 2.735040457113591e-06
+  },
+  {
+   "name": "iqm_single_3_k4",
+   "n_cz": 160,
+   "n_1q": 250,
+   "max_abs_err_exact": 3.4811394366007775e-06,
+   "max_abs_err_1024shots": 0.06822586059570312,
+   "mean_abs_err_1024shots": 0.019825925881212406,
+   "mean_abs_err_reversed_control": 0.22075018964030527
+  },
+  {
+   "name": "rigetti_packed2_k2",
+   "n_cz": null,
+   "n_1q": null,
+   "max_abs_err_exact": 1.3492834726180902e-06,
+   "max_abs_err_1024shots": 0.057116568088531494,
+   "mean_abs_err_1024shots": 0.01823927164077759,
+   "mean_abs_err_reversed_control": 0.03820735649629073
+  },
+  {
+   "name": "rigetti_packed2_k4",
+   "n_cz": null,
+   "n_1q": null,
+   "max_abs_err_exact": 3.106213516179679e-06,
+   "max_abs_err_1024shots": 0.07980147004127502,
+   "mean_abs_err_1024shots": 0.02742634957486933,
+   "mean_abs_err_reversed_control": 0.17690427682616494
+  }
+ ],
+ "worst_exact": 3.4811394366007775e-06,
+ "worst_1024shots": 0.11511928588151932,
+ "programset_max_abs_err_1024shots": [
+  0.023334980010986328,
+  0.06874462962150574
+ ],
+ "programset_result_type": "ProgramSetQuantumTaskResult"
+}

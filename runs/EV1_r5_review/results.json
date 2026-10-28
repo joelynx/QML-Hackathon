@@ -1,0 +1,165 @@
+{
+  "code_revision": "9a1922c8898b90db",
+  "fixture_sha256": "7f323fb891968894ce015ac23d16376d6249290e19d5456c193e37254aa5c147",
+  "eval_sha256": "f758910b94defc3dbbbbb1c735c41d2611755b20ba578340cdd6de9c95a84be9",
+  "source_hashes": {
+    "__init__.py": "67533a7f8a0d6e67be20fcfb251ee61f6e12ccdbd6cd057ec416725724fd1d72",
+    "evalspec.py": "2c135e8f363bb7c0b24479cc707bc06aa9a56d6d016ab4bb5424ee81eb03ca90",
+    "evaluate.py": "8e0220615c9e48dc552fdef9e3cf755d69adef6bc40f3076fc186abab3678d5e",
+    "leakcheck.py": "9638c16c65c88c96ad4813300a29983f02396b644409176d4ce9d6e149d68fd8",
+    "scorer.py": "3de0a7bde580e985298c0a62a46eed371db6989a91702a7bd4c2cb77a7d6f655",
+    "units.py": "06aa60fb0099c02e19852e7e870dbc673cf0b7089f9c97a9f0104f261ffc0b0a"
+  },
+  "source_changes": {
+    "__init__.py": {
+      "changed": false,
+      "diff_lines": 0
+    },
+    "evalspec.py": {
+      "changed": true,
+      "diff_lines": 70
+    },
+    "evaluate.py": {
+      "changed": true,
+      "diff_lines": 430
+    },
+    "leakcheck.py": {
+      "changed": false,
+      "diff_lines": 0
+    },
+    "scorer.py": {
+      "changed": true,
+      "diff_lines": 308
+    },
+    "test_scorer.py": {
+      "changed": true,
+      "diff_lines": 541
+    },
+    "units.py": {
+      "changed": true,
+      "diff_lines": 93
+    }
+  },
+  "accessible_output_hashes": {
+    "positions_ds1.csv": true,
+    "records_ds1.csv": true,
+    "labels_ds1.csv": true,
+    "ds1_folds.json": true,
+    "positions_ds2s.csv": true,
+    "records_ds2s.csv": true,
+    "positions_ds2.csv": true,
+    "records_ds2.csv": true,
+    "positions_svdb.csv": true,
+    "records_svdb.csv": true,
+    "lowdata_subsets.json": true
+  },
+  "manifest_changes": {
+    "positions_ds1.csv": {
+      "r3": "45f088c4a65d8db86fed39724a12523cd7e1605e42678400764f36875956dd9a",
+      "r5": "803c5d3652c989c5971b77425d9def53fc4d04b6c2e2c47c0f4aec6d59504c67"
+    },
+    "labels_ds1.csv": {
+      "r3": "592517b8373a778be04077bcd962942ddad7de1dfc68fd5424b4ad0f90bc4046",
+      "r5": "3e28ee8f80477ce654c4f8962647643adb9532b17d529d4dc6789af5beb6ae3c"
+    },
+    "lowdata_subsets.json": {
+      "r3": null,
+      "r5": "6348bd6c817b057c55e885bcfefd3f041e3563d74a53de841f88bfde78d982f1"
+    }
+  },
+  "R1": {
+    "n_predict": 50964,
+    "n_units": 50542,
+    "exactly_removed_472_flutter_labels": true,
+    "raw_DS1_positions_match_independent_whitelist": true,
+    "folds_unchanged": true
+  },
+  "DS1_reference_scores": {
+    "const_n": 0.31697369103834777,
+    "rr_rule": 0.3919742092168618
+  },
+  "frozen_subsets_reproduced": true,
+  "R2_table_V_cell_checks": {
+    "cells": 15,
+    "endpoints": 2,
+    "errors": []
+  },
+  "seed_order": {
+    "first": "accepted",
+    "permuted": "accepted",
+    "same_log_identity": true,
+    "delta_first": 0.041761868277526704,
+    "delta_permuted": 0.041761868277526704,
+    "primary_CI_first": [
+      -0.04482722556561872,
+      0.12839998918903714
+    ],
+    "primary_CI_permuted": [
+      -0.04473419124501206,
+      0.12637789974765984
+    ],
+    "S_slice_CI_first": [
+      -0.08091351047258565,
+      0.16995337151428092
+    ],
+    "S_slice_CI_permuted": [
+      -0.09105920500477394,
+      0.16355954485370644
+    ]
+  },
+  "lowdata_not_bound_to_headline": {
+    "status": "accepted",
+    "candidate_config": "unrelated_full_data_cfg",
+    "headline_candidate_config": "q_cfg",
+    "training_subset_provenance_supplied": false
+  },
+  "model_output_collision": {
+    "status": "accepted",
+    "artifact_changed": true
+  },
+  "confirmation_swapped_arms": {
+    "first": "accepted",
+    "swapped_repair": "accepted",
+    "first_delta": -0.5722511684643019,
+    "swapped_delta": 0.5722511684643019,
+    "first_confirmed": false,
+    "swapped_confirmed": true,
+    "same_union_of_artifact_hashes": true,
+    "approved_model_change": null
+  },
+  "confirmation_overwrite": {
+    "output_changed": true,
+    "first_result_still_available_in_output": false,
+    "other_result_JSON_files": [],
+    "ledger_has_first_metrics": false
+  },
+  "pending_headline_provenance_only": {
+    "E002": {
+      "checked_runs": 5,
+      "config_ids": [
+        "E002-esn-cfg28"
+      ],
+      "seed_ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "E003": {
+      "checked_runs": 5,
+      "config_ids": [
+        "E003-qrc-cfg15"
+      ],
+      "seed_ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  "real_logs_unchanged": true
+}

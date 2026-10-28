@@ -1,0 +1,87 @@
+{
+ "arm_id": "E002-esn",
+ "seed": 4,
+ "split": "svdb",
+ "config_id": "E002-esn-cfg28",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 predict 08dc4140d5d45b6b",
+ "model_artifact": "runs/E002/model_seed4.npz",
+ "model_artifact_sha256": "d3cf14e13e605dc952714547c7e2bc02dcb536f288b87512441c7baf0807d0f6",
+ "reservoir_seed": 4,
+ "shot_seed": null,
+ "prediction_sha256": "59c7ebaf44b268eb401e19ed86f60e00dbc6012db8afd0f7c058d6ae9a4aee92",
+ "config": {
+  "size": 55,
+  "rho": 0.6801305020819445,
+  "leak": 0.10244788459973231,
+  "in_scale": 0.9796057536708305,
+  "density": 0.05409639694101503,
+  "bias": 0.5368532157292856
+ },
+ "lam": 0.001,
+ "predicted_by": "qhc.p4.predict (predict-only from the saved artifact; A018 fix)",
+ "source_manifest": "runs/E002/pred_ds2s_seed4.run.json",
+ "source_manifest_sha256": "d2bc8715fdbb004d32d1a20e5893bdc4b0110d27290591181e424e7da9bde4a6",
+ "source_code_revision": "eval 9a1922c8898b90db / pipe da67af87f8b8fd73",
+ "features_file": "runs/E018/features/svdb.npz",
+ "features_arrays_sha256": {
+  "beat_id": "09f39f9c30b7930a0893e439066f38327cf03c36da7aa0b0d27003cfcfe1370e",
+  "record": "7e84d52f73504f60cc2c7b117028aa0af0d306953b0979d58f3fb4e742ba3897",
+  "win": "ea4f9170af3dbdd6ecacda8ffb0c377932a9d62a36a7b28f871e61055006d240",
+  "rel": "bcd9e55b5495285796d9657d051b9dffec6201694ff47a9066631febc6076b9e",
+  "rr": "e4610978233344b7c60799e8b9df54a20b07c540eee9cf22a012f908e1c61b1a"
+ },
+ "artifact_check": {
+  "sha256_before": "d3cf14e13e605dc952714547c7e2bc02dcb536f288b87512441c7baf0807d0f6",
+  "sha256_after_load": "d3cf14e13e605dc952714547c7e2bc02dcb536f288b87512441c7baf0807d0f6",
+  "arm": "esn",
+  "seed": 4,
+  "shot_seed": null,
+  "shots": null,
+  "lam": 0.001,
+  "artifact_pipe_revision": "da67af87f8b8fd73",
+  "reservoir_arrays": {
+   "W": {
+    "shape": [
+     55,
+     55
+    ],
+    "dtype": "float64",
+    "sha256": "7d777710fa5e789ec406b5dd24958f7d9bdc7cb5590de96f002376173e66e020",
+    "equal": true
+   },
+   "W_in": {
+    "shape": [
+     55,
+     10
+    ],
+    "dtype": "float64",
+    "sha256": "c4daabdf5fc26e8dd02cc22a4bcde3d938fd9bf459f28c59da66288b1a89162e",
+    "equal": true
+   },
+   "b": {
+    "shape": [
+     55
+    ],
+    "dtype": "float64",
+    "sha256": "f3557716e5b8dbd80eef091ea79c4fd100a34d5bd8f625089901b9c4b05f5a26",
+    "equal": true
+   }
+  },
+  "readout_shapes": {
+   "mu": [
+    228
+   ],
+   "sd": [
+    228
+   ],
+   "W_readout": [
+    228,
+    3
+   ],
+   "b_readout": [
+    3
+   ]
+  },
+  "sha256_after_predict": "d3cf14e13e605dc952714547c7e2bc02dcb536f288b87512441c7baf0807d0f6"
+ }
+}

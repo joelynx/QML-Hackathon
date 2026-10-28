@@ -1,0 +1,114 @@
+{
+ "ev": "EV1",
+ "split": "ds2s",
+ "candidate_id": "ref_rr_rule",
+ "baseline_id": "ref_const_n",
+ "candidate_files": {
+  "runs/EV1_reference/pred_rr_rule_ds2s.csv": "b1744586bda91aa39cad9322c8639c5c8ba9d88cc41dbd9abdaceb049fbae759"
+ },
+ "baseline_files": {
+  "runs/EV1_reference/pred_const_n_ds2s.csv": "d16215992953f4fb3f23a4f5bfc64b658c13e40c04d594fc6a9e879a7184a3b5"
+ },
+ "labels_sha256": "bc99cc7493340d0ac2727d6347fd7c5f53d7af0f2bd57fa3d25feaf64d924f84",
+ "practical_gain": 0.02,
+ "suspicious_gain_threshold": 0.05,
+ "time": "2026-10-26T17:46:06+04:00",
+ "command": "C:\\Users\\admin\\Desktop\\Water Hackathon\\quantum_healthcare\\src\\qhc\\evaluate.py compare --split ds2s --cand runs/EV1_reference/pred_rr_rule_ds2s.csv --base runs/EV1_reference/pred_const_n_ds2s.csv --cand-id ref_rr_rule --base-id ref_const_n --out runs/EV1_reference/compare_rr_vs_const_ds2s.json",
+ "n_records": 21,
+ "n_units": 47129,
+ "n_seeds": 1,
+ "candidate_macro_f1": 0.4548782336921176,
+ "baseline_macro_f1": 0.3147357848792709,
+ "delta": 0.1401424488128467,
+ "ci": [
+  0.021955196365636403,
+  0.24239340474711604
+ ],
+ "ci_level": 0.95,
+ "n_comparisons": 1,
+ "n_boot": 2000,
+ "boot_seed": 20261026,
+ "dominant_record": "232",
+ "delta_without_dominant_record": 0.0494296522624067,
+ "outcome": "favorable",
+ "outcome_without_dominant_record_condition": "favorable",
+ "suspicious_gain": true,
+ "per_class": {
+  "N": {
+   "candidate_f1": 0.970607978519371,
+   "baseline_f1": 0.9442073546378127,
+   "delta": 0.026400623881558283,
+   "ci": [
+    -0.0051192246862435,
+    0.06548809545852176
+   ]
+  },
+  "S": {
+   "candidate_f1": 0.3940267225569819,
+   "baseline_f1": 0.0,
+   "delta": 0.3940267225569819,
+   "ci": [
+    0.048740370704636236,
+    0.6805209582849178
+   ]
+  },
+  "V": {
+   "candidate_f1": 0.0,
+   "baseline_f1": 0.0,
+   "delta": 0.0,
+   "ci": [
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "auprc": {
+  "S": {
+   "candidate": 0.2228742349725757,
+   "baseline": 0.037789895817861616,
+   "delta": 0.18508433915471406,
+   "ci": [
+    0.015051228691711794,
+    0.40207921900126314
+   ]
+  },
+  "V": {
+   "candidate": 0.0678987459950349,
+   "baseline": 0.0678987459950349,
+   "delta": 0.0,
+   "ci": [
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "leave_one_record_out_delta": {
+  "100": 0.13869794059236173,
+  "103": 0.14056281162402462,
+  "105": 0.14122605075462064,
+  "111": 0.1406019476275701,
+  "113": 0.14191667952590253,
+  "117": 0.14037327066103833,
+  "121": 0.14045053529347357,
+  "123": 0.1421785598365259,
+  "200": 0.1498965056296171,
+  "210": 0.14651245044632882,
+  "212": 0.14069247416113967,
+  "213": 0.13956199569971423,
+  "214": 0.14438409808227515,
+  "219": 0.15195805142933155,
+  "221": 0.1529555194527622,
+  "222": 0.13812303505917545,
+  "228": 0.145850966168319,
+  "231": 0.1411834791888627,
+  "232": 0.0494296522624067,
+  "233": 0.15124453016364253,
+  "234": 0.1409906231689087
+ },
+ "candidate_per_seed": [
+  0.4548782336921176
+ ],
+ "baseline_per_seed": [
+  0.3147357848792709
+ ]
+}

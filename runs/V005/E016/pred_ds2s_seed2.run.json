@@ -1,0 +1,23 @@
+{
+ "arm_id": "E016-hgb",
+ "seed": 2,
+ "split": "ds2s",
+ "config_id": "E016-hgb-cfg6",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 boost c2c2fc47c011e891",
+ "model_artifact": "runs/V005/E016/model_seed2.pkl",
+ "model_artifact_sha256": "8d995be95dbb2684f7d90130e0d854bc822637ac7df25de6e8af0ad5b56af151",
+ "reservoir_seed": 2,
+ "shot_seed": null,
+ "prediction_sha256": "c2cfe758e165ed19beb8b0d41d006e087bb815ffc22eaa3febdb378283b1cd3f",
+ "config": {
+  "learning_rate": 0.023865971766869373,
+  "max_leaf_nodes": 127,
+  "min_samples_leaf": 50,
+  "l2_regularization": 0.8641961493930176,
+  "max_iter": 300,
+  "max_features": 0.6804464466625447
+ },
+ "features": "rel(40) | rr(8)",
+ "random_state": 2,
+ "note": "reservoir_seed carries the model's random_state (no reservoir)"
+}

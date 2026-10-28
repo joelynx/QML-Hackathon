@@ -1,0 +1,2 @@
+[diagnostic] E003 vs E002 on ds1: delta +0.0051 CI0.9500 [-0.0437, +0.0658] (without None: None) -> no detectable change (CI includes 0)
+wrote runs/E003/compare_ds1_oof_vs_E002.json

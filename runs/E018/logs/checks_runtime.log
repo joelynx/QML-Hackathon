@@ -1,0 +1,9 @@
+self-check: 10 of 10 match
+svdb: check_runs, validate and out-check passed for both arms
+smoke test passed {'passed': True, 'seconds': 26.1}
+runtime estimate {'n_boot': 8000, 'seconds': 2019.4, 'units': 184389, 'note': 'placeholder labels (cycling N/S/V, every prediction-set beat a unit); results discarded'}
+{"selfcheck_all_match": true, "preconditions": {"headline_logged": true, "access_log_exists": false, "confirmation_reports_dir_exists": false, "access_1_report_exists": false, "dominant_record_svdb": null, "cap": 2, "eval_code_revision": "8501643023cd2eb6"}, "artifacts_untouched": {"files_before": 77, "files_after": 77, "identical": true, "differences": []}}
+
+real	34m14.140s
+user	0m0.000s
+sys	0m0.030s

@@ -1,0 +1,21 @@
+{
+ "arm_id": "E002-esn",
+ "seed": 0,
+ "split": "ds2s",
+ "config_id": "E002-esn-cfg28",
+ "code_revision": "eval 9a1922c8898b90db / pipe da67af87f8b8fd73",
+ "model_artifact": "runs/E002/model_seed0.npz",
+ "model_artifact_sha256": "0f5b4333465d9e4800366ed27bfd0874f34e3e9ec1ae7559e1bacb57dcd70d0b",
+ "reservoir_seed": 0,
+ "shot_seed": null,
+ "prediction_sha256": "6996d03d8dddc1e2a6a0523f75ded867e2530c15461db81487b0d6b72c2ba7cc",
+ "config": {
+  "size": 55,
+  "rho": 0.6801305020819445,
+  "leak": 0.10244788459973231,
+  "in_scale": 0.9796057536708305,
+  "density": 0.05409639694101503,
+  "bias": 0.5368532157292856
+ },
+ "lam": 0.001
+}

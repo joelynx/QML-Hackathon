@@ -1,0 +1,37 @@
+{
+ "arm_id": "E008-E002-esn-k11",
+ "seed": 0,
+ "split": "ds2s",
+ "config_id": "E002-esn-cfg28-k11",
+ "code_revision": "eval 9a1922c8898b90db / pipe ad80a50e051c6820",
+ "model_artifact": "runs/E008/E002/model_seed0.npz",
+ "model_artifact_sha256": "28e273def92a16d1063ceb787f62c510924030d8abebe0146fcc47c5ad658e10",
+ "reservoir_seed": 0,
+ "shot_seed": null,
+ "prediction_sha256": "287fbc917d565f2113e489e25276cb3f7c530212e3b17cbdf20b6a934379becc",
+ "config": {
+  "size": 55,
+  "rho": 0.6801305020819445,
+  "leak": 0.10244788459973231,
+  "in_scale": 0.9796057536708305,
+  "density": 0.05409639694101503,
+  "bias": 0.5368532157292856
+ },
+ "lam": 0.001,
+ "parent_config_id": "E002-esn-cfg28",
+ "train_records": [
+  "106",
+  "112",
+  "115",
+  "116",
+  "119",
+  "124",
+  "205",
+  "208",
+  "209",
+  "220",
+  "223"
+ ],
+ "refit_scope": "lowdata_k11",
+ "n_train_units": 25375
+}

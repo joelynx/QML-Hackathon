@@ -1,0 +1,1442 @@
+--- r3/evalspec.py
++++ r5/evalspec.py
+@@ -15,8 +15,9 @@
+ }
+ 
+ # Every WFDB beat annotation code. Positions of all of these are released to pipelines (for RR intervals);
+-# only beats mapped to CLASSES are evaluation units.
+-BEAT_SYMBOLS = set("NLRBAaJSVrFejnE/fQ?!")
++# only beats mapped to CLASSES are evaluation units. Non-beat annotations are never beat positions: in particular
++# `!` (ventricular flutter wave) is a non-beat code in the PhysioNet annotation definitions (EV1 r4, review item R1).
++BEAT_SYMBOLS = set("NLRBAaJSVrFejnE/fQ?")
+ 
+ # Prediction set (label-free): every beat annotation except the first and last of a record and any beat within
+ # EDGE_SEC of the record start or end. Evaluation units are the prediction-set beats whose class is in CLASSES.
+@@ -47,16 +48,53 @@
+ # Comparison procedure (metric units: macro-F1 over N, S, V; positive delta = candidate better).
+ PRACTICAL_GAIN = 0.02
+ SUSPICIOUS_GAIN = 0.05
+-N_BOOT = 2000
++N_BOOT = 8000  # one replicate set for every interval, enough draws for the 98.75% slice tails
+ BOOT_SEED = 20261026
+ CI_LEVEL = 0.95
++
++# Pre-declared slice family of the headline pair (EV1 r4, review item R4): fixed now, never extended after results.
++# S_f1 and V_f1 come from the headline comparison; lowdata_k5 and lowdata_k11 from the two low-data comparisons.
++SLICE_FAMILY = ("S_f1", "V_f1", "lowdata_k5", "lowdata_k11")
++SLICE_CI_LEVEL = 1 - (1 - CI_LEVEL) / len(SLICE_FAMILY)  # Bonferroni over the fixed family: 0.9875
++
++# Comparison roles. Strict roles need exactly N_SEEDS distinct seeded runs per arm, each with a run manifest bound to
++# its prediction file, checked before any label access (review item R5). `headline` is the single pre-registered
++# confirmatory pair and is immutable once evaluated; `secondary` comparisons are descriptive.
++ROLES = {
++    "headline": {"splits": ("ds2s",), "strict": True},
++    "lowdata_k5": {"splits": ("ds2s",), "strict": True},
++    "lowdata_k11": {"splits": ("ds2s",), "strict": True},
++    "secondary": {"splits": ("ds2s", "ds2"), "strict": True},
++    "confirmation": {"splits": ("svdb",), "strict": True},
++    "diagnostic": {"splits": ("ds1", "ds2s", "ds2"), "strict": False},  # minimal references, null self-comparison
++}
++# Roles that run once per split with one fixed set of runs per arm (identity = per-arm sets of file content hashes).
++RUN_ONCE_ROLES = ("headline", "lowdata_k5", "lowdata_k11")
++# Order on the test splits ds2s and ds2 (review V003 B1): until the headline is logged, the only predictions that may be
++# scored there are the minimal references below (runs/EV1_reference_r4/); diagnostics there are limited to them at all
++# times; score, secondary and low-data runs wait for the headline.
++TEST_SPLITS = ("ds2s", "ds2")
++REFERENCE_PRED_SHA256 = {
++    "d16215992953f4fb3f23a4f5bfc64b658c13e40c04d594fc6a9e879a7184a3b5",  # const_n ds2s
++    "b1744586bda91aa39cad9322c8639c5c8ba9d88cc41dbd9abdaceb049fbae759",  # rr_rule ds2s
++    "418cb8b5da2624d29ffa92f91919a112cab53f6df80f24a4e90f2ed27b583b78",  # const_n ds2
++    "459139c96058f1f24ec49045559a46212ae6de0d84e1035cd317b579b0fa820a",  # rr_rule ds2
++}
++
++# Reduced-data refitting slice (EVAL.md slice c): DS1 record-subset sizes, drawn by units.draw_lowdata_subsets.
++LOWDATA_K = (5, 11)
++LOWDATA_MIN_UNITS = 10  # each subset must hold at least this many S and V units
+ 
+ # Record whose exclusion must not erase a favorable result (ANOMALIES A001: 232 holds 77.5% of ds2s S units).
+ # "favorable" additionally requires the point delta without this record to be > 0.
+ DOMINANT_RECORD = {"ds2s": "232", "ds2": "232"}
+ 
+-# Arms must have exactly this many seeds for a headline comparison (enforced: equal counts; warned if not this).
++# Arms in strict roles must have exactly this many distinct seeded runs (diagnostic comparisons may use fewer).
+ N_SEEDS = 5
++# Keys every run manifest (<prediction file without .csv>.run.json) must carry in strict roles. shot_seed is null for
++# arms without measurement sampling (classical reservoirs).
++RUN_KEYS = ("arm_id", "seed", "split", "config_id", "code_revision", "model_artifact", "model_artifact_sha256",
++            "reservoir_seed", "shot_seed", "prediction_sha256")
+ 
+ # Confirmation-set accesses allowed project-wide (enforced from runs/confirmation_access.jsonl).
+ CONFIRMATION_CAP = 2
+--- r3/evaluate.py
++++ r5/evaluate.py
+@@ -1,18 +1,37 @@
+ """EV1 evaluation command.
+ 
+   python -m qhc.evaluate score     --split ds2s --pred P.csv --id NAME --out runs/E###/score_ds2s.json
+-  python -m qhc.evaluate compare   --split ds2s --cand C_seed*.csv --base B_seed*.csv --cand-id X --base-id Y --out ...
+-  python -m qhc.evaluate reference --split ds2s --rule const_n --out runs/EV1_reference/pred_const_n_ds2s.csv
++  python -m qhc.evaluate compare   --split ds2s --role headline --cand C_seed*.csv --base B_seed*.csv
++                                   --cand-id X --base-id Y --out runs/E###/compare_ds2s.json
++  python -m qhc.evaluate reference --split ds2s --rule const_n --out runs/EV1_reference_r4/pred_const_n_ds2s.csv
+ 
+ Prediction files are CSV with columns beat_id, pred (N/S/V), prob_N, prob_S, prob_V, with one row per beat whose
+-`predict` flag is set in positions_<split>.csv. Only N/S/V beats enter the metric.
+-Scoring the confirmation split (svdb) requires --confirm-reason. The predictions are validated first, then the
+-project-wide cap is checked, then the access is appended to runs/confirmation_access.jsonl, and only then are the
+-labels read.
++`predict` flag is set in positions_<split>.csv. Only N/S/V beats enter the primary metric.
++
++Comparison roles (evalspec.ROLES): strict roles (headline, lowdata_k5, lowdata_k11, secondary, confirmation) need
++exactly 5 distinct seeded runs per arm, each with a run manifest <file without .csv>.run.json bound to the prediction
++file by hash, one configuration per arm, distinct model artifacts, and the same seed indices in both arms. All of
++this, the role and split, the order rules below, and the predictions themselves are checked before any label is read.
++Every scoring of ds2s, ds2 or svdb is appended to runs/full_eval_log.jsonl.
++
++Order on the test splits ds2s and ds2: until the headline is logged, only the minimal-reference predictions may be
++scored there; diagnostics there are limited to them; score, secondary and low-data runs wait for the headline; the
++headline compares models (never the references alone) and must be the first non-reference scoring; the headline and
++the two low-data comparisons each run once (an identical rerun, by file content, is accepted at any later time). The
++confirmation split waits for a logged headline. --out may not overwrite an input file or run manifest.
++
++The confirmation split (svdb) is scored only by `compare --role confirmation --confirm-reason ...`, which emits the
++complete report (every per-seed and seed-averaged secondary metric and per-record confusions) in that one access.
++Order: validate; check that the output can be written and smoke-test the scorer on placeholder labels; enforce the
++project-wide cap (a second access also needs --repair-reason and the same model artifacts as the first, unless
++--approved-model-change records the human's approval); append the access with artifact and prediction hashes to
++runs/confirmation_access.jsonl; only then read the labels. The result is printed before it is written, and written
++atomically, with a fallback file under runs/ if --out fails.
+ """
+ import argparse
+ import datetime
+ import glob
++import hashlib
+ import json
+ import os
+ import sys
+@@ -27,6 +46,25 @@
+ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # project root (src/qhc/..)
+ PROCESSED = os.path.join(ROOT, "runs", "data", "processed", E.EV)
+ ACCESS_LOG = os.path.join(ROOT, "runs", "confirmation_access.jsonl")
++FULL_EVAL_LOG = os.path.join(ROOT, "runs", "full_eval_log.jsonl")
++LOGGED_SPLITS = {"ds2s", "ds2", "svdb"}
++
++
++def code_revision():
++    """First 16 hex of sha256 over the concatenated src/qhc/*.py files (sorted), the evaluation revision id. Line endings
++    are normalised to LF first, so a checkout that converts them reproduces the same id."""
++    h = hashlib.sha256()
++    for p in sorted(glob.glob(os.path.join(ROOT, "src", "qhc", "*.py"))):
++        with open(p, "rb") as f:
++            h.update(f.read().replace(b"\r\n", b"\n"))
++    return h.hexdigest()[:16]
++
++
++def scorer_identity():
++    return {"ev": E.EV, "code_revision": code_revision(), "practical_gain": E.PRACTICAL_GAIN,
++            "suspicious_gain": E.SUSPICIOUS_GAIN, "ci_level": E.CI_LEVEL, "slice_ci_level": E.SLICE_CI_LEVEL,
++            "slice_family": list(E.SLICE_FAMILY), "n_boot": E.N_BOOT, "boot_seed": E.BOOT_SEED,
++            "n_seeds": E.N_SEEDS, "lookahead_sec": E.LOOKAHEAD_SEC, "edge_sec": E.EDGE_SEC}
+ 
+ 
+ def load_positions(split, processed=None):
+@@ -63,32 +101,200 @@
+     return pd.read_csv(path, dtype={"beat_id": str, "pred": str})
+ 
+ 
+-def _expand(patterns):
++def _resolved(path):
++    return os.path.normcase(os.path.realpath(path))
++
++
++def _expand(patterns, seen=None):
++    """Expand the file patterns of one arm. A file that resolves to one already given (in either arm) is refused:
++    repeating a file is not a seed."""
++    seen = {} if seen is None else seen
+     files = []
+     for p in patterns:
+         hits = sorted(glob.glob(p))
+         if not hits:
+             raise SystemExit(f"no prediction file matches {p}")
+-        files.extend(hits)
++        for f in hits:
++            r = _resolved(f)
++            if r in seen:
++                raise SystemExit(f"prediction file {f} is given twice (same file as {seen[r]}); each seed needs its own run")
++            seen[r] = f
++            files.append(f)
+     return files
+ 
+ 
+-def _confirmation_access(split, reason, ids, preds):
+-    """Validate against the label-free prediction set, enforce the cap, then log. Returns True if labels may be read."""
++def run_manifest_path(pred_path):
++    return os.path.splitext(pred_path)[0] + ".run.json"
++
++
++def check_runs(files, split, arm):
++    """Strict roles: exactly N_SEEDS distinct seeded runs, each with a run manifest bound to its prediction file and
++    model artifact by hash. Distinct predictions are not required (valid runs can agree); distinct provenance is."""
++    if len(files) != E.N_SEEDS:
++        raise SystemExit(f"{arm}: {len(files)} runs given; this role needs exactly {E.N_SEEDS} distinct seeded runs")
++    runs = []
++    for f in files:
++        mp = run_manifest_path(f)
++        if not os.path.exists(mp):
++            raise SystemExit(f"{arm}: run manifest {mp} is missing")
++        with open(mp) as fh:
++            m = json.load(fh)
++        missing = [k for k in E.RUN_KEYS if k not in m]
++        if missing:
++            raise SystemExit(f"{arm}: run manifest {mp} lacks {missing}")
++        if m["prediction_sha256"] != sha256(f):
++            raise SystemExit(f"{arm}: {f} does not match the prediction_sha256 in its run manifest")
++        if m["split"] != split:
++            raise SystemExit(f"{arm}: run manifest {mp} is for split {m['split']}, not {split}")
++        art = m["model_artifact"] if os.path.isabs(m["model_artifact"]) else os.path.join(ROOT, m["model_artifact"])
++        if not os.path.exists(art) or sha256(art) != m["model_artifact_sha256"]:
++            raise SystemExit(f"{arm}: model artifact {m['model_artifact']} is missing or does not match its hash")
++        runs.append({**m, "_artifact": _resolved(art), "_file": f})
++    if len({r["arm_id"] for r in runs}) != 1:
++        raise SystemExit(f"{arm}: runs come from different arms {sorted({r['arm_id'] for r in runs})}")
++    if len({json.dumps(r["config_id"]) for r in runs}) != 1:
++        raise SystemExit(f"{arm}: runs come from different configurations {sorted({str(r['config_id']) for r in runs})}")
++    seeds = [r["seed"] for r in runs]
++    if len(set(seeds)) != len(seeds):
++        raise SystemExit(f"{arm}: duplicate seed ids {seeds}")
++    if len({r["_artifact"] for r in runs}) != len(runs):
++        raise SystemExit(f"{arm}: two runs point to the same model artifact")
++    if len({r["model_artifact_sha256"] for r in runs}) != len(runs):
++        raise SystemExit(f"{arm}: two runs have byte-identical model artifacts (the same model is not two seeds)")
++    rand = [json.dumps([r["reservoir_seed"], r["shot_seed"]]) for r in runs]
++    if len(set(rand)) != len(rand):
++        raise SystemExit(f"{arm}: two runs share both reservoir and shot randomness")
++    return runs
++
++
++def _log_lines(path):
++    if not os.path.exists(path):
++        return []
++    with open(path) as f:
++        return [json.loads(line) for line in f if line.strip()]
++
++
++def _append(path, entry):
++    os.makedirs(os.path.dirname(path), exist_ok=True)
++    with open(path, "a") as f:
++        f.write(json.dumps(entry) + "\n")
++
++
++def _file_hashes(files):
++    return {f: sha256(f) for f in files}
++
++
++def _arm_identity(arm_hashes):
++    """Content identity of a request: per arm, the sorted file hashes (independent of paths)."""
++    return [sorted(h) for h in arm_hashes]
++
++
++def _entry_arms(e):
++    return e.get("arms") or [sorted(e["files"].values())]
++
++
++def _headline_entries(log):
++    """Logged headline comparisons on ds2s whose arms are not the minimal references alone."""
++    return [e for e in log if e.get("role") == "headline" and e.get("split") == "ds2s"
++            and not all(h in E.REFERENCE_PRED_SHA256 for a in _entry_arms(e) for h in a)]
++
++
++def _check_out(out, inputs):
++    """--out may not resolve to an input prediction file or run manifest."""
++    protected = {_resolved(f) for f in inputs} | {_resolved(run_manifest_path(f)) for f in inputs}
++    if _resolved(out) in protected:
++        raise SystemExit(f"--out {out} would overwrite an input file")
++
++
++def _check_order(role, split, arm_hashes):
++    """Order rules on the test splits (V003 B1); role None is a single-arm `score`."""
++    if split not in E.TEST_SPLITS:
++        return
++    log = [e for e in _log_lines(FULL_EVAL_LOG) if e.get("split") in E.TEST_SPLITS]
++    only_refs = lambda arms: all(h in E.REFERENCE_PRED_SHA256 for a in arms for h in a)
++    ident = _arm_identity(arm_hashes)
++    if role == "headline" and only_refs(ident):
++        raise SystemExit("the headline compares models; the minimal references alone cannot be the headline")
++    if only_refs(ident):
++        return  # minimal references may always be scored
++    if role == "diagnostic":
++        raise SystemExit("on ds2s and ds2, diagnostic scoring is limited to the minimal-reference predictions")
++    headline = _headline_entries(log)
++    if role == "headline":
++        if any(_entry_arms(e) != ident for e in headline):
++            raise SystemExit(f"a different headline was already evaluated ({headline[0]['ids']}, {headline[0]['time']}); "
++                             "later pairs use --role secondary")
++        if not headline:
++            for e in log:
++                if not only_refs(_entry_arms(e)):
++                    raise SystemExit(f"the headline must be the first non-reference scoring on the test splits; the "
++                                     f"log already holds {e.get('cmd')} {e.get('role')} {e.get('ids')} ({e['time']})")
++    elif not headline:
++        raise SystemExit(f"{role or 'score'} on {split} waits until the pre-registered headline pair is logged")
++    if role in E.RUN_ONCE_ROLES:
++        for e in log:
++            if e.get("role") == role and e["split"] == split and _entry_arms(e) != ident:
++                raise SystemExit(f"{role} was already evaluated on {split} ({e['ids']}, {e['time']}) with other runs; "
++                                 "it runs once (later variants use --role secondary)")
++
++
++def _check_writable(out):
++    """Fail before any access if the output file cannot be written."""
++    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
++    existed = os.path.exists(out)
++    with open(out, "a"):
++        pass
++    if not existed:
++        os.remove(out)
++
++
++def _smoke_test(split, cp, bp):
++    """Run the whole comparison once on placeholder labels (cycling N/S/V, few replicates), so that a crash in the
++    scorer cannot happen after a confirmation access has been logged."""
++    pset = prediction_set(split)
++    fake = pset.assign(aami=np.array(E.CLASSES)[np.arange(len(pset)) % len(E.CLASSES)], is_unit=True)
++    json.dumps(scorer.compare(cp, bp, fake, hours=load_hours(split), role="confirmation", n_boot=20))
++
++
++def _confirmation_access(split, a, ids, preds, file_hashes, runs, cp, bp):
++    """Validate against the label-free prediction set, check the output and the scorer, enforce the cap and the repair
++    rules, then log. Returns True if labels may be read."""
+     if split not in E.CONFIRMATION_SPLITS:
+         return False
+-    if not reason:
++    if not a.confirm_reason:
+         raise SystemExit(f"split {split} is the confirmation set: pass --confirm-reason and log the access in EVAL.md")
++    if not _headline_entries(_log_lines(FULL_EVAL_LOG)):
++        raise SystemExit("the confirmation set is scored only after the headline pair has been evaluated on ds2s")
+     pset = prediction_set(split)
+     for p in preds:
+         scorer.validate(p, pset)
+-    used = sum(1 for _ in open(ACCESS_LOG)) if os.path.exists(ACCESS_LOG) else 0
++    _check_writable(a.out)
++    _smoke_test(split, cp, bp)
++    previous = _log_lines(ACCESS_LOG)
++    used = len(previous)
+     if used >= E.CONFIRMATION_CAP:
+         raise SystemExit(f"confirmation cap reached ({used}/{E.CONFIRMATION_CAP}); a further access needs a new EV version")
+-    os.makedirs(os.path.dirname(ACCESS_LOG), exist_ok=True)
+-    with open(ACCESS_LOG, "a") as f:
+-        f.write(json.dumps({"time": _now(), "split": split, "ids": ids, "reason": reason, "access": used + 1}) + "\n")
++    artifacts = {r["_file"]: r["model_artifact_sha256"] for r in runs}
++    if used >= 1:
++        if not a.repair_reason:
++            raise SystemExit("a second confirmation access is a documented repair only: pass --repair-reason "
++                             "(the implementation defect corrected), and keep the first result")
++        first = set(previous[0].get("model_artifact_sha256", {}).values())
++        if set(artifacts.values()) != first and not a.approved_model_change:
++            raise SystemExit("a repair access must score the same model artifacts as the first access; a model change "
++                             "needs --approved-model-change recording the human's approval")
++    _append(ACCESS_LOG, {"time": _now(), "split": split, "ids": ids, "reason": a.confirm_reason,
++                         "repair_reason": a.repair_reason, "approved_model_change": a.approved_model_change,
++                         "access": used + 1, "code_revision": code_revision(), "prediction_sha256": file_hashes,
++                         "model_artifact_sha256": artifacts})
+     return True
++
++
++def _log_full_eval(cmd, split, role, ids, file_hashes, arm_hashes):
++    if split in LOGGED_SPLITS:
++        _append(FULL_EVAL_LOG, {"time": _now(), "cmd": cmd, "split": split, "role": role, "ids": ids,
++                                "files": file_hashes, "arms": _arm_identity(arm_hashes),
++                                "code_revision": code_revision(), "argv": sys.argv[1:]})
+ 
+ 
+ def _now():
+@@ -96,19 +302,34 @@
+ 
+ 
+ def _write(out, payload):
+-    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
+-    with open(out, "w") as f:
+-        json.dump(payload, f, indent=1)
++    """Atomic write; if --out fails, the result goes to a fallback file under runs/ so that it is never lost."""
++    try:
++        os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
++        with open(out + ".tmp", "w") as f:
++            json.dump(payload, f, indent=1)
++        os.replace(out + ".tmp", out)
++    except (OSError, TypeError, ValueError) as err:
++        fallback = os.path.join(ROOT, "runs", f"eval_output_fallback_{datetime.datetime.now():%Y%m%d_%H%M%S}.json")
++        with open(fallback, "w") as f:
++            json.dump(payload, f, indent=1, default=str)
++        print(f"could not write {out} ({err}); wrote {fallback}")
++        return
+     print(f"wrote {out}")
+ 
+ 
+ def cmd_score(a):
++    if a.split in E.CONFIRMATION_SPLITS:
++        raise SystemExit(f"{a.split} is scored only by `compare --role confirmation`, which reports everything in one access")
++    _check_out(a.out, [a.pred])
+     pred = _read_pred(a.pred)
+-    ok = _confirmation_access(a.split, a.confirm_reason, [a.id], [pred])
+-    labels, lpath = load_labels(a.split, _confirmed_access=ok)
++    scorer.validate(pred, prediction_set(a.split))  # before any label is read
++    hashes = _file_hashes([a.pred])
++    _check_order(None, a.split, [list(hashes.values())])
++    _log_full_eval("score", a.split, None, [a.id], hashes, [list(hashes.values())])
++    labels, lpath = load_labels(a.split)
+     res = scorer.score(pred, labels, load_hours(a.split))
+-    meta = {"ev": E.EV, "split": a.split, "candidate_id": a.id, "pred_file": a.pred, "pred_sha256": sha256(a.pred),
+-            "labels_sha256": sha256(lpath), "time": _now(), "command": " ".join(sys.argv)}
++    meta = {"split": a.split, "candidate_id": a.id, "pred_file": a.pred, "pred_sha256": hashes[a.pred],
++            "labels_sha256": sha256(lpath), "scorer": scorer_identity(), "time": _now(), "command": " ".join(sys.argv)}
+     _write(a.out, {**meta, **res})
+     pc = res["per_class"]
+     print(f"{a.id} {a.split}: macro-F1 {res['macro_f1']:.4f} | " +
+@@ -116,26 +337,58 @@
+ 
+ 
+ def cmd_compare(a):
+-    cf, bf = _expand(a.cand), _expand(a.base)
++    role = E.ROLES.get(a.role)
++    if role is None:
++        raise SystemExit(f"unknown role {a.role}")
++    if a.split not in role["splits"]:
++        raise SystemExit(f"role {a.role} is for split(s) {role['splits']}, not {a.split}")
++    seen = {}
++    cf, bf = _expand(a.cand, seen), _expand(a.base, seen)
++    if len(cf) != len(bf):
++        raise SystemExit(f"arms need equal seed counts (got {len(cf)} and {len(bf)})")
++    _check_out(a.out, cf + bf)
++    runs = []
++    if role["strict"]:
++        c_runs, b_runs = check_runs(cf, a.split, "candidate"), check_runs(bf, a.split, "baseline")
++        if c_runs[0]["arm_id"] == b_runs[0]["arm_id"]:
++            raise SystemExit(f"candidate and baseline carry the same arm_id {c_runs[0]['arm_id']!r}")
++        if sorted(r["seed"] for r in c_runs) != sorted(r["seed"] for r in b_runs):
++            raise SystemExit("matched rule 1: both arms must use the same seed indices")
++        runs = c_runs + b_runs
++    elif len(cf) != E.N_SEEDS:
++        print(f"note: diagnostic comparison with {len(cf)} run(s) per arm")
+     cp, bp = [_read_pred(f) for f in cf], [_read_pred(f) for f in bf]
+-    if len(cp) != len(bp):
+-        raise SystemExit(f"arms need equal seed counts (got {len(cp)} and {len(bp)})")
+-    if len(cp) != E.N_SEEDS:
+-        print(f"warning: {len(cp)} seeds per arm; headline comparisons use {E.N_SEEDS}")
+-    ok = _confirmation_access(a.split, a.confirm_reason, [a.cand_id, a.base_id], cp + bp)
++    hashes = _file_hashes(cf + bf)
++    arm_hashes = [[hashes[f] for f in cf], [hashes[f] for f in bf]]
++    _check_order(a.role, a.split, arm_hashes)
++    if a.split not in E.CONFIRMATION_SPLITS:
++        pset = prediction_set(a.split)
++        for p in cp + bp:
++            scorer.validate(p, pset)
++    ok = _confirmation_access(a.split, a, [a.cand_id, a.base_id], cp + bp, hashes, runs, cp, bp)
++    _log_full_eval("compare", a.split, a.role, [a.cand_id, a.base_id], hashes, arm_hashes)
+     labels, lpath = load_labels(a.split, _confirmed_access=ok)
+-    res = scorer.compare(cp, bp, labels, dominant_record=E.DOMINANT_RECORD.get(a.split), n_comparisons=a.n_comparisons)
+-    payload = {"ev": E.EV, "split": a.split, "candidate_id": a.cand_id, "baseline_id": a.base_id,
+-               "candidate_files": {f: sha256(f) for f in cf}, "baseline_files": {f: sha256(f) for f in bf},
+-               "labels_sha256": sha256(lpath), "practical_gain": E.PRACTICAL_GAIN,
+-               "suspicious_gain_threshold": E.SUSPICIOUS_GAIN, "time": _now(), "command": " ".join(sys.argv), **res}
++    res = scorer.compare(cp, bp, labels, hours=load_hours(a.split), role=a.role,
++                         dominant_record=E.DOMINANT_RECORD.get(a.split))
++    payload = {"split": a.split, "candidate_id": a.cand_id, "baseline_id": a.base_id,
++               "candidate_files": {f: hashes[f] for f in cf}, "baseline_files": {f: hashes[f] for f in bf},
++               "run_manifests": {r["_file"]: {k: r[k] for k in E.RUN_KEYS} for r in runs},
++               "labels_sha256": sha256(lpath), "scorer": scorer_identity(), "time": _now(),
++               "command": " ".join(sys.argv), **res}
+     if a.split in E.CONFIRMATION_SPLITS:
+-        payload["confirmed"] = bool(res["delta"] > 0 and res["ci"][0] > 0)
++        payload["confirmed"] = bool(res["primary"]["delta"] > 0 and res["primary"]["ci"][0] > 0)
++    pr = res["primary"]
++    print(f"[{a.role}] {a.cand_id} vs {a.base_id} on {a.split}: delta {pr['delta']:+.4f} "
++          f"CI{pr['ci_level']:.4f} [{pr['ci'][0]:+.4f}, {pr['ci'][1]:+.4f}] "
++          f"(without {pr['dominant_record']}: {pr['delta_without_dominant_record']}) -> {pr['outcome']} "
++          f"({pr['outcome_reason']})" + (" | SUSPICIOUS GAIN: queue verification" if pr["suspicious_gain"] else ""))
++    if res["slices"]:
++        for name, s in res["slices"]["members"].items():
++            print(f"  slice {name}: delta {s['delta']:+.4f} CI{res['slices']['ci_level']:.4f} "
++                  f"[{s['ci'][0]:+.4f}, {s['ci'][1]:+.4f}] -> {s['decision']}")
++    if "confirmed" in payload:
++        print(f"  confirmed: {payload['confirmed']}")
+     _write(a.out, payload)
+-    print(f"{a.cand_id} vs {a.base_id} on {a.split}: delta {res['delta']:+.4f} "
+-          f"CI{res['ci_level']:.3f} [{res['ci'][0]:+.4f}, {res['ci'][1]:+.4f}] "
+-          f"(without {res['dominant_record']}: {res['delta_without_dominant_record']}) -> {res['outcome']}"
+-          + (" | SUSPICIOUS GAIN: queue verification" if res["suspicious_gain"] else ""))
+ 
+ 
+ def reference_predictions(rule, positions):
+@@ -173,23 +426,26 @@
+ def main(argv=None):
+     ap = argparse.ArgumentParser(description="EV1 evaluation")
+     sub = ap.add_subparsers(dest="cmd", required=True)
+-    s = sub.add_parser("score")
++    s = sub.add_parser("score", help="score one prediction file (not available for the confirmation split)")
+     s.add_argument("--split", required=True, choices=sorted(E.SPLITS))
+     s.add_argument("--pred", required=True)
+     s.add_argument("--id", required=True)
+     s.add_argument("--out", required=True)
+-    s.add_argument("--confirm-reason")
+     s.set_defaults(fn=cmd_score)
+     c = sub.add_parser("compare")
+     c.add_argument("--split", required=True, choices=sorted(E.SPLITS))
++    c.add_argument("--role", required=True, choices=sorted(E.ROLES),
++                   help="headline (the single pre-registered pair), lowdata_k5 / lowdata_k11 (slice family), "
++                        "secondary (descriptive), confirmation (svdb), diagnostic (references, null check)")
+     c.add_argument("--cand", required=True, nargs="+", help="one prediction file (or glob) per seed")
+     c.add_argument("--base", required=True, nargs="+")
+     c.add_argument("--cand-id", required=True)
+     c.add_argument("--base-id", required=True)
+     c.add_argument("--out", required=True)
+-    c.add_argument("--n-comparisons", type=int, default=1,
+-                   help="m for the Bonferroni-adjusted CI when the headline pair has been replaced (EVAL.md rule 4)")
+     c.add_argument("--confirm-reason")
++    c.add_argument("--repair-reason", help="required for the second (repair) confirmation access")
++    c.add_argument("--approved-model-change",
++                   help="only with --repair-reason: records the human's approval to score different model artifacts")
+     c.set_defaults(fn=cmd_compare)
+     r = sub.add_parser("reference")
+     r.add_argument("--split", required=True, choices=sorted(E.SPLITS))
+--- r3/scorer.py
++++ r5/scorer.py
+@@ -1,7 +1,7 @@
+-"""EV1 scorer: macro-F1 over N/S/V on fixed beat units, and the paired two-level bootstrap comparison.
++"""EV1 scorer: macro-F1 over N/S/V on fixed beat units, secondary metrics, and the paired two-level bootstrap.
+ 
+ `labels` frames have one row per prediction-set beat: beat_id, record, aami, is_unit. Pipelines predict every row;
+-only rows with is_unit (class N, S or V) enter the metric. `hours` maps record -> recording duration in hours.
++only rows with is_unit (class N, S or V) enter the primary metric. `hours` maps record -> recording duration in hours.
+ """
+ import numpy as np
+ import pandas as pd
+@@ -11,6 +11,8 @@
+ K = len(E.CLASSES)
+ IDX = {c: i for i, c in enumerate(E.CLASSES)}
+ PROB_COLS = [f"prob_{c}" for c in E.CLASSES]
++# Truth classes of de Chazal et al. 2004, Table V. A beat of any other class (e.g. one SVDB `B` beat) counts as Q.
++TRUTH5 = ("N", "S", "V", "F", "Q")
+ 
+ 
+ class PredictionError(ValueError):
+@@ -106,6 +108,7 @@
+ 
+ 
+ def summarize(cm_records, records, hours=None):
++    """Primary metric and N/S/V-restricted per-class metrics: every count here is over N/S/V-truth units only."""
+     total = cm_records.sum(0)
+     tp = np.diag(total).astype(float)
+     pred_n, true_n = total.sum(0), total.sum(1)
+@@ -122,16 +125,57 @@
+             "sensitivity": float(tp[i] / true_n[i]) if true_n[i] else None,
+             "ppv": float(tp[i] / pred_n[i]) if pred_n[i] else None,
+             "f1": float(f1[i]),
+-            "record_avg_sensitivity": float((rec_tp[has_true, i] / rec_true[has_true, i]).mean()) if has_true.any() else None,
+-            "record_avg_ppv": float((rec_tp[has_pred, i] / rec_pred[has_pred, i]).mean()) if has_pred.any() else None,
+-            "false_flags_per_hour": float((pred_n[i] - tp[i]) / total_hours) if total_hours and c != "N" else None,
++            "nsv_record_avg_sensitivity":
++                float((rec_tp[has_true, i] / rec_true[has_true, i]).mean()) if has_true.any() else None,
++            "nsv_record_avg_ppv": float((rec_tp[has_pred, i] / rec_pred[has_pred, i]).mean()) if has_pred.any() else None,
++            "nsv_class_false_flags_per_hour":
++                float((pred_n[i] - tp[i]) / total_hours) if total_hours and c != "N" else None,
+         }
+     out["confusion_true_by_pred"] = total.tolist()
+     return out
+ 
+ 
+-def score(pred, labels, hours=None):
+-    aligned = validate(pred, labels)
++def paper_metrics(truth, pred):
++    """Gross (beat-pooled) VEB and SVEB measures of de Chazal et al. 2004, Table V(a)-(b), over the full prediction
++    set. V: FP = Nv + Sv, and Fv, Qv are neither rewarded nor penalised. S: FP = Ns + Vs + Fs, and Qs is neither
++    rewarded nor penalised. Pipelines predict N/S/V only, so the f and q prediction columns are empty."""
++    truth, pred = np.asarray(truth), np.asarray(pred)
++    t = np.where(np.isin(truth, TRUTH5), truth, "Q")
++    cm = {(a, b): int(((t == a) & (pred == b)).sum()) for a in TRUTH5 for b in E.CLASSES}
++
++    def block(c, fp_from, ignored):
++        tp = cm[(c, c)]
++        fn = sum(cm[(c, b)] for b in E.CLASSES if b != c)
++        fp = sum(cm[(a, c)] for a in fp_from)
++        ign = sum(cm[(a, c)] for a in ignored)
++        tn = len(t) - tp - fn - fp - ign
++        return {"tp": tp, "fn": fn, "fp": fp, "tn": tn, "not_scored": ign,
++                "sensitivity": tp / (tp + fn) if tp + fn else None,
++                "ppv": tp / (tp + fp) if tp + fp else None,
++                "fpr": fp / (tn + fp) if tn + fp else None}
++
++    return {"VEB": block("V", ("N", "S"), ("F", "Q")), "SVEB": block("S", ("N", "V", "F"), ("Q",)),
++            "confusion_truth5_by_pred": [[cm[(a, b)] for b in E.CLASSES] for a in TRUTH5]}
++
++
++def review_burden(truth, pred, total_hours):
++    """Flags per hour over the full prediction set, for a general ectopic-beat review workflow."""
++    truth, pred = np.asarray(truth), np.asarray(pred)
++    flag = np.isin(pred, ("S", "V"))
++    ectopic = np.isin(truth, ("S", "V"))
++    per_h = lambda m: float(m.sum() / total_hours)
++    return {
++        "hours": total_hours,
++        "ectopic_flags_per_hour": per_h(flag),  # every S or V prediction
++        "normal_beats_flagged_per_hour": per_h(flag & (truth == "N")),
++        "f_q_beats_flagged_per_hour": per_h(flag & ~np.isin(truth, E.CLASSES)),
++        "s_v_class_swaps_per_hour": per_h(flag & ectopic & (truth != pred)),  # ectopic beat flagged, wrong class
++        "missed_ectopic_per_hour": per_h(ectopic & (pred == "N")),
++    }
++
++
++def arm_summary(labels, aligned, hours=None):
++    """Every reported metric of one prediction set (one seed of one arm), from validated, aligned predictions."""
+     units, au = _units(labels, aligned)
+     records = sorted(labels["record"].astype(str).unique())
+     cm = per_record_confusion(units, au, records)
+@@ -140,24 +184,52 @@
+         result["per_class"][c]["auprc"] = average_precision(units["aami"].eq(c), au[f"prob_{c}"])
+     result["n_predict"] = int(len(labels))
+     result["n_units"] = int(len(units))
+-    nonunit = labels.loc[~labels["is_unit"].to_numpy(dtype=bool), "aami"].to_numpy()
+-    nonunit_pred = aligned.loc[~labels["is_unit"].to_numpy(dtype=bool), "pred"].to_numpy()
++    truth, pred = labels["aami"].to_numpy(), aligned["pred"].to_numpy()
++    nonunit = ~labels["is_unit"].to_numpy(dtype=bool)
+     result["nonunit_predictions"] = {
+-        a: {c: int(((nonunit == a) & (nonunit_pred == c)).sum()) for c in E.CLASSES} for a in sorted(set(nonunit))
++        a: {c: int(((truth[nonunit] == a) & (pred[nonunit] == c)).sum()) for c in E.CLASSES}
++        for a in sorted(set(truth[nonunit]))
+     }
+-    result["per_record"] = {r: {"confusion_true_by_pred": cm[i].tolist(), "n": int(cm[i].sum())} for i, r in enumerate(records)}
++    result["paper_compatible"] = paper_metrics(truth, pred)
++    rec_all = labels["record"].astype(str).to_numpy()
++    result["paper_compatible_per_record"] = {
++        r: paper_metrics(truth[rec_all == r], pred[rec_all == r])["confusion_truth5_by_pred"] for r in records}
++    if hours:
++        result["review_burden"] = review_burden(truth, pred, float(sum(hours[r] for r in records)))
++    result["per_record"] = {r: {"confusion_true_by_pred": cm[i].tolist(), "n": int(cm[i].sum())}
++                            for i, r in enumerate(records)}
+     return result
+ 
+ 
+-def _arm(preds, labels, records):
+-    """Per-seed per-record confusions (n_seeds, n_records, K, K) and per-seed unit probabilities."""
+-    cms, probs, units = [], [], None
++def score(pred, labels, hours=None):
++    return arm_summary(labels, validate(pred, labels), hours)
++
++
++def seed_average(summaries):
++    """Arithmetic mean over seeds of every scalar metric of arm_summary (None when any seed has None). Count matrices
++    and per-record tables are not averaged; they are kept per seed. This is not the score of a seed ensemble."""
++    out = {}
++    for k, v in summaries[0].items():
++        vals = [s[k] for s in summaries]
++        if k == "per_record" or isinstance(v, (list, bool, str)):
++            continue
++        if isinstance(v, dict):
++            out[k] = seed_average(vals)
++        else:
++            out[k] = None if any(x is None for x in vals) else float(np.mean(vals))
++    return out
++
++
++def _arm(preds, labels, records, hours):
++    """Per-seed per-record confusions (n_seeds, n_records, K, K), per-seed unit probabilities, per-seed summaries."""
++    cms, probs, summaries, units = [], [], [], None
+     for p in preds:
+         aligned = validate(p, labels)
+         units, au = _units(labels, aligned)
+         cms.append(per_record_confusion(units, au, records))
+         probs.append(au[PROB_COLS].to_numpy(dtype=float))
+-    return np.stack(cms), np.stack(probs), units
++        summaries.append(arm_summary(labels, aligned, hours))
++    return np.stack(cms), np.stack(probs), units, summaries
+ 
+ 
+ def _boot_f1(cm_arm, rec_w, seed_w):
+@@ -174,24 +246,39 @@
+ 
+ 
+ def decide(delta, lo, hi, delta_without_dominant=None):
+-    if delta >= E.PRACTICAL_GAIN and lo > 0 and (delta_without_dominant is None or delta_without_dominant > 0):
+-        return "favorable"
++    """Three-way outcome of the decision rule, with the reason it was reached."""
+     if hi < 0:
+-        return "unfavorable"
+-    return "no detectable change"
+-
+-
+-def compare(cand_preds, base_preds, labels, dominant_record=None, n_comparisons=1, n_boot=None, seed=E.BOOT_SEED):
++        return "unfavorable", "CI upper bound < 0"
++    if lo > 0:
++        if delta < E.PRACTICAL_GAIN:
++            return "no detectable change", "detectable gain below the practical threshold"
++        if delta_without_dominant is not None and delta_without_dominant <= 0:
++            return "no detectable change", "gain disappears without the dominant record"
++        return "favorable", "meets the decision rule"
++    return "no detectable change", "CI includes 0"
++
++
++def slice_decision(lo, hi):
++    """Slice rule: favorable only if the slice-level CI lower bound is > 0 (no practical or dominant-record test)."""
++    return "favorable" if lo > 0 else "unfavorable" if hi < 0 else "no detectable change"
++
++
++def compare(cand_preds, base_preds, labels, hours=None, role="diagnostic", dominant_record=None, n_boot=None,
++            seed=E.BOOT_SEED):
+     """Paired comparison of two arms on the same units. Each arm is a list of prediction frames, one per seed; the arm
+-    score is the seed-averaged macro-F1. Uncertainty: two-level bootstrap, records resampled jointly for both arms and
+-    seeds resampled independently within each arm. The CI level is Bonferroni-adjusted for n_comparisons, and the
+-    default number of replicates scales with it (N_BOOT x n_comparisons) so the tails keep enough draws."""
+-    n_boot = n_boot or E.N_BOOT * n_comparisons
++    score is the mean of the per-seed macro-F1 values (not the macro-F1 of a seed ensemble). Uncertainty: two-level
++    bootstrap, records resampled jointly for both arms and seeds resampled independently within each arm; one set of
++    replicates serves every interval. The primary interval is at CI_LEVEL, except for a low-data slice comparison,
++    whose primary delta is itself a member of the slice family and uses SLICE_CI_LEVEL. The headline comparison also
++    reports its two slice-family members (S and V F1) at SLICE_CI_LEVEL with the slice rule."""
++    if role not in E.ROLES:
++        raise PredictionError(f"unknown role {role!r}; one of {sorted(E.ROLES)}")
++    n_boot = n_boot or E.N_BOOT
+     if not cand_preds or len(cand_preds) != len(base_preds):
+         raise PredictionError(f"arms need equal, non-zero seed counts (got {len(cand_preds)} and {len(base_preds)})")
+     records = sorted(labels["record"].astype(str).unique())
+-    cc, cprob, units = _arm(cand_preds, labels, records)
+-    bc, bprob, _ = _arm(base_preds, labels, records)
++    cc, cprob, units, c_sum = _arm(cand_preds, labels, records, hours)
++    bc, bprob, _, b_sum = _arm(base_preds, labels, records, hours)
+     n_rec, n_seed = len(records), cc.shape[0]
+     one_r, one_s = np.ones((1, n_rec)), np.ones((1, n_seed))
+     c_cls, b_cls = _boot_f1(cc, one_r, one_s)[0], _boot_f1(bc, one_r, one_s)[0]
+@@ -205,9 +292,13 @@
+     np.add.at(sw_b, (np.repeat(np.arange(n_boot), n_seed), rng.integers(0, n_seed, size=n_boot * n_seed)), 1)
+     d_cls = _boot_f1(cc, rw, sw_c) - _boot_f1(bc, rw, sw_b)  # (B, K)
+     d_macro = d_cls.mean(1)
+-    level = 1 - (1 - E.CI_LEVEL) / n_comparisons
+-    q = [(1 - level) / 2, 1 - (1 - level) / 2]
+-    lo, hi = (float(x) for x in np.quantile(d_macro, q))
++
++    def ci(draws, level):
++        return [float(x) for x in np.quantile(draws, [(1 - level) / 2, 1 - (1 - level) / 2])]
++
++    lowdata = role in ("lowdata_k5", "lowdata_k11")
++    level = E.SLICE_CI_LEVEL if lowdata else E.CI_LEVEL
++    lo, hi = ci(d_macro, level)
+ 
+     loo = {}
+     for i, r in enumerate(records):
+@@ -215,8 +306,23 @@
+         w[0, i] = 0
+         loo[r] = float(_boot_f1(cc, w, one_s)[0].mean() - _boot_f1(bc, w, one_s)[0].mean())
+     d_wo = loo.get(str(dominant_record)) if dominant_record is not None else None
+-
+-    per_seed = lambda arm: [float(f1_from_confusion(arm[s].sum(0)).mean()) for s in range(arm.shape[0])]
++    outcome, reason = decide(delta, lo, hi, d_wo)
++
++    inference = {"headline": "confirmatory (pre-registered headline pair)",
++                 "lowdata_k5": "slice-family member", "lowdata_k11": "slice-family member",
++                 "secondary": "descriptive (not confirmatory; may follow adaptive development on ds2s)",
++                 "confirmation": "external confirmation (SVDB pass criterion)",
++                 "diagnostic": "diagnostic (no claim)"}[role]
++    slice_info = {"family": list(E.SLICE_FAMILY), "m": len(E.SLICE_FAMILY), "ci_level": E.SLICE_CI_LEVEL,
++                  "rule": "favorable iff the slice CI lower bound > 0", "members": {}}
++    if role == "headline":
++        for name, c in (("S_f1", "S"), ("V_f1", "V")):
++            s_lo, s_hi = ci(d_cls[:, IDX[c]], E.SLICE_CI_LEVEL)
++            slice_info["members"][name] = {"delta": float(c_cls[IDX[c]] - b_cls[IDX[c]]), "ci": [s_lo, s_hi],
++                                           "decision": slice_decision(s_lo, s_hi)}
++    elif lowdata:
++        slice_info["members"][role] = {"delta": delta, "ci": [lo, hi], "decision": slice_decision(lo, hi)}
++
+     ridx = {r: i for i, r in enumerate(records)}
+     rec_of_unit = units["record"].astype(str).map(ridx).to_numpy()
+     auprc = {}
+@@ -227,31 +333,42 @@
+         point_b = float(np.mean([average_precision(y, pb[s]) for s in range(n_seed)]))
+         d = _boot_ap(y, pc, rec_of_unit, rw, sw_c) - _boot_ap(y, pb, rec_of_unit, rw, sw_b)
+         auprc[c] = {"candidate": point_c, "baseline": point_b, "delta": point_c - point_b,
+-                    "ci": [float(x) for x in np.quantile(d, q)]}
++                    "ci": ci(d, E.CI_LEVEL), "ci_level": E.CI_LEVEL}
+     return {
++        "role": role,
+         "n_records": n_rec,
+         "n_units": int(len(units)),
+         "n_seeds": n_seed,
+-        "candidate_macro_f1": float(c_cls.mean()),
+-        "baseline_macro_f1": float(b_cls.mean()),
+-        "delta": delta,
+-        "ci": [lo, hi],
+-        "ci_level": level,
+-        "n_comparisons": n_comparisons,
+         "n_boot": n_boot,
+         "boot_seed": seed,
+-        "dominant_record": dominant_record,
+-        "delta_without_dominant_record": d_wo,
+-        "outcome": decide(delta, lo, hi, d_wo),
+-        "outcome_without_dominant_record_condition": decide(delta, lo, hi),
+-        "suspicious_gain": bool(delta >= E.SUSPICIOUS_GAIN),
+-        "per_class": {
++        "estimand": "mean over seeds of per-seed macro-F1 (candidate) minus the same for the baseline, on matched units;"
++                    " conditional on the DS1 training cohort and the selected configurations",
++        "primary": {
++            "inference": inference,
++            "candidate_macro_f1": float(c_cls.mean()),
++            "baseline_macro_f1": float(b_cls.mean()),
++            "delta": delta,
++            "ci": [lo, hi],
++            "ci_level": level,
++            "dominant_record": dominant_record,
++            "delta_without_dominant_record": d_wo,
++            "outcome": outcome,
++            "outcome_reason": reason,
++            "outcome_without_dominant_record_condition": decide(delta, lo, hi)[0],
++            "suspicious_gain": bool(delta >= E.SUSPICIOUS_GAIN),
++        },
++        "slices": slice_info if slice_info["members"] else None,
++        "per_class_f1": {
+             c: {"candidate_f1": float(c_cls[i]), "baseline_f1": float(b_cls[i]), "delta": float(c_cls[i] - b_cls[i]),
+-                "ci": [float(x) for x in np.quantile(d_cls[:, i], q)]}
++                "ci": ci(d_cls[:, i], E.CI_LEVEL), "ci_level": E.CI_LEVEL}
+             for c, i in IDX.items()
+         },
+         "auprc": auprc,
+         "leave_one_record_out_delta": loo,
+-        "candidate_per_seed": per_seed(cc),
+-        "baseline_per_seed": per_seed(bc),
++        "arms": {
++            "candidate": {"per_seed_macro_f1": [s["macro_f1"] for s in c_sum], "seed_average": seed_average(c_sum),
++                          "per_seed": c_sum},
++            "baseline": {"per_seed_macro_f1": [s["macro_f1"] for s in b_sum], "seed_average": seed_average(b_sum),
++                         "per_seed": b_sum},
++        },
+     }
+--- r3/test_scorer.py
++++ r5/test_scorer.py
+@@ -10,10 +10,11 @@
+ from qhc import evaluate as ev
+ from qhc import scorer
+ from qhc.leakcheck import check_lookahead
+-from qhc.units import predict_flags
++from qhc.units import draw_lowdata_subsets, predict_flags, select_beats, sha256
+ 
+ ROOT = os.path.dirname(os.path.dirname(__file__))
+ PROCESSED = os.path.join(ROOT, "runs", "data", "processed", E.EV)
++REAL_SVDB_LABELS = os.path.join(PROCESSED, "confirm", "labels_svdb.csv")
+ 
+ 
+ def make_labels(spec):
+@@ -45,12 +46,38 @@
+     assert r["confusion_true_by_pred"] == [[3, 1, 1], [1, 1, 0], [1, 0, 2]]
+     assert r["n_predict"] == 11 and r["n_units"] == 10
+     assert r["nonunit_predictions"] == {"F": {"N": 0, "S": 0, "V": 1}}
+-    # false flags per hour: S FP = 1, V FP = 1, over 1.0 h
+-    assert r["per_class"]["S"]["false_flags_per_hour"] == pytest.approx(1.0)
+-    assert r["per_class"]["V"]["false_flags_per_hour"] == pytest.approx(1.0)
+-    # record-averaged: S sensitivity A 1/1, B 0/1 -> 0.5; V PPV A 1/1, B 1/2 -> 0.75
+-    assert r["per_class"]["S"]["record_avg_sensitivity"] == pytest.approx(0.5)
+-    assert r["per_class"]["V"]["record_avg_ppv"] == pytest.approx(0.75)
++    # N/S/V-restricted class-specific false flags per hour: S FP = 1, V FP = 1, over 1.0 h
++    assert r["per_class"]["S"]["nsv_class_false_flags_per_hour"] == pytest.approx(1.0)
++    assert r["per_class"]["V"]["nsv_class_false_flags_per_hour"] == pytest.approx(1.0)
++    # N/S/V-restricted record-averaged: S sensitivity A 1/1, B 0/1 -> 0.5; V PPV A 1/1, B 1/2 -> 0.75
++    assert r["per_class"]["S"]["nsv_record_avg_sensitivity"] == pytest.approx(0.5)
++    assert r["per_class"]["V"]["nsv_record_avg_ppv"] == pytest.approx(0.75)
++    # review burden over the full prediction set (1.0 h): S/V predictions A 3, B 3 (incl. the F beat) = 6;
++    # N flagged: A beat 2 (S), B beat 1 (V) = 2; F flagged 1; no S<->V swaps; missed ectopic: B beat 2 (S->N) and
++    # B beat 4 (V->N) = 2
++    rb = r["review_burden"]
++    assert rb["ectopic_flags_per_hour"] == pytest.approx(6.0)
++    assert rb["normal_beats_flagged_per_hour"] == pytest.approx(2.0)
++    assert rb["f_q_beats_flagged_per_hour"] == pytest.approx(1.0)
++    assert rb["s_v_class_swaps_per_hour"] == pytest.approx(0.0)
++    assert rb["missed_ectopic_per_hour"] == pytest.approx(2.0)
++
++
++def test_paper_compatible_metrics_count_f_as_s_false_positive():
++    """Review item R2: de Chazal Table V counts F->S as an S false positive (and leaves F->V, Q->V, Q->S unscored)."""
++    lab = make_labels({"A": "NSVF"})
++    r = scorer.score(make_pred(lab, "NSVS"), lab)
++    assert r["macro_f1"] == pytest.approx(1.0)  # the primary metric is N/S/V-restricted by declaration
++    assert r["per_class"]["S"]["ppv"] == pytest.approx(1.0)
++    pc = r["paper_compatible"]
++    assert pc["SVEB"]["ppv"] == pytest.approx(0.5) and pc["SVEB"]["fp"] == 1 and pc["SVEB"]["tn"] == 2
++    assert pc["SVEB"]["fpr"] == pytest.approx(1 / 3)
++    # F predicted V and Q predicted V/S are neither rewarded nor penalised
++    lab2 = make_labels({"A": "NSVFQQ"})
++    r2 = scorer.score(make_pred(lab2, "NSVVVS"), lab2)["paper_compatible"]
++    assert r2["VEB"]["ppv"] == pytest.approx(1.0) and r2["VEB"]["not_scored"] == 2
++    assert r2["SVEB"]["ppv"] == pytest.approx(1.0) and r2["SVEB"]["not_scored"] == 1
++    assert r2["VEB"]["tp"] + r2["VEB"]["fn"] + r2["VEB"]["fp"] + r2["VEB"]["tn"] + r2["VEB"]["not_scored"] == 6
+ 
+ 
+ def test_known_good_is_one():
+@@ -112,7 +139,7 @@
+ def test_compare_identical_is_null():
+     lab = _synthetic()
+     p = make_pred(lab, lab["aami"])
+-    c = scorer.compare([p], [p], lab, n_boot=300)
++    c = scorer.compare([p], [p], lab, n_boot=300)["primary"]
+     assert c["delta"] == 0 and c["ci"] == [0.0, 0.0] and c["outcome"] == "no detectable change"
+ 
+ 
+@@ -121,9 +148,10 @@
+     good, bad = make_pred(lab, lab["aami"]), make_pred(lab, "N" * len(lab))
+     up = scorer.compare([good], [bad], lab, n_boot=300)
+     down = scorer.compare([bad], [good], lab, n_boot=300)
+-    assert up["outcome"] == "favorable" and up["suspicious_gain"] and up["ci"][0] > 0
+-    assert down["outcome"] == "unfavorable" and down["delta"] == pytest.approx(-up["delta"])
+-    assert up["per_class"]["S"]["delta"] == pytest.approx(1.0) and up["per_class"]["S"]["ci"][0] > 0
++    assert up["primary"]["outcome"] == "favorable" and up["primary"]["suspicious_gain"] and up["primary"]["ci"][0] > 0
++    assert down["primary"]["outcome"] == "unfavorable"
++    assert down["primary"]["delta"] == pytest.approx(-up["primary"]["delta"])
++    assert up["per_class_f1"]["S"]["delta"] == pytest.approx(1.0) and up["per_class_f1"]["S"]["ci"][0] > 0
+     assert up["auprc"]["S"]["delta"] > 0 and up["auprc"]["S"]["ci"][0] > 0
+ 
+ 
+@@ -132,8 +160,16 @@
+     truth = lab["aami"].to_numpy()
+     worse = truth.copy()
+     worse[np.flatnonzero(truth == "S")[::12]] = "N"  # lose ~8% of S beats in every record
+-    c = scorer.compare([make_pred(lab, worse)], [make_pred(lab, truth)], lab, n_boot=500)
++    c = scorer.compare([make_pred(lab, worse)], [make_pred(lab, truth)], lab, n_boot=500)["primary"]
+     assert -E.PRACTICAL_GAIN < c["delta"] < 0 and c["ci"][1] < 0 and c["outcome"] == "unfavorable"
++
++
++def test_decision_reasons():
++    assert scorer.decide(0.01, 0.005, 0.015) == ("no detectable change", "detectable gain below the practical threshold")
++    assert scorer.decide(0.03, 0.01, 0.05, -0.001) == ("no detectable change", "gain disappears without the dominant record")
++    assert scorer.decide(0.03, 0.01, 0.05, 0.01) == ("favorable", "meets the decision rule")
++    assert scorer.decide(-0.01, -0.02, -0.001) == ("unfavorable", "CI upper bound < 0")
++    assert scorer.decide(0.05, -0.01, 0.1) == ("no detectable change", "CI includes 0")
+ 
+ 
+ def test_gain_carried_by_one_record_is_not_favorable():
+@@ -145,9 +181,9 @@
+     cand[in_r0] = truth[in_r0]  # candidate fixes S only in r0 ...
+     cand[(~in_r0) & (truth == "V")] = "N"  # ... and loses V elsewhere
+     c = scorer.compare([make_pred(lab, cand)], [make_pred(lab, base)], lab, dominant_record="r0", n_boot=300)
+-    assert c["delta_without_dominant_record"] < 0
+-    assert c["outcome"] != "favorable"
+-    assert c["leave_one_record_out_delta"]["r0"] == pytest.approx(c["delta_without_dominant_record"])
++    assert c["primary"]["delta_without_dominant_record"] < 0
++    assert c["primary"]["outcome"] != "favorable"
++    assert c["leave_one_record_out_delta"]["r0"] == pytest.approx(c["primary"]["delta_without_dominant_record"])
+ 
+ 
+ def test_seed_resampling_widens_ci_and_counts_are_enforced():
+@@ -156,20 +192,47 @@
+     rng = np.random.default_rng(1)
+     noisy = [make_pred(lab, np.where(rng.random(len(lab)) < q, "N", truth)) for q in (0.05, 0.1, 0.2, 0.3, 0.4)]
+     a = scorer.compare(noisy, noisy[::-1], lab, n_boot=400)
+-    assert a["delta"] == pytest.approx(0) and a["ci"][1] - a["ci"][0] > 0.01  # seed spread enters the CI
+-    assert a["ci"] == scorer.compare(noisy, noisy[::-1], lab, n_boot=400)["ci"]  # reproducible
+-    assert a["candidate_macro_f1"] == pytest.approx(np.mean(a["candidate_per_seed"]))
++    assert a["primary"]["delta"] == pytest.approx(0) and a["primary"]["ci"][1] - a["primary"]["ci"][0] > 0.01
++    assert a["primary"]["ci"] == scorer.compare(noisy, noisy[::-1], lab, n_boot=400)["primary"]["ci"]  # reproducible
++    cand = a["arms"]["candidate"]
++    assert a["primary"]["candidate_macro_f1"] == pytest.approx(np.mean(cand["per_seed_macro_f1"]))
++    assert cand["seed_average"]["macro_f1"] == pytest.approx(a["primary"]["candidate_macro_f1"])
+     with pytest.raises(scorer.PredictionError, match="equal"):
+         scorer.compare(noisy[:1], noisy, lab, n_boot=50)
+ 
+ 
+-def test_compare_rejects_extra_rows_and_adjusts_level():
++def test_compare_rejects_extra_rows():
+     lab = _synthetic()
+     p = make_pred(lab, lab["aami"])
+     extra = pd.concat([p, make_pred(make_labels({"zz": "N"}), "N")])
+     with pytest.raises(scorer.PredictionError, match="not in the prediction set"):
+         scorer.compare([extra], [p], lab, n_boot=50)
+-    assert scorer.compare([p], [p], lab, n_comparisons=3, n_boot=50)["ci_level"] == pytest.approx(1 - 0.05 / 3)
++
++
++def test_primary_and_slice_levels_and_decisions():
++    """Review item R4: the headline's primary CI is at 95%; its S and V slice members at 98.75% with the slice rule
++    (CI lower bound > 0, no practical threshold); a low-data comparison's primary delta is a slice member at 98.75%."""
++    lab = _synthetic(n_rec=30)
++    truth = lab["aami"].to_numpy()
++    base = truth.copy()
++    base[np.flatnonzero(truth == "S")[::4]] = "N"  # baseline misses 25% of S beats everywhere
++    cand = truth.copy()
++    cand[np.flatnonzero(truth == "S")[::5]] = "N"  # candidate misses 20%: a small, consistent S gain
++    c = scorer.compare([make_pred(lab, cand)], [make_pred(lab, base)], lab, role="headline", n_boot=2000)
++    assert c["primary"]["ci_level"] == pytest.approx(0.95)
++    assert c["slices"]["ci_level"] == pytest.approx(1 - 0.05 / 4) and c["slices"]["m"] == 4
++    assert set(c["slices"]["members"]) == {"S_f1", "V_f1"}
++    s = c["slices"]["members"]["S_f1"]
++    assert s["ci"][0] > 0 and s["decision"] == "favorable"
++    assert c["primary"]["delta"] < E.PRACTICAL_GAIN and c["primary"]["outcome"] == "no detectable change"
++    assert c["primary"]["outcome_reason"] == "detectable gain below the practical threshold"
++    assert c["slices"]["members"]["V_f1"]["decision"] == "no detectable change"  # V identical in both arms
++    # the slice interval is wider than the 95% per-class interval of the same quantity
++    assert s["ci"][0] < c["per_class_f1"]["S"]["ci"][0] and s["ci"][1] > c["per_class_f1"]["S"]["ci"][1]
++    low = scorer.compare([make_pred(lab, cand)], [make_pred(lab, base)], lab, role="lowdata_k5", n_boot=2000)
++    assert low["primary"]["ci_level"] == pytest.approx(0.9875)
++    assert low["slices"]["members"]["lowdata_k5"]["ci"] == low["primary"]["ci"]
++    assert scorer.compare([make_pred(lab, cand)], [make_pred(lab, base)], lab, role="secondary", n_boot=200)["slices"] is None
+ 
+ 
+ def test_rr_rule_reference_uses_positions_only():
+@@ -180,6 +243,16 @@
+     assert (pred[[f"prob_{c}" for c in E.CLASSES]].sum(1) == 1).all()
+ 
+ 
++def test_non_beat_annotations_are_not_beat_positions():
++    """Review item R1: flutter waves (!) and other non-beat codes never become beat positions or RR endpoints."""
++    samples = [100, 200, 230, 260, 300, 330, 400, 500, 520]
++    symbols = ["N", "!", "!", "+", "N", "~", "V", "|", "N"]
++    b = select_beats(samples, symbols)
++    assert b["sample"].tolist() == [100, 300, 400, 520] and b["symbol"].tolist() == ["N", "N", "V", "N"]
++    assert np.diff(b["sample"]).tolist() == [200, 100, 120]
++    assert "!" not in E.BEAT_SYMBOLS
++
++
+ # ---- decision-time boundary (lookahead) check ----
+ FS = 100
+ SIG = np.sin(np.arange(3000) / 7.0)
+@@ -208,61 +281,312 @@
+     assert check_lookahead(_leaky_window, SIG, BEATS, FS, idx) != []
+ 
+ 
+-# ---- confirmation guard (synthetic files; never touches the real confirmation set or log) ----
+-def _fake_processed(tmp_path):
+-    lab = make_labels({"A": "NNSV", "B": "NVNN"})
++# ---- command-level checks on synthetic files (never touch the real test labels, confirmation set or logs) ----
++def _fake_split(tmp_path, split, spec):
++    lab = make_labels(spec)
+     proc = tmp_path / "processed"
+-    (proc / "confirm").mkdir(parents=True)
++    (proc / "confirm").mkdir(parents=True, exist_ok=True)
+     pos = lab.assign(sample=range(len(lab)), fs=128, predict=True)[["beat_id", "record", "sample", "fs", "predict"]]
+-    pos.to_csv(proc / "positions_svdb.csv", index=False)
+-    pd.DataFrame({"record": ["A", "B"], "fs": 128, "sig_len": 230400, "duration_s": 1800.0}).to_csv(
+-        proc / "records_svdb.csv", index=False)
+-    lab.to_csv(proc / "confirm" / "labels_svdb.csv", index=False)
++    pos.to_csv(proc / f"positions_{split}.csv", index=False)
++    pd.DataFrame({"record": sorted(spec), "fs": 128, "sig_len": 230400, "duration_s": 1800.0}).to_csv(
++        proc / f"records_{split}.csv", index=False)
++    lab.to_csv(proc / ("confirm" if split in E.CONFIRMATION_SPLITS else ".") / f"labels_{split}.csv", index=False)
+     return lab, proc
+ 
+ 
+-def test_confirmation_guard(tmp_path, monkeypatch):
+-    real = os.path.join(PROCESSED, "confirm", "labels_svdb.csv")
++def _runs(tmp_path, lab, arm, preds, split, seeds=(0, 1, 2, 3, 4), shot=True):
++    """Write one prediction file, model artifact and run manifest per seed; return the prediction paths."""
++    d = tmp_path / arm
++    d.mkdir(exist_ok=True)
++    files = []
++    for s, p in zip(seeds, preds):
++        f, art = d / f"pred_seed{s}_{split}_{len(files)}.csv", d / f"model_seed{s}_{len(files)}.npz"
++        make_pred(lab, p).to_csv(f, index=False)
++        art.write_bytes(f"{arm}-{s}-{len(files)}".encode())
++        man = {"arm_id": arm, "seed": s, "split": split, "config_id": "cfg", "code_revision": "test",
++               "model_artifact": str(art), "model_artifact_sha256": sha256(str(art)), "reservoir_seed": 100 + s,
++               "shot_seed": (200 + s) if shot else None, "prediction_sha256": sha256(str(f))}
++        (d / (f.stem + ".run.json")).write_text(json.dumps(man))
++        files.append(str(f))
++    return files
++
++
++@pytest.fixture
++def sandbox(tmp_path, monkeypatch):
+     opened = []
+     orig_read_csv = pd.read_csv
+     monkeypatch.setattr(pd, "read_csv", lambda path, *a, **k: (opened.append(str(path)), orig_read_csv(path, *a, **k))[1])
+-    lab, proc = _fake_processed(tmp_path)
+-    log = tmp_path / "access.jsonl"
++    monkeypatch.setattr(ev, "ACCESS_LOG", str(tmp_path / "access.jsonl"))
++    monkeypatch.setattr(ev, "FULL_EVAL_LOG", str(tmp_path / "full_eval.jsonl"))
++    yield tmp_path, opened
++    assert not any(os.path.abspath(p) == os.path.abspath(REAL_SVDB_LABELS) for p in opened)
++
++
++def _labels_read(opened, proc, split):
++    return any(os.path.basename(p) == f"labels_{split}.csv" and str(proc) in p for p in opened)
++
++
++def test_command_rejects_repeated_files_and_bad_runs_before_labels(sandbox, monkeypatch):
++    """Review item R5: duplicate files, too few runs, duplicate seed ids, a stale manifest or mismatched seed sets are
++    refused before any label access; a valid 5 x 5 headline runs; a different headline is then refused."""
++    tmp_path, opened = sandbox
++    rng = np.random.default_rng(0)
++    spec = {f"r{i}": "".join(rng.choice(list("NNNNNNSV"), size=60)) for i in range(8)}
++    lab, proc = _fake_split(tmp_path, "ds2s", spec)
+     monkeypatch.setattr(ev, "PROCESSED", str(proc))
+-    monkeypatch.setattr(ev, "ACCESS_LOG", str(log))
+-    good = tmp_path / "good.csv"
+-    make_pred(lab, lab["aami"]).to_csv(good, index=False)
+-    bad = tmp_path / "bad.csv"
+-    make_pred(lab, lab["aami"]).iloc[1:].to_csv(bad, index=False)
+-    out = str(tmp_path / "s.json")
++    truth = lab["aami"].to_numpy()
++    noisy = lambda q, s: np.where(np.random.default_rng(s).random(len(lab)) < q, "N", truth)
++    cand = _runs(tmp_path, lab, "qrc", [noisy(0.1, s) for s in range(5)], "ds2s")
++    base = _runs(tmp_path, lab, "esn", [noisy(0.2, s) for s in range(5)], "ds2s", shot=False)
++    out = str(tmp_path / "c.json")
++    args = lambda c, b, role="headline": ["compare", "--split", "ds2s", "--role", role, "--cand", *c, "--base", *b,
++                                          "--cand-id", "Q", "--base-id", "C", "--out", out]
++    refusals = [
++        (args([cand[0]] * 5, base), "given twice"),
++        (args(cand, cand), "given twice"),
++        (args(cand[:1], base[:1]), "exactly 5"),
++    ]
++    dup_seed = _runs(tmp_path, lab, "qrc_dup", [noisy(0.1, s) for s in range(5)], "ds2s", seeds=(0, 1, 2, 3, 3))
++    refusals.append((args(dup_seed, base), "duplicate seed"))
++    other_seeds = _runs(tmp_path, lab, "qrc_other", [noisy(0.1, 50 + s) for s in range(5)], "ds2s", seeds=(5, 6, 7, 8, 9))
++    refusals.append((args(other_seeds, base), "same seed indices"))
++    stale = _runs(tmp_path, lab, "qrc_stale", [noisy(0.1, s) for s in range(5)], "ds2s")
++    make_pred(lab, truth).to_csv(stale[2], index=False)  # file changed after its manifest was written
++    refusals.append((args(stale, base), "prediction_sha256"))
++    refusals.append((args(cand, base, role="confirmation"), "role confirmation is for split"))
++    for argv, msg in refusals:
++        with pytest.raises(SystemExit, match=msg):
++            ev.main(argv)
++    assert not _labels_read(opened, proc, "ds2s") and not os.path.exists(ev.FULL_EVAL_LOG)
++    ev.main(args(cand, base))
++    res = json.load(open(out))
++    assert res["role"] == "headline" and res["primary"]["ci_level"] == pytest.approx(0.95)
++    assert res["slices"]["ci_level"] == pytest.approx(0.9875) and set(res["slices"]["members"]) == {"S_f1", "V_f1"}
++    assert res["n_boot"] == E.N_BOOT and res["scorer"]["code_revision"] == ev.code_revision()
++    assert len(res["arms"]["candidate"]["per_seed"]) == 5 and len(res["run_manifests"]) == 10
++    assert len(ev._log_lines(ev.FULL_EVAL_LOG)) == 1
++    ev.main(args(cand, base))  # rerunning the identical headline is allowed
++    other_base = _runs(tmp_path, lab, "esn_other", [noisy(0.2, 60 + s) for s in range(5)], "ds2s", seeds=(5, 6, 7, 8, 9),
++                       shot=False)
++    with pytest.raises(SystemExit, match="different headline was already evaluated"):
++        ev.main(args(other_seeds, other_base))
++    with pytest.raises(SystemExit, match="limited to the minimal-reference"):  # no peeking through diagnostics
++        ev.main(args(cand[:1], base[:1], role="diagnostic"))
++
++
++def _ds2s_sandbox(tmp_path, monkeypatch, n_rec=8, size=60, seed=0):
++    rng = np.random.default_rng(seed)
++    spec = {f"r{i}": "".join(rng.choice(list("NNNNNNSV"), size=size)) for i in range(n_rec)}
++    lab, proc = _fake_split(tmp_path, "ds2s", spec)
++    monkeypatch.setattr(ev, "PROCESSED", str(proc))
++    truth = lab["aami"].to_numpy()
++    noisy = lambda q, s: np.where(np.random.default_rng(s).random(len(lab)) < q, "N", truth)
++    return lab, proc, noisy
++
++
++def test_order_rules_on_test_splits(sandbox, monkeypatch):
++    """Review V003 B1 and M4: before the headline only the minimal references may be scored on ds2s (score, secondary,
++    low-data and non-reference diagnostics are refused, and a prior non-reference scoring blocks the headline); the
++    low-data comparisons run once, at the 98.75% slice level, with the slice decision in the command output."""
++    tmp_path, opened = sandbox
++    lab, proc, noisy = _ds2s_sandbox(tmp_path, monkeypatch)
++    ref, ref2 = str(tmp_path / "ref.csv"), str(tmp_path / "ref2.csv")
++    make_pred(lab, "N" * len(lab)).to_csv(ref, index=False)
++    make_pred(lab, noisy(0.5, 99)).to_csv(ref2, index=False)
++    monkeypatch.setattr(E, "REFERENCE_PRED_SHA256", {sha256(ref), sha256(ref2)})
++    out = str(tmp_path / "o.json")
++    cmp_ = lambda c, b, role: ["compare", "--split", "ds2s", "--role", role, "--cand", *c, "--base", *b,
++                               "--cand-id", "Q", "--base-id", "C", "--out", out]
++    cand = _runs(tmp_path, lab, "qrc", [noisy(0.1, s) for s in range(5)], "ds2s")
++    base = _runs(tmp_path, lab, "esn", [noisy(0.3, s) for s in range(5)], "ds2s", shot=False)
++    low = _runs(tmp_path, lab, "qrc_k5", [noisy(0.15, 10 + s) for s in range(5)], "ds2s")
++    low_b = _runs(tmp_path, lab, "esn_k5", [noisy(0.3, 20 + s) for s in range(5)], "ds2s", shot=False)
++    for argv, msg in [(["score", "--split", "ds2s", "--pred", cand[0], "--id", "x", "--out", out], "waits"),
++                      (cmp_(cand, base, "secondary"), "waits"), (cmp_(low, low_b, "lowdata_k5"), "waits"),
++                      (cmp_(cand[:1], base[:1], "diagnostic"), "limited to the minimal-reference")]:
++        with pytest.raises(SystemExit, match=msg):
++            ev.main(argv)
++    assert not _labels_read(opened, proc, "ds2s")
++    ev.main(["score", "--split", "ds2s", "--pred", ref, "--id", "const_n", "--out", out])  # references are fine
++    ev.main(cmp_([ref2], [ref], "diagnostic"))
++    ev.main(cmp_(cand, base, "headline"))
++    ev.main(cmp_(low, low_b, "lowdata_k5"))
++    res = json.load(open(out))
++    assert res["primary"]["ci_level"] == pytest.approx(0.9875)
++    assert res["slices"]["members"]["lowdata_k5"]["ci"] == res["primary"]["ci"]
++    assert res["slices"]["members"]["lowdata_k5"]["decision"] in ("favorable", "no detectable change", "unfavorable")
++    ev.main(cmp_(low[::-1], low_b, "lowdata_k5"))  # the same files in another order and spelling: identical rerun
++    low2 = _runs(tmp_path, lab, "qrc_k5b", [noisy(0.05, 30 + s) for s in range(5)], "ds2s")
++    with pytest.raises(SystemExit, match="runs once"):
++        ev.main(cmp_(low2, low_b, "lowdata_k5"))
++    ev.main(cmp_(low2, low_b, "secondary"))  # later variants are descriptive
++    ev.main(["score", "--split", "ds2s", "--pred", cand[0], "--id", "x", "--out", out])
++    ev.main(cmp_(cand[::-1], base, "headline"))  # V003 N3: an identical headline rerun is accepted after later entries
++    with pytest.raises(SystemExit, match="overwrite an input"):  # V003 N4
++        ev.main(cmp_(low2, low_b, "secondary")[:-1] + [low2[0]])
++    with pytest.raises(SystemExit, match="cannot be the headline"):  # V003 N1: references alone are not a headline
++        ev._check_order("headline", "ds2s", [[sha256(ref)], [sha256(ref2)]])
++
++
++def _fake_headline_log():
++    ev._append(ev.FULL_EVAL_LOG, {"time": "t", "cmd": "compare", "split": "ds2s", "role": "headline", "ids": ["Q", "C"],
++                                  "files": {}, "arms": [["1" * 64], ["2" * 64]]})
++
++
++def test_headline_refused_after_an_earlier_non_reference_scoring(sandbox, monkeypatch):
++    tmp_path, _ = sandbox
++    lab, proc, noisy = _ds2s_sandbox(tmp_path, monkeypatch)
++    cand = _runs(tmp_path, lab, "qrc", [noisy(0.1, s) for s in range(5)], "ds2s")
++    base = _runs(tmp_path, lab, "esn", [noisy(0.3, s) for s in range(5)], "ds2s", shot=False)
++    ev._append(ev.FULL_EVAL_LOG, {"time": "t", "cmd": "score", "split": "ds2s", "role": None, "ids": ["peek"],
++                                  "files": {"x.csv": "0" * 64}})
++    with pytest.raises(SystemExit, match="headline must be the first"):
++        ev.main(["compare", "--split", "ds2s", "--role", "headline", "--cand", *cand, "--base", *base,
++                 "--cand-id", "Q", "--base-id", "C", "--out", str(tmp_path / "o.json")])
++
++
++def test_copies_and_mixed_configurations_are_not_seeds(sandbox, monkeypatch):
++    """Review V003 S1: byte-identical model artifacts, mixed config_ids within an arm, or one arm_id for both arms are
++    refused, before any label is read."""
++    tmp_path, opened = sandbox
++    lab, proc, noisy = _ds2s_sandbox(tmp_path, monkeypatch)
++    base = _runs(tmp_path, lab, "esn", [noisy(0.3, s) for s in range(5)], "ds2s", shot=False)
++    out = str(tmp_path / "o.json")
++    args = lambda c, b: ["compare", "--split", "ds2s", "--role", "headline", "--cand", *c, "--base", *b,
++                         "--cand-id", "Q", "--base-id", "C", "--out", out]
++    copies = _runs(tmp_path, lab, "qrc_copy", [noisy(0.1, 0)] * 5, "ds2s")
++    for f in copies:  # make every model artifact byte-identical, with manifests updated to match
++        m = json.load(open(f[:-4] + ".run.json"))
++        open(m["model_artifact"], "wb").write(b"same model")
++        m["model_artifact_sha256"] = sha256(m["model_artifact"])
++        json.dump(m, open(f[:-4] + ".run.json", "w"))
++    mixed = _runs(tmp_path, lab, "qrc_mixed", [noisy(0.1, s) for s in range(5)], "ds2s")
++    m = json.load(open(mixed[3][:-4] + ".run.json"))
++    m["config_id"] = "other"
++    json.dump(m, open(mixed[3][:-4] + ".run.json", "w"))
++    same_arm = _runs(tmp_path, lab, "esn_twin", [noisy(0.1, s) for s in range(5)], "ds2s")
++    for f in same_arm:
++        m = json.load(open(f[:-4] + ".run.json"))
++        m["arm_id"] = "esn"
++        json.dump(m, open(f[:-4] + ".run.json", "w"))
++    for c, msg in [(copies, "byte-identical model artifacts"), (mixed, "different configurations"),
++                   (same_arm, "same arm_id")]:
++        with pytest.raises(SystemExit, match=msg):
++            ev.main(args(c, base))
++    assert not _labels_read(opened, proc, "ds2s") and not os.path.exists(ev.FULL_EVAL_LOG)
++
++
++def test_confirmation_command_reports_everything_in_one_logged_access(sandbox, monkeypatch):
++    """Review item R6: one confirmation command emits every per-seed and seed-averaged secondary metric and the
++    per-record confusions, and logs exactly one access bound to prediction and artifact hashes. A second access
++    needs a repair reason; a third is refused. The real confirmation labels are never opened."""
++    tmp_path, opened = sandbox
++    rng = np.random.default_rng(3)
++    spec = {f"s{i}": "".join(rng.choice(list("NNNNNSSVFQ"), size=50)) for i in range(10)}
++    lab, proc = _fake_split(tmp_path, "svdb", spec)
++    monkeypatch.setattr(ev, "PROCESSED", str(proc))
+     with pytest.raises(PermissionError):
+         ev.load_labels("svdb", processed=str(proc))
+-    with pytest.raises(SystemExit):  # no reason given
+-        ev.main(["score", "--split", "svdb", "--pred", str(good), "--id", "x", "--out", out])
+-    with pytest.raises(scorer.PredictionError):  # malformed file is rejected before any access is logged
+-        ev.main(["score", "--split", "svdb", "--pred", str(bad), "--id", "x", "--out", out, "--confirm-reason", "t"])
+-    assert not log.exists()
+-    for _ in range(E.CONFIRMATION_CAP):
+-        ev.main(["score", "--split", "svdb", "--pred", str(good), "--id", "x", "--out", out, "--confirm-reason", "t"])
+-    assert sum(1 for _ in open(log)) == E.CONFIRMATION_CAP
++    truth = np.where(lab["is_unit"], lab["aami"], "N")
++    noisy = lambda q, s: np.where(np.random.default_rng(s).random(len(lab)) < q, "N", truth)
++    cand = _runs(tmp_path, lab, "qrc", [noisy(0.05, s) for s in range(5)], "svdb")
++    base = _runs(tmp_path, lab, "esn", [noisy(0.3, 10 + s) for s in range(5)], "svdb", shot=False)
++    out = str(tmp_path / "confirm.json")
++    argv = ["compare", "--split", "svdb", "--role", "confirmation", "--cand", *cand, "--base", *base,
++            "--cand-id", "Q", "--base-id", "C", "--out", out]
++    with pytest.raises(SystemExit, match="confirm-reason"):
++        ev.main(argv)
++    with pytest.raises(SystemExit, match="only after the headline"):  # V003 N2
++        ev.main(argv + ["--confirm-reason", "too early"])
++    _fake_headline_log()
++    with pytest.raises(SystemExit, match="only by `compare --role confirmation`"):
++        ev.main(["score", "--split", "svdb", "--pred", cand[0], "--id", "x", "--out", out])
++    bad = str(tmp_path / "bad.csv")
++    make_pred(lab, truth).iloc[1:].to_csv(bad, index=False)
++    with pytest.raises(SystemExit):  # one run instead of five, and no manifest: refused before any access
++        ev.main(argv[:5] + ["--cand", bad, "--base", base[0]] + argv[-6:] + ["--confirm-reason", "t"])
++    assert not os.path.exists(ev.ACCESS_LOG) and not _labels_read(opened, proc, "svdb")
++    ev.main(argv + ["--confirm-reason", "final pair"])
++    log = ev._log_lines(ev.ACCESS_LOG)
++    assert len(log) == 1 and log[0]["access"] == 1 and len(log[0]["prediction_sha256"]) == 10
++    assert len(log[0]["model_artifact_sha256"]) == 10 and log[0]["code_revision"] == ev.code_revision()
++    res = json.load(open(out))
++    assert res["confirmed"] is True and res["primary"]["ci_level"] == pytest.approx(0.95)
++    for arm in ("candidate", "baseline"):
++        per_seed = res["arms"][arm]["per_seed"]
++        assert len(per_seed) == 5
++        for s in per_seed:
++            for c in E.CLASSES:
++                assert {"sensitivity", "ppv", "f1", "nsv_record_avg_sensitivity", "nsv_record_avg_ppv",
++                        "nsv_class_false_flags_per_hour"} <= set(s["per_class"][c])
++            assert set(s["nonunit_predictions"]) == {"F", "Q"} and len(s["per_record"]) == 10
++            assert {"VEB", "SVEB"} <= set(s["paper_compatible"]) and "ectopic_flags_per_hour" in s["review_burden"]
++        avg = res["arms"][arm]["seed_average"]
++        assert avg["per_class"]["S"]["sensitivity"] == pytest.approx(np.mean([s["per_class"]["S"]["sensitivity"]
++                                                                              for s in per_seed]))
++    assert set(res["arms"]["candidate"]["per_seed"][0]["paper_compatible_per_record"]) == set(spec)
++    with pytest.raises(SystemExit, match="repair-reason"):
++        ev.main(argv + ["--confirm-reason", "again"])
++    other = _runs(tmp_path, lab, "qrc_other", [noisy(0.05, 40 + s) for s in range(5)], "svdb")
++    argv_other = argv[:5] + ["--cand", *other] + argv[11:]
++    with pytest.raises(SystemExit, match="same model artifacts"):  # V003 S3: a repair is not a model change
++        ev.main(argv_other + ["--confirm-reason", "repair", "--repair-reason", "x"])
++    ev.main(argv + ["--confirm-reason", "repair", "--repair-reason", "fixed resampling bug"])
+     with pytest.raises(SystemExit, match="cap"):
+-        ev.main(["score", "--split", "svdb", "--pred", str(good), "--id", "x", "--out", out, "--confirm-reason", "t"])
+-    assert not any(os.path.abspath(p) == os.path.abspath(real) for p in opened)  # the real confirmation labels stay closed
++        ev.main(argv + ["--confirm-reason", "third", "--repair-reason", "x"])
++    assert len(ev._log_lines(ev.ACCESS_LOG)) == E.CONFIRMATION_CAP
++
++
++def test_confirmation_checks_output_and_scorer_before_logging(sandbox, monkeypatch):
++    """Review V003 S2: an unwritable output or a scorer crash fails before the access is logged."""
++    tmp_path, opened = sandbox
++    rng = np.random.default_rng(4)
++    spec = {f"s{i}": "".join(rng.choice(list("NNNNNSSV"), size=40)) for i in range(6)}
++    lab, proc = _fake_split(tmp_path, "svdb", spec)
++    monkeypatch.setattr(ev, "PROCESSED", str(proc))
++    truth = lab["aami"].to_numpy()
++    cand = _runs(tmp_path, lab, "qrc", [np.where(np.random.default_rng(s).random(len(lab)) < 0.1, "N", truth)
++                                         for s in range(5)], "svdb")
++    base = _runs(tmp_path, lab, "esn", [np.where(np.random.default_rng(9 + s).random(len(lab)) < 0.3, "N", truth)
++                                         for s in range(5)], "svdb", shot=False)
++    _fake_headline_log()
++    blocker = tmp_path / "a_file"
++    blocker.write_text("x")
++    argv = lambda out: ["compare", "--split", "svdb", "--role", "confirmation", "--cand", *cand, "--base", *base,
++                        "--cand-id", "Q", "--base-id", "C", "--out", out, "--confirm-reason", "final"]
++    with pytest.raises(OSError):
++        ev.main(argv(str(blocker / "sub" / "out.json")))  # parent is a file
++    monkeypatch.setattr(scorer, "compare", lambda *a, **k: (_ for _ in ()).throw(MemoryError("boom")))
++    with pytest.raises(MemoryError):
++        ev.main(argv(str(tmp_path / "ok.json")))
++    assert not os.path.exists(ev.ACCESS_LOG) and not _labels_read(opened, proc, "svdb")
+ 
+ 
+ # ---- real-data checks ----
+ manifest_path = os.path.join(PROCESSED, "manifest.json")
+ needs_data = pytest.mark.skipif(not os.path.exists(manifest_path), reason="run python -m qhc.units first")
+ 
++# Current-dataset class totals (all beat annotations of the split, before the edge and first/last exclusions), from the
++# checksum-verified PhysioNet annotations. de Chazal 2004, Table II, gives DS1 N 45,868, S 942, V 3,787 and DS2
++# N 44,258; the other totals agree. EV1 uses de Chazal's record split and class mapping with these documented
++# current-annotation differences (EVAL.md, review item R3); labels are not altered to force agreement.
++CURRENT_COUNTS = {"ds1": {"N": 45866, "S": 944, "V": 3788, "F": 415, "Q": 8},
++                  "ds2": {"N": 44259, "S": 1837, "V": 3221, "F": 388, "Q": 7}}
++DE_CHAZAL_TABLE_II = {"ds1": {"N": 45868, "S": 942, "V": 3787, "F": 415, "Q": 8},
++                      "ds2": {"N": 44258, "S": 1837, "V": 3221, "F": 388, "Q": 7}}
++
+ 
+ @needs_data
+-def test_units_reproduce_de_chazal_counts():
++def test_units_match_current_dataset_counts():
+     m = json.load(open(manifest_path))["splits"]
+-    for split, ref in {"ds1": {"N": 45866, "S": 944, "V": 3788, "F": 415, "Q": 8},
+-                       "ds2": {"N": 44259, "S": 1837, "V": 3221, "F": 388, "Q": 7}}.items():
++    for split, ref in CURRENT_COUNTS.items():
+         parts = ("class_counts", "predicted_nonunit_by_aami", "not_predicted_by_aami")
+         total = {c: sum(m[split][p].get(c, 0) for p in parts) for c in ref}
+         assert total == ref
++        assert "other" not in m[split]["predicted_nonunit_by_aami"]  # no non-beat codes in the prediction set
++    diff = {s: {c: CURRENT_COUNTS[s][c] - DE_CHAZAL_TABLE_II[s][c] for c in CURRENT_COUNTS[s]} for s in CURRENT_COUNTS}
++    assert diff == {"ds1": {"N": -2, "S": 2, "V": 1, "F": 0, "Q": 0}, "ds2": {"N": 1, "S": 0, "V": 0, "F": 0, "Q": 0}}
++    assert m["ds1"]["n_predict"] == 50964 and m["ds1"]["n_units"] == 50542
+ 
+ 
+ @needs_data
+@@ -280,3 +604,12 @@
+             g = g.sort_values("sample")
+             want = predict_flags(g["sample"].to_numpy(), rec.loc[r, "fs"], rec.loc[r, "sig_len"])
+             assert (g["predict"].to_numpy() == want).all()
++
++
++@needs_data
++def test_lowdata_subsets_are_reproducible():
++    """Review V003 M3: the frozen subsets equal units.draw_lowdata_subsets on the DS1 units."""
++    lab = pd.read_csv(os.path.join(PROCESSED, "labels_ds1.csv"), dtype={"record": str})
++    frozen = json.load(open(os.path.join(PROCESSED, "lowdata_subsets.json")))
++    assert draw_lowdata_subsets(lab[lab["is_unit"]]) == frozen
++    assert frozen["subsets"]["k5"]["records"] == ["101", "122", "209", "215", "223"]
+--- r3/units.py
++++ r5/units.py
+@@ -46,12 +46,18 @@
+     return flag
+ 
+ 
++def select_beats(samples, symbols):
++    """Beat annotations only: (sample, symbol) rows whose symbol is a beat code. Non-beat annotations (rhythm, noise,
++    flutter waves `!`, ...) are dropped, so they never act as beat positions or enter RR intervals."""
++    rows = [(int(s), sym) for s, sym in zip(samples, symbols) if sym in E.BEAT_SYMBOLS]
++    return pd.DataFrame(rows, columns=["sample", "symbol"])
++
++
+ def beats_for_record(raw_root, db, rec):
+     path = os.path.join(raw_root, db, rec)
+     hdr = wfdb.rdheader(path)
+     ann = wfdb.rdann(path, "atr")
+-    rows = [(int(s), sym) for s, sym in zip(ann.sample, ann.symbol) if sym in E.BEAT_SYMBOLS]
+-    df = pd.DataFrame(rows, columns=["sample", "symbol"])
++    df = select_beats(ann.sample, ann.symbol)
+     df["aami"] = df["symbol"].map(E.AAMI).fillna("other")
+     df["predict"] = predict_flags(df["sample"], hdr.fs, hdr.sig_len)
+     df["is_unit"] = df["predict"] & df["aami"].isin(E.CLASSES)
+@@ -86,13 +92,44 @@
+     return {f"fold{i}": sorted(recs[best == i].tolist()) for i in range(k)}
+ 
+ 
+-def build(raw_root, out_dir):
++def draw_lowdata_subsets(units_ds1, seed=E.BOOT_SEED):
++    """Seeded DS1 record subsets for the reduced-data slice: rng = np.random.default_rng(seed); for each k in LOWDATA_K,
++    in order and from the same stream, draw rng.choice(sorted DS1 records, k, replace=False) until the subset holds at
++    least LOWDATA_MIN_UNITS S and LOWDATA_MIN_UNITS V units."""
++    cnt = units_ds1.groupby("record")["aami"].value_counts().unstack(fill_value=0)
++    recs = sorted(cnt.index)
++    rng = np.random.default_rng(seed)
++    out = {}
++    for k in E.LOWDATA_K:
++        draws = 0
++        while True:
++            draws += 1
++            sub = sorted(rng.choice(recs, k, replace=False).tolist())
++            c = cnt.loc[sub].sum()
++            if c.get("S", 0) >= E.LOWDATA_MIN_UNITS and c.get("V", 0) >= E.LOWDATA_MIN_UNITS:
++                break
++        out[f"k{k}"] = {"records": sub, "draws": draws, "units": {x: int(c.get(x, 0)) for x in E.CLASSES}}
++    rule = (f"numpy default_rng({seed}) over sorted DS1 records; k=5 then k=11 from the same stream with "
++            f"rng.choice(records, k, replace=False); redraw until the subset has >= {E.LOWDATA_MIN_UNITS} S and "
++            f">= {E.LOWDATA_MIN_UNITS} V units")
++    return {"rule": rule, "subsets": out}
++
++
++def build(raw_root, out_dir, splits=None):
++    """Build all splits, or only `splits`; in that case the other splits' outputs and manifest entries are kept as
++    they are (used in EV1 r4 to rebuild the MIT-BIH splits without reopening the SVDB annotations)."""
+     os.makedirs(out_dir, exist_ok=True)
++    m_path = os.path.join(out_dir, "manifest.json")
+     manifest = {"ev": E.EV, "edge_sec": E.EDGE_SEC, "inputs": {}, "outputs": {}, "splits": {}}
++    if splits is not None:
++        manifest = json.load(open(m_path))
++        manifest.setdefault("partial_rebuilds", []).append(sorted(splits))
+     for db in ("mitdb", "svdb"):
+         sums = os.path.join(raw_root, db, "SHA256SUMS.txt")
+         manifest["inputs"][f"{db}/SHA256SUMS.txt"] = sha256(sums)
+     for split, (db, records, _) in E.SPLITS.items():
++        if splits is not None and split not in splits:
++            continue
+         recs = record_list(raw_root, db, records)
+         parts = [beats_for_record(raw_root, db, r) for r in recs]
+         pos = pd.concat([p for p, _ in parts], ignore_index=True)
+@@ -133,7 +170,11 @@
+                 name: {c: int(units[units["record"].isin(recs_)]["aami"].eq(c).sum()) for c in E.CLASSES}
+                 for name, recs_ in folds.items()
+             }
+-    with open(os.path.join(out_dir, "manifest.json"), "w") as f:
++            s_path = os.path.join(out_dir, "lowdata_subsets.json")
++            with open(s_path, "w") as f:
++                json.dump(draw_lowdata_subsets(units), f, indent=1)
++            manifest["outputs"]["lowdata_subsets.json"] = sha256(s_path)
++    with open(m_path, "w") as f:
+         json.dump(manifest, f, indent=1)
+     return manifest
+ 
+@@ -142,8 +183,9 @@
+     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+     ap.add_argument("--raw", default="runs/data/raw")
+     ap.add_argument("--out", default=f"runs/data/processed/{E.EV}")
++    ap.add_argument("--splits", nargs="+", choices=sorted(E.SPLITS), help="rebuild only these splits (default: all)")
+     a = ap.parse_args()
+-    m = build(a.raw, a.out)
++    m = build(a.raw, a.out, a.splits)
+     for s, info in m["splits"].items():
+         print(s, info["n_predict"], info["n_units"], info["class_counts"], "nonunit:", info["predicted_nonunit_by_aami"],
+               "not predicted:", info["not_predicted_by_aami"])

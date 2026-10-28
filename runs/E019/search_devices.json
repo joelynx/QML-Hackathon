@@ -1,0 +1,100 @@
+{
+ "fetched_utc": "2026-10-28T14:45:52.712803+00:00",
+ "regions": {
+  "us-west-1": [
+   {
+    "deviceArn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-1",
+    "deviceName": "Aspen-M-1",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   },
+   {
+    "deviceArn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2",
+    "deviceName": "Aspen-M-2",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   },
+   {
+    "deviceArn": "arn:aws:braket:::device/qpu/rigetti/Aspen-8",
+    "deviceName": "Aspen-8",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   },
+   {
+    "deviceArn": "arn:aws:braket:::device/qpu/rigetti/Aspen-11",
+    "deviceName": "Aspen-11",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   },
+   {
+    "deviceArn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+    "deviceName": "Cepheus-1-108Q",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "ONLINE"
+   },
+   {
+    "deviceArn": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+    "deviceName": "Aspen-9",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   },
+   {
+    "deviceArn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+    "deviceName": "SV1",
+    "providerName": "Amazon Braket",
+    "deviceType": "SIMULATOR",
+    "deviceStatus": "ONLINE"
+   },
+   {
+    "deviceArn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-3",
+    "deviceName": "Ankaa-3",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   },
+   {
+    "deviceArn": "arn:aws:braket:::device/quantum-simulator/amazon/dm1",
+    "deviceName": "dm1",
+    "providerName": "Amazon Braket",
+    "deviceType": "SIMULATOR",
+    "deviceStatus": "ONLINE"
+   },
+   {
+    "deviceArn": "arn:aws:braket:::device/qpu/rigetti/Aspen-10",
+    "deviceName": "Aspen-10",
+    "providerName": "Rigetti",
+    "deviceType": "QPU",
+    "deviceStatus": "RETIRED"
+   }
+  ],
+  "eu-north-1": [
+   {
+    "deviceArn": "arn:aws:braket:eu-north-1::device/qpu/aqt/Ibex-Q1",
+    "deviceName": "IBEX Q1",
+    "providerName": "AQT",
+    "deviceType": "QPU",
+    "deviceStatus": "ONLINE"
+   },
+   {
+    "deviceArn": "arn:aws:braket:eu-north-1::device/qpu/iqm/Garnet",
+    "deviceName": "Garnet",
+    "providerName": "IQM",
+    "deviceType": "QPU",
+    "deviceStatus": "ONLINE"
+   },
+   {
+    "deviceArn": "arn:aws:braket:eu-north-1::device/qpu/iqm/Emerald",
+    "deviceName": "Emerald",
+    "providerName": "IQM",
+    "deviceType": "QPU",
+    "deviceStatus": "OFFLINE"
+   }
+  ]
+ }
+}

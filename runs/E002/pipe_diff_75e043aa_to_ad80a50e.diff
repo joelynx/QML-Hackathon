@@ -1,0 +1,76 @@
+--- pipe 75e043aa9915baf2/run.py
++++ pipe ad80a50e051c6820/run.py
+@@ -5,6 +5,7 @@
+   python -I -m qhc.pipe.run leakcheck --exp E001 --seed 0       full-pipeline lookahead check on DS1 records
+   python -I -m qhc.pipe.run control   --exp E004 --kind mf --from-exp E003   controls of a tuned QRC (EVAL.md rule 7)
+   python -I -m qhc.pipe.run rronly    --exp E006 --oof --splits ds2s          RR features alone (EVAL.md rule 7)
++  python -I -m qhc.pipe.run lowdata   --exp E007 --from-exp E003 --k 5 --splits ds2s   reduced-data refit (EVAL.md slice c)
+ 
+ Both arms: reservoir input = the patient-relative beat window (features.relative_windows); readout input = the K = 220
+ reservoir features plus the shared rr block; readout = readout.Readout with the nested LAMBDAS grid; decision = argmax.
+@@ -242,6 +243,51 @@
+     print(f"{a.exp} rr-only: DS1 OOF {scores} -> lambda {lam}")
+ 
+ 
++def cmd_lowdata(a):
++    """Reduced-data refitting (EVAL.md slice c): a headline arm keeps its full-DS1 configuration and lambda (the
++    selected configuration) and its reservoir and shot seeds; the readout (normalisation and weights) is refitted on the
++    units of the frozen k-record DS1 subset only. Writes runs/<exp>/<from-exp>/ with the run-manifest fields the
++    low-data roles check: parent_config_id (the headline configuration id), train_records and refit_scope. A proxy:
++    predictions for the DS1 records outside the subset (heldout_ds1_seed*.csv)."""
++    best = best_config(a.from_exp)
++    arm = best["arm"]
++    with open(os.path.join(PROCESSED, "lowdata_subsets.json")) as f:
++        subset = sorted(json.load(f)["subsets"][f"k{a.k}"]["records"])
++    out = os.path.join(exp_dir(a.exp), a.from_exp)
++    os.makedirs(out, exist_ok=True)
++    d, y, _ = ds1_data()
++    keys = keys_of(d)
++    in_sub = np.isin(d["record"], subset)
++    fit, held = in_sub & (y >= 0), ~in_sub
++    targets = {s: load_split(s) for s in a.splits}
++    parent = f"{a.from_exp}-{arm}-cfg{best['index']}"
++    for seed in a.seeds:
++        shot_seed = 1000 + seed if arm in SHOT_ARMS else None
++        t = time.time()
++        model = build_model(arm, best["config"], seed, shot_seed)
++        X = design(model.features(d[INPUT], keys), d)
++        ro = Readout(best["lam"]).fit(X[fit], y[fit])
++        write_pred(os.path.join(out, f"heldout_ds1_seed{seed}.csv"), d["beat_id"][held], ro.predict_proba(X[held]))
++        art = os.path.join(out, f"model_seed{seed}.npz")
++        save_artifact(art, arm, best, seed, shot_seed, model, ro)
++        for s, ds in targets.items():
++            f = os.path.join(out, f"pred_{s}_seed{seed}.csv")
++            write_pred(f, ds["beat_id"], ro.predict_proba(design(model.features(ds[INPUT], keys_of(ds)), ds)))
++            man = {"arm_id": f"{a.exp}-{a.from_exp}-{arm}-k{a.k}", "seed": seed, "split": s,
++                   "config_id": f"{parent}-k{a.k}", "code_revision": f"eval {code_revision()} / pipe {PIPE_REV}",
++                   "model_artifact": os.path.relpath(art, ROOT).replace(os.sep, "/"),
++                   "model_artifact_sha256": sha256(art), "reservoir_seed": seed, "shot_seed": shot_seed,
++                   "prediction_sha256": sha256(f), "config": best["config"], "lam": best["lam"],
++                   "parent_config_id": parent, "train_records": subset, "refit_scope": f"lowdata_k{a.k}",
++                   "n_train_units": int(fit.sum())}
++            with open(os.path.splitext(f)[0] + ".run.json", "w") as fh:
++                json.dump(man, fh, indent=1)
++        print(f"{a.exp} {a.from_exp} {arm} k{a.k} seed {seed}: {int(fit.sum())} units, {round(time.time() - t, 1)}s",
++              flush=True)
++    with open(os.path.join(out, "selected_config.json"), "w") as f:
++        json.dump(dict(best, lowdata_k=a.k, train_records=subset, parent_config_id=parent), f, indent=1)
++
++
+ def pipeline_fn(meta, model, ro, db, rec):
+     """The complete per-record pipeline f(signal, samples, fs) -> class probabilities, as qhc.leakcheck expects."""
+     def f(signal, samples, fs):
+@@ -305,6 +351,13 @@
+     r.add_argument("--splits", nargs="*", default=[], choices=sorted(E.SPLITS))
+     r.add_argument("--oof", action="store_true")
+     r.set_defaults(fn=cmd_rronly)
++    lo = sub.add_parser("lowdata")
++    lo.add_argument("--exp", required=True)
++    lo.add_argument("--from-exp", required=True)
++    lo.add_argument("--k", type=int, required=True, choices=list(E.LOWDATA_K))
++    lo.add_argument("--seeds", type=int, nargs="+", default=list(range(E.N_SEEDS)))
++    lo.add_argument("--splits", nargs="*", default=[], choices=sorted(E.SPLITS))
++    lo.set_defaults(fn=cmd_lowdata)
+     a = ap.parse_args(argv)
+     a.fn(a)
+ 

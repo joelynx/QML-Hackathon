@@ -1,0 +1,40 @@
+pooled seed-summed confusion (true x pred), candidate:
+ [[39864  1653   629]
+ [  950   750    80]
+ [   26   137  3036]] 
+baseline:
+ [[38209  2759  1179]
+ [  576  1059   145]
+ [   21   127  3050]]
+
+V false positives per seed, candidate - baseline: total -614.4
+  117: -123.2  (cand 37.4, base 160.6; N->V 37.4 vs 160.6; S->V 0.0 vs 0.0; V units 0)
+  222: -99.2  (cand 187.2, base 286.4; N->V 153.8 vs 257.2; S->V 33.4 vs 29.2; V units 0)
+  105: -91.6  (cand 86.2, base 177.8; N->V 86.2 vs 177.8; S->V 0.0 vs 0.0; V units 41)
+  111: -60.6  (cand 82.6, base 143.2; N->V 82.6 vs 143.2; S->V 0.0 vs 0.0; V units 1)
+  232: -53.4  (cand 35.6, base 89.0; N->V 0.0 vs 0.0; S->V 35.6 vs 89.0; V units 0)
+  212: -42.8  (cand 119.4, base 162.2; N->V 119.4 vs 162.2; S->V 0.0 vs 0.0; V units 0)
+
+S true positives per seed, candidate - baseline: total -309.8 of 1781 S units
+  232: -288.2  (cand 493.2, base 781.4; S units 1381)
+  200: -8.2  (cand 11.0, base 19.2; S units 30)
+  234: -8.2  (cand 22.0, base 30.2; S units 50)
+  222: -2.2  (cand 156.0, base 158.2; S units 209)
+  219: -1.6  (cand 1.4, base 3.0; S units 7)
+
+S false positives per seed, candidate - baseline: total -1096.0
+  213: -394.6  (cand 104.2, base 498.8)
+  233: -234.4  (cand 52.0, base 286.4)
+  210: -156.4  (cand 146.2, base 302.6)
+  212: -151.8  (cand 75.0, base 226.8)
+  219: -138.6  (cand 255.2, base 393.8)
+
+232: S units 1381; S TP cand 493.2 base 781.4; S FP cand 0.0 base 0.0
+records with S units: 15 | with >= 10 S: 7
+records with V units: 15 | with >= 10 V: 9
+
+per-record S F1 (records with >= 10 S units): candidate better in 4 of 7
+   [('232', np.float64(-0.196), 1381), ('222', np.float64(-0.031), 209), ('200', np.float64(-0.014), 30), ('210', np.float64(0.054), 22), ('234', np.float64(0.065), 50), ('213', np.float64(0.077), 28), ('100', np.float64(0.141), 33)]
+
+per-record V F1 (records with >= 10 V units): candidate better in 5 of 9
+   [('105', np.float64(-0.167), 41), ('200', np.float64(-0.001), 825), ('221', np.float64(-0.001), 396), ('214', np.float64(-0.0), 256), ('213', np.float64(0.02), 220), ('228', np.float64(0.028), 362), ('233', np.float64(0.043), 830), ('210', np.float64(0.05), 195), ('219', np.float64(0.066), 64)]

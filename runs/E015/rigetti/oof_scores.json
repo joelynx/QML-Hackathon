@@ -1,0 +1,116 @@
+{
+ "device": "rigetti",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 noise 8b1226919f8ca395",
+ "trajectories": 32,
+ "rates": {
+  "device": "rigetti",
+  "device_name": "Rigetti Cepheus-1-108Q",
+  "device_arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+  "fetched_utc": "2026-10-28T14:45:52.271404+00:00",
+  "region": "us-west-1",
+  "source": "runs/E015/calibration_rigetti.json",
+  "r1": 0.0030202956869451736,
+  "r2": 0.01167628377355956,
+  "two_qubit_gate": "CZ",
+  "e01": 0.031000000000000028,
+  "e10": 0.031000000000000028,
+  "q1": 0.00453044353041776,
+  "q2": 0.014595354716949449,
+  "fields": {
+   "r1": "1 - median over qubits of standardized.oneQubitProperties[*].oneQubitFidelity[SIMULTANEOUS_RANDOMIZED_BENCHMARKING] (n = 107)",
+   "r2": "1 - median over edges of standardized.twoQubitProperties[*].twoQubitGateFidelity[CZ/INTERLEAVED_RANDOMIZED_BENCHMARKING] (n = 193); gate CZ",
+   "readout": "1 - median over qubits of oneQubitFidelity[READOUT] (n = 107); symmetric (no asymmetric fields published)"
+  },
+  "all_medians": {
+   "RANDOMIZED_BENCHMARKING": {
+    "n": 107,
+    "median": 0.9985636437137728,
+    "min": 0.5,
+    "max": 0.9994432571727532
+   },
+   "SIMULTANEOUS_RANDOMIZED_BENCHMARKING": {
+    "n": 107,
+    "median": 0.9969797043130548,
+    "min": 0.5,
+    "max": 0.9989419897333106
+   },
+   "READOUT": {
+    "n": 107,
+    "median": 0.969,
+    "min": 0.615,
+    "max": 0.994
+   },
+   "CZ/INTERLEAVED_RANDOMIZED_BENCHMARKING": {
+    "n": 193,
+    "median": 0.9883237162264404,
+    "min": 0.5,
+    "max": 0.9963402028845144
+   }
+  }
+ },
+ "seeds": {
+  "0": {
+   "macro_f1": 0.6446612827116912,
+   "f1": {
+    "N": 0.9623783686830187,
+    "S": 0.2785388127853881,
+    "V": 0.6930666666666667
+   },
+   "feature_seconds_ds1": 125.5,
+   "ds2s_seconds": 112.0,
+   "total_seconds": 257.2
+  },
+  "1": {
+   "macro_f1": 0.645548764238734,
+   "f1": {
+    "N": 0.9624515232352215,
+    "S": 0.2732439190725165,
+    "V": 0.7009508504084639
+   },
+   "feature_seconds_ds1": 132.4,
+   "ds2s_seconds": 122.1,
+   "total_seconds": 258.6
+  },
+  "2": {
+   "macro_f1": 0.644514400934553,
+   "f1": {
+    "N": 0.9619231286720187,
+    "S": 0.27285067873303165,
+    "V": 0.6987693953986088
+   },
+   "feature_seconds_ds1": 109.5,
+   "ds2s_seconds": 84.1,
+   "total_seconds": 196.3
+  },
+  "3": {
+   "macro_f1": 0.6497752772130746,
+   "f1": {
+    "N": 0.9630824734182605,
+    "S": 0.28305315765561107,
+    "V": 0.703190200565352
+   },
+   "feature_seconds_ds1": 76.8,
+   "ds2s_seconds": 68.4,
+   "total_seconds": 147.3
+  },
+  "4": {
+   "macro_f1": 0.647196434640152,
+   "f1": {
+    "N": 0.9642162234696844,
+    "S": 0.2787078519217166,
+    "V": 0.6986652285290549
+   },
+   "feature_seconds_ds1": 74.5,
+   "ds2s_seconds": 69.8,
+   "total_seconds": 146.6
+  }
+ },
+ "lambda_grid_seed0": {
+  "0.001": 0.6129983614372866,
+  "0.01": 0.6318278743470676,
+  "0.1": 0.6446612827116912,
+  "1.0": 0.6078387989830835
+ },
+ "lam": 0.1,
+ "mean_macro_f1": 0.646339231947641
+}

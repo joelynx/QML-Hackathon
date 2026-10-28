@@ -1,0 +1,499 @@
+{
+ "ev": "EV1",
+ "split": "ds2s",
+ "candidate_id": "ref_rr_rule",
+ "pred_file": "runs/EV1_reference/pred_rr_rule_ds2s.csv",
+ "pred_sha256": "b1744586bda91aa39cad9322c8639c5c8ba9d88cc41dbd9abdaceb049fbae759",
+ "labels_sha256": "bc99cc7493340d0ac2727d6347fd7c5f53d7af0f2bd57fa3d25feaf64d924f84",
+ "time": "2026-10-26T17:45:40+04:00",
+ "command": "C:\\Users\\admin\\Desktop\\Water Hackathon\\quantum_healthcare\\src\\qhc\\evaluate.py score --split ds2s --pred runs/EV1_reference/pred_rr_rule_ds2s.csv --id ref_rr_rule --out runs/EV1_reference/score_rr_rule_ds2s.json",
+ "macro_f1": 0.4548782336921176,
+ "accuracy": 0.8909588576035986,
+ "per_class": {
+  "N": {
+   "support": 42148,
+   "predicted": 41276,
+   "sensitivity": 0.9605675239631773,
+   "ppv": 0.9808605485027619,
+   "f1": 0.970607978519371,
+   "record_avg_sensitivity": 0.9616932407445032,
+   "record_avg_ppv": 0.971211208182675,
+   "false_flags_per_hour": null
+  },
+  "S": {
+   "support": 1781,
+   "predicted": 5853,
+   "sensitivity": 0.8444693992139247,
+   "ppv": 0.25696224158551173,
+   "f1": 0.3940267225569819,
+   "record_avg_sensitivity": 0.8585335652782583,
+   "record_avg_ppv": 0.26096432843386197,
+   "false_flags_per_hour": 412.9160439560439,
+   "auprc": 0.2228742349725757
+  },
+  "V": {
+   "support": 3200,
+   "predicted": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "f1": 0.0,
+   "record_avg_sensitivity": 0.0,
+   "record_avg_ppv": null,
+   "false_flags_per_hour": 0.0,
+   "auprc": 0.0678987459950349
+  }
+ },
+ "confusion_true_by_pred": [
+  [
+   40486,
+   1662,
+   0
+  ],
+  [
+   277,
+   1504,
+   0
+  ],
+  [
+   513,
+   2687,
+   0
+  ]
+ ],
+ "n_predict": 47523,
+ "n_units": 47129,
+ "nonunit_predictions": {
+  "F": {
+   "N": 384,
+   "S": 3,
+   "V": 0
+  },
+  "Q": {
+   "N": 6,
+   "S": 1,
+   "V": 0
+  }
+ },
+ "per_record": {
+  "100": {
+   "confusion_true_by_pred": [
+    [
+     2236,
+     0,
+     0
+    ],
+    [
+     0,
+     33,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ]
+   ],
+   "n": 2270
+  },
+  "103": {
+   "confusion_true_by_pred": [
+    [
+     2077,
+     3,
+     0
+    ],
+    [
+     1,
+     1,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2082
+  },
+  "105": {
+   "confusion_true_by_pred": [
+    [
+     2522,
+     2,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     41,
+     0
+    ]
+   ],
+   "n": 2565
+  },
+  "111": {
+   "confusion_true_by_pred": [
+    [
+     2119,
+     2,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ]
+   ],
+   "n": 2122
+  },
+  "113": {
+   "confusion_true_by_pred": [
+    [
+     1704,
+     82,
+     0
+    ],
+    [
+     0,
+     6,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1792
+  },
+  "117": {
+   "confusion_true_by_pred": [
+    [
+     1532,
+     0,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1533
+  },
+  "121": {
+   "confusion_true_by_pred": [
+    [
+     1859,
+     0,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ]
+   ],
+   "n": 1861
+  },
+  "123": {
+   "confusion_true_by_pred": [
+    [
+     1434,
+     79,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     3,
+     0
+    ]
+   ],
+   "n": 1516
+  },
+  "200": {
+   "confusion_true_by_pred": [
+    [
+     1724,
+     17,
+     0
+    ],
+    [
+     7,
+     23,
+     0
+    ],
+    [
+     156,
+     669,
+     0
+    ]
+   ],
+   "n": 2596
+  },
+  "210": {
+   "confusion_true_by_pred": [
+    [
+     2205,
+     214,
+     0
+    ],
+    [
+     1,
+     21,
+     0
+    ],
+    [
+     36,
+     159,
+     0
+    ]
+   ],
+   "n": 2636
+  },
+  "212": {
+   "confusion_true_by_pred": [
+    [
+     2744,
+     1,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2745
+  },
+  "213": {
+   "confusion_true_by_pred": [
+    [
+     2636,
+     1,
+     0
+    ],
+    [
+     1,
+     27,
+     0
+    ],
+    [
+     195,
+     25,
+     0
+    ]
+   ],
+   "n": 2885
+  },
+  "214": {
+   "confusion_true_by_pred": [
+    [
+     1989,
+     11,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     256,
+     0
+    ]
+   ],
+   "n": 2256
+  },
+  "219": {
+   "confusion_true_by_pred": [
+    [
+     1606,
+     474,
+     0
+    ],
+    [
+     2,
+     5,
+     0
+    ],
+    [
+     6,
+     58,
+     0
+    ]
+   ],
+   "n": 2151
+  },
+  "221": {
+   "confusion_true_by_pred": [
+    [
+     1750,
+     279,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     3,
+     393,
+     0
+    ]
+   ],
+   "n": 2425
+  },
+  "222": {
+   "confusion_true_by_pred": [
+    [
+     1835,
+     437,
+     0
+    ],
+    [
+     5,
+     204,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2481
+  },
+  "228": {
+   "confusion_true_by_pred": [
+    [
+     1665,
+     21,
+     0
+    ],
+    [
+     0,
+     3,
+     0
+    ],
+    [
+     9,
+     353,
+     0
+    ]
+   ],
+   "n": 2051
+  },
+  "231": {
+   "confusion_true_by_pred": [
+    [
+     1530,
+     36,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ],
+    [
+     0,
+     2,
+     0
+    ]
+   ],
+   "n": 1569
+  },
+  "232": {
+   "confusion_true_by_pred": [
+    [
+     395,
+     2,
+     0
+    ],
+    [
+     218,
+     1163,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1778
+  },
+  "233": {
+   "confusion_true_by_pred": [
+    [
+     2226,
+     1,
+     0
+    ],
+    [
+     0,
+     7,
+     0
+    ],
+    [
+     108,
+     722,
+     0
+    ]
+   ],
+   "n": 3064
+  },
+  "234": {
+   "confusion_true_by_pred": [
+    [
+     2698,
+     0,
+     0
+    ],
+    [
+     42,
+     8,
+     0
+    ],
+    [
+     0,
+     3,
+     0
+    ]
+   ],
+   "n": 2751
+  }
+ }
+}

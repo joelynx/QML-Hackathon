@@ -1,0 +1,447 @@
+{
+ "runs/E003/compare_ds2s_headline_EV2.json": {
+  "role": "headline",
+  "split": "ds2s",
+  "cand": "E003",
+  "base": "E002",
+  "cand_f1": 0.7273,
+  "base_f1": 0.7065,
+  "delta": 0.0208,
+  "ci": [
+   -0.0157,
+   0.0617
+  ],
+  "ci_level": 0.95,
+  "without_232": 0.046,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "confirmatory (pre-registered headline pair)",
+  "per_class": {
+   "N": [
+    0.0168,
+    [
+     0.0024,
+     0.0302
+    ]
+   ],
+   "S": [
+    -0.0231,
+    [
+     -0.1244,
+     0.0798
+    ]
+   ],
+   "V": [
+    0.0688,
+    [
+     0.0295,
+     0.1293
+    ]
+   ]
+  },
+  "slices": {
+   "family": [
+    "S_f1",
+    "V_f1",
+    "lowdata_k5",
+    "lowdata_k11"
+   ],
+   "m": 4,
+   "ci_level": 0.9875,
+   "rule": "favorable iff the slice CI lower bound > 0",
+   "members": {
+    "S_f1": {
+     "delta": -0.023079240727005346,
+     "ci": [
+      -0.1455727748643742,
+      0.09784272999576084
+     ],
+     "decision": "no detectable change"
+    },
+    "V_f1": {
+     "delta": 0.06879289495196095,
+     "ci": [
+      0.020664567871929898,
+      0.15427098358959215
+     ],
+     "decision": "favorable"
+    }
+   }
+  },
+  "loro_min_max": [
+   0.0111,
+   0.046
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-26T21:26:59+04:00",
+    "headline"
+   ],
+   [
+    "2026-10-26T22:15:23+04:00",
+    "headline"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-26T22:28:29+04:00",
+  "confirmed": null
+ },
+ "runs/E018/confirm_svdb.json": {
+  "role": "confirmation",
+  "split": "svdb",
+  "cand": "E003",
+  "base": "E002",
+  "cand_f1": 0.6402,
+  "base_f1": 0.6488,
+  "delta": -0.0085,
+  "ci": [
+   -0.0476,
+   0.0274
+  ],
+  "ci_level": 0.95,
+  "without_232": null,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "external confirmation (SVDB pass criterion)",
+  "per_class": {
+   "N": [
+    0.0038,
+    [
+     -0.0064,
+     0.0143
+    ]
+   ],
+   "S": [
+    -0.026,
+    [
+     -0.0775,
+     0.0245
+    ]
+   ],
+   "V": [
+    -0.0034,
+    [
+     -0.0886,
+     0.0727
+    ]
+   ]
+  },
+  "slices": null,
+  "loro_min_max": [
+   -0.0157,
+   -0.001
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-28T19:29:19+04:00",
+    "confirmation"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-28T20:01:41+04:00",
+  "confirmed": false
+ },
+ "runs/E012/compare_ds2s_secondary_E012_vs_E003.json": {
+  "role": "secondary",
+  "split": "ds2s",
+  "cand": "E012",
+  "base": "E003",
+  "cand_f1": 0.7278,
+  "base_f1": 0.7273,
+  "delta": 0.0005,
+  "ci": [
+   -0.0058,
+   0.0081
+  ],
+  "ci_level": 0.95,
+  "without_232": 0.0022,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "descriptive (not confirmatory; may follow adaptive development on ds2s)",
+  "per_class": {
+   "N": [
+    0.0008,
+    [
+     -0.001,
+     0.0023
+    ]
+   ],
+   "S": [
+    -0.0028,
+    [
+     -0.0131,
+     0.01
+    ]
+   ],
+   "V": [
+    0.0035,
+    [
+     -0.0116,
+     0.0206
+    ]
+   ]
+  },
+  "slices": null,
+  "loro_min_max": [
+   -0.0003,
+   0.0022
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-28T19:29:53+04:00",
+    "secondary"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-28T19:41:44+04:00",
+  "confirmed": null
+ },
+ "runs/E014/compare_ds2s_secondary_E014n6_vs_E003.json": {
+  "role": "secondary",
+  "split": "ds2s",
+  "cand": "E014-n6",
+  "base": "E003",
+  "cand_f1": 0.7351,
+  "base_f1": 0.7273,
+  "delta": 0.0078,
+  "ci": [
+   -0.0055,
+   0.0188
+  ],
+  "ci_level": 0.95,
+  "without_232": 0.0004,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "descriptive (not confirmatory; may follow adaptive development on ds2s)",
+  "per_class": {
+   "N": [
+    0.0017,
+    [
+     -0.0016,
+     0.0059
+    ]
+   ],
+   "S": [
+    0.0283,
+    [
+     -0.0093,
+     0.057
+    ]
+   ],
+   "V": [
+    -0.0066,
+    [
+     -0.0266,
+     0.0144
+    ]
+   ]
+  },
+  "slices": null,
+  "loro_min_max": [
+   0.0004,
+   0.0105
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-28T19:30:17+04:00",
+    "secondary"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-28T19:40:06+04:00",
+  "confirmed": null
+ },
+ "runs/E015/compare_ds2s_secondary_E015rigetti_vs_E003.json": {
+  "role": "secondary",
+  "split": "ds2s",
+  "cand": "E015-rigetti",
+  "base": "E003",
+  "cand_f1": 0.7289,
+  "base_f1": 0.7273,
+  "delta": 0.0016,
+  "ci": [
+   -0.0331,
+   0.0248
+  ],
+  "ci_level": 0.95,
+  "without_232": -0.0179,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "descriptive (not confirmatory; may follow adaptive development on ds2s)",
+  "per_class": {
+   "N": [
+    0.0003,
+    [
+     -0.008,
+     0.0112
+    ]
+   ],
+   "S": [
+    0.0576,
+    [
+     -0.0363,
+     0.1208
+    ]
+   ],
+   "V": [
+    -0.053,
+    [
+     -0.1136,
+     -0.0196
+    ]
+   ]
+  },
+  "slices": null,
+  "loro_min_max": [
+   -0.0179,
+   0.0086
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-28T19:30:43+04:00",
+    "secondary"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-28T19:42:35+04:00",
+  "confirmed": null
+ },
+ "runs/E016/compare_ds2s_secondary_E003_vs_E016.json": {
+  "role": "secondary",
+  "split": "ds2s",
+  "cand": "E003",
+  "base": "E016",
+  "cand_f1": 0.7273,
+  "base_f1": 0.7216,
+  "delta": 0.0057,
+  "ci": [
+   -0.1389,
+   0.0676
+  ],
+  "ci_level": 0.95,
+  "without_232": -0.0869,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "descriptive (not confirmatory; may follow adaptive development on ds2s)",
+  "per_class": {
+   "N": [
+    -0.0157,
+    [
+     -0.0301,
+     -0.0007
+    ]
+   ],
+   "S": [
+    0.1012,
+    [
+     -0.3074,
+     0.2699
+    ]
+   ],
+   "V": [
+    -0.0683,
+    [
+     -0.1587,
+     -0.0309
+    ]
+   ]
+  },
+  "slices": null,
+  "loro_min_max": [
+   -0.0869,
+   0.0236
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-28T19:31:07+04:00",
+    "secondary"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-28T19:41:01+04:00",
+  "confirmed": null
+ },
+ "runs/E016/compare_ds2s_secondary_E002_vs_E016.json": {
+  "role": "secondary",
+  "split": "ds2s",
+  "cand": "E002",
+  "base": "E016",
+  "cand_f1": 0.7065,
+  "base_f1": 0.7216,
+  "delta": -0.0151,
+  "ci": [
+   -0.1896,
+   0.0766
+  ],
+  "ci_level": 0.95,
+  "without_232": -0.1329,
+  "outcome_logged": "no detectable change",
+  "outcome_reason": "CI includes 0",
+  "outcome_recomputed": "no detectable change",
+  "inference": "descriptive (not confirmatory; may follow adaptive development on ds2s)",
+  "per_class": {
+   "N": [
+    -0.0325,
+    [
+     -0.0536,
+     -0.0057
+    ]
+   ],
+   "S": [
+    0.1243,
+    [
+     -0.3694,
+     0.3837
+    ]
+   ],
+   "V": [
+    -0.1371,
+    [
+     -0.2673,
+     -0.0673
+    ]
+   ]
+  },
+  "slices": null,
+  "loro_min_max": [
+   -0.1329,
+   0.0046
+  ],
+  "files_on_disk_match": true,
+  "manifests_match": true,
+  "log_entries": [
+   [
+    "2026-10-28T19:31:33+04:00",
+    "secondary"
+   ]
+  ],
+  "eval_rev": "8501643023cd2eb6",
+  "n_boot": 8000,
+  "time": "2026-10-28T19:41:01+04:00",
+  "confirmed": null
+ }
+}

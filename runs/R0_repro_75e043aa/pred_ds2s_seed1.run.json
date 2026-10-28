@@ -1,0 +1,21 @@
+{
+ "arm_id": "R0_repro_75e043aa-esn",
+ "seed": 1,
+ "split": "ds2s",
+ "config_id": "R0_repro_75e043aa-esn-cfg28",
+ "code_revision": "eval 9a1922c8898b90db / pipe 75e043aa9915baf2",
+ "model_artifact": "runs/R0_repro_75e043aa/model_seed1.npz",
+ "model_artifact_sha256": "218d15bb7696d631ba12f7258e33c4098c5b387502a6ea9f1a293acc32eeb943",
+ "reservoir_seed": 1,
+ "shot_seed": null,
+ "prediction_sha256": "8a70f0713e25c7b4b4aac42a13847c7bff8fe4e2a4d7ac1d8c29e63379089987",
+ "config": {
+  "size": 55,
+  "rho": 0.6801305020819445,
+  "leak": 0.10244788459973231,
+  "in_scale": 0.9796057536708305,
+  "density": 0.05409639694101503,
+  "bias": 0.5368532157292856
+ },
+ "lam": 0.001
+}

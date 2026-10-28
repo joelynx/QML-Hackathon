@@ -1,0 +1,37 @@
+{
+ "arm_id": "E008-E003-qrc-k11",
+ "seed": 2,
+ "split": "ds2s",
+ "config_id": "E003-qrc-cfg15-k11",
+ "code_revision": "eval 9a1922c8898b90db / pipe ad80a50e051c6820",
+ "model_artifact": "runs/E008/E003/model_seed2.npz",
+ "model_artifact_sha256": "e3174f5115dfdc94032ad7ef50a0ca05128c369cca872b3c07a0fd18a4f0ac5a",
+ "reservoir_seed": 2,
+ "shot_seed": 1002,
+ "prediction_sha256": "56fb1d19474510b6e824ce08ace4c03bd6d5fa5ba1e578fec28ec9564758f54a",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "lam": 0.1,
+ "parent_config_id": "E003-qrc-cfg15",
+ "train_records": [
+  "106",
+  "112",
+  "115",
+  "116",
+  "119",
+  "124",
+  "205",
+  "208",
+  "209",
+  "220",
+  "223"
+ ],
+ "refit_scope": "lowdata_k11",
+ "n_train_units": 25375
+}

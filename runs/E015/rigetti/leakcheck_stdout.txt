@@ -1,0 +1,5 @@
+207 141 0
+209 234 0
+114 135 0
+201 221 0
+{"exp": "E015", "device": "rigetti", "seed": 0, "arm": "qrc_noise", "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 noise 8b1226919f8ca395", "beats_checked": 731, "passed": true}

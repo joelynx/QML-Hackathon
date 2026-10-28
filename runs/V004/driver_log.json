@@ -1,0 +1,48 @@
+{
+ "pipe_revision_loaded": "55884b1fb66732b9",
+ "steps": {
+  "features": {
+   "seconds": 7.3,
+   "result": {
+    "ds1": {
+     "n": 50964,
+     "shared_pipe_revision": "843f0b0c8fe443c6",
+     "identical": {
+      "beat_id": true,
+      "record": true,
+      "win": true,
+      "rel": true,
+      "rr": true
+     }
+    },
+    "ds2s": {
+     "n": 47523,
+     "shared_pipe_revision": "697d9992c5fe5811",
+     "identical": {
+      "beat_id": true,
+      "record": true,
+      "win": true,
+      "rel": true,
+      "rr": true
+     }
+    }
+   }
+  },
+  "tune": {
+   "seconds": 434.5,
+   "result": null
+  },
+  "final04": {
+   "seconds": 45.4,
+   "result": null
+  },
+  "final59": {
+   "seconds": 43.2,
+   "result": null
+  },
+  "leakcheck": {
+   "seconds": 4.6,
+   "result": null
+  }
+ }
+}

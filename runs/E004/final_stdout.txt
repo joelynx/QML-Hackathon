@@ -1,0 +1,6 @@
+E004 mf seed 0: 80.7s
+E004 mf seed 1: 76.7s
+E004 mf seed 2: 78.6s
+E004 mf seed 3: 77.7s
+E004 mf seed 4: 75.6s
+{"exp": "E004", "seed": 0, "arm": "mf", "pipe_revision": "18b08b059ebe6518", "beats_checked": 731, "passed": true} {'207': (141, 0), '209': (234, 0), '114': (135, 0), '201': (221, 0)}

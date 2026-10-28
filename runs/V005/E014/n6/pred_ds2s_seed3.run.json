@@ -1,0 +1,24 @@
+{
+ "seed": 3,
+ "split": "ds2s",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 ablate f7fe9f52db014c44",
+ "model_artifact": "runs/V005/E014/n6/model_seed3.npz",
+ "model_artifact_sha256": "e566e0e7ab7d8ef7a56df051403922f4087cb7b66e9e1c57fa4522f2d838ad60",
+ "reservoir_seed": 3,
+ "prediction_sha256": "b08dffc6f6ef40db464c5960a904cac808a5815194d331f73436ca013624766e",
+ "arm_id": "E014-qrc_n6",
+ "config_id": "E014-qrc-cfg15-n6",
+ "shot_seed": 1003,
+ "shots": 1024,
+ "n_qubits": 6,
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454,
+  "n_qubits": 6
+ },
+ "lam": 0.1
+}

@@ -1,0 +1,4 @@
+[headline] E003 vs E002 on ds2s: delta +0.0208 CI0.9500 [-0.0157, +0.0617] (without 232: 0.04604936739944976) -> no detectable change (CI includes 0)
+  slice S_f1: delta -0.0231 CI0.9875 [-0.1456, +0.0978] -> no detectable change
+  slice V_f1: delta +0.0688 CI0.9875 [+0.0207, +0.1543] -> favorable
+wrote runs/E003/compare_ds2s_headline.json

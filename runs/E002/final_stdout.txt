@@ -1,0 +1,10 @@
+E002 esn seed 0: 8.6s
+E002 esn seed 1: 6.4s
+E002 esn seed 2: 6.9s
+E002 esn seed 3: 6.5s
+E002 esn seed 4: 7.0s
+E002 esn seed 5: 8.0s
+E002 esn seed 6: 6.5s
+E002 esn seed 7: 6.4s
+E002 esn seed 8: 7.2s
+E002 esn seed 9: 7.1s

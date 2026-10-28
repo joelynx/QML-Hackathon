@@ -1,0 +1,6 @@
+E010 esn seed 0: 8.4s
+E010 esn seed 1: 6.7s
+E010 esn seed 2: 6.5s
+E010 esn seed 3: 6.6s
+E010 esn seed 4: 6.7s
+{"exp": "E010", "seed": 0, "arm": "esn", "pipe_revision": "55884b1fb66732b9", "beats_checked": 731, "passed": true} {'207': (141, 0), '209': (234, 0), '114': (135, 0), '201': (221, 0)}

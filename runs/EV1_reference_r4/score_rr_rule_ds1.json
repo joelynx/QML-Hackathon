@@ -1,0 +1,594 @@
+{
+ "split": "ds1",
+ "candidate_id": "rr_rule",
+ "pred_file": "runs/EV1_reference_r4/pred_rr_rule_ds1.csv",
+ "pred_sha256": "5e8fa5dec31e010229d116ed8ac7601b35afb33b0fee1611b18ae95b2db322c8",
+ "labels_sha256": "3e28ee8f80477ce654c4f8962647643adb9532b17d529d4dc6789af5beb6ae3c",
+ "scorer": {
+  "ev": "EV1",
+  "code_revision": "a2439884ff2f1909",
+  "practical_gain": 0.02,
+  "suspicious_gain": 0.05,
+  "ci_level": 0.95,
+  "slice_ci_level": 0.9875,
+  "slice_family": [
+   "S_f1",
+   "V_f1",
+   "lowdata_k5",
+   "lowdata_k11"
+  ],
+  "n_boot": 8000,
+  "boot_seed": 20261026,
+  "n_seeds": 5,
+  "lookahead_sec": 1.0,
+  "edge_sec": 1.0
+ },
+ "time": "2026-10-26T18:37:33+04:00",
+ "command": "C:\\Users\\admin\\Desktop\\Water Hackathon\\quantum_healthcare\\src\\qhc\\evaluate.py score --split ds1 --pred runs/EV1_reference_r4/pred_rr_rule_ds1.csv --id rr_rule --out runs/EV1_reference_r4/score_rr_rule_ds1.json",
+ "macro_f1": 0.3919742092168618,
+ "accuracy": 0.8957302837244272,
+ "per_class": {
+  "N": {
+   "support": 45813,
+   "predicted": 45940,
+   "sensitivity": 0.976011175867112,
+   "ppv": 0.9733130169786678,
+   "f1": 0.9746602290933266,
+   "nsv_record_avg_sensitivity": 0.9766581159378016,
+   "nsv_record_avg_ppv": 0.9723963398726372,
+   "nsv_class_false_flags_per_hour": null
+  },
+  "S": {
+   "support": 943,
+   "predicted": 4602,
+   "sensitivity": 0.591728525980912,
+   "ppv": 0.121251629726206,
+   "f1": 0.2012623985572588,
+   "nsv_record_avg_sensitivity": 0.6794951333719252,
+   "nsv_record_avg_ppv": 0.2574839074287908,
+   "nsv_class_false_flags_per_hour": 366.50517482517483,
+   "auprc": 0.07936547522101191
+  },
+  "V": {
+   "support": 3786,
+   "predicted": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "f1": 0.0,
+   "nsv_record_avg_sensitivity": 0.0,
+   "nsv_record_avg_ppv": null,
+   "nsv_class_false_flags_per_hour": 0.0,
+   "auprc": 0.07490799730916861
+  }
+ },
+ "confusion_true_by_pred": [
+  [
+   44714,
+   1099,
+   0
+  ],
+  [
+   385,
+   558,
+   0
+  ],
+  [
+   841,
+   2945,
+   0
+  ]
+ ],
+ "n_predict": 50964,
+ "n_units": 50542,
+ "nonunit_predictions": {
+  "F": {
+   "N": 400,
+   "S": 14,
+   "V": 0
+  },
+  "Q": {
+   "N": 7,
+   "S": 1,
+   "V": 0
+  }
+ },
+ "paper_compatible": {
+  "VEB": {
+   "tp": 0,
+   "fn": 3786,
+   "fp": 0,
+   "tn": 47178,
+   "not_scored": 0,
+   "sensitivity": 0.0,
+   "ppv": null,
+   "fpr": 0.0
+  },
+  "SVEB": {
+   "tp": 558,
+   "fn": 385,
+   "fp": 4058,
+   "tn": 45962,
+   "not_scored": 1,
+   "sensitivity": 0.591728525980912,
+   "ppv": 0.12088388214904679,
+   "fpr": 0.08112754898040783
+  },
+  "confusion_truth5_by_pred": [
+   [
+    44714,
+    1099,
+    0
+   ],
+   [
+    385,
+    558,
+    0
+   ],
+   [
+    841,
+    2945,
+    0
+   ],
+   [
+    400,
+    14,
+    0
+   ],
+   [
+    7,
+    1,
+    0
+   ]
+  ]
+ },
+ "review_burden": {
+  "hours": 11.033950617283951,
+  "ectopic_flags_per_hour": 418.43580419580417,
+  "normal_beats_flagged_per_hour": 99.60167832167832,
+  "f_q_beats_flagged_per_hour": 1.3594405594405594,
+  "s_v_class_swaps_per_hour": 266.9034965034965,
+  "missed_ectopic_per_hour": 111.11160839160839
+ },
+ "per_record": {
+  "101": {
+   "confusion_true_by_pred": [
+    [
+     1857,
+     1,
+     0
+    ],
+    [
+     1,
+     2,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1861
+  },
+  "106": {
+   "confusion_true_by_pred": [
+    [
+     1488,
+     17,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     520,
+     0
+    ]
+   ],
+   "n": 2025
+  },
+  "108": {
+   "confusion_true_by_pred": [
+    [
+     1732,
+     6,
+     0
+    ],
+    [
+     0,
+     4,
+     0
+    ],
+    [
+     0,
+     17,
+     0
+    ]
+   ],
+   "n": 1759
+  },
+  "109": {
+   "confusion_true_by_pred": [
+    [
+     2488,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     19,
+     19,
+     0
+    ]
+   ],
+   "n": 2526
+  },
+  "112": {
+   "confusion_true_by_pred": [
+    [
+     2535,
+     0,
+     0
+    ],
+    [
+     1,
+     1,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2537
+  },
+  "114": {
+   "confusion_true_by_pred": [
+    [
+     1818,
+     0,
+     0
+    ],
+    [
+     5,
+     7,
+     0
+    ],
+    [
+     6,
+     37,
+     0
+    ]
+   ],
+   "n": 1873
+  },
+  "115": {
+   "confusion_true_by_pred": [
+    [
+     1923,
+     27,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 1950
+  },
+  "116": {
+   "confusion_true_by_pred": [
+    [
+     2299,
+     0,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ],
+    [
+     1,
+     108,
+     0
+    ]
+   ],
+   "n": 2409
+  },
+  "118": {
+   "confusion_true_by_pred": [
+    [
+     2163,
+     1,
+     0
+    ],
+    [
+     7,
+     89,
+     0
+    ],
+    [
+     2,
+     14,
+     0
+    ]
+   ],
+   "n": 2276
+  },
+  "119": {
+   "confusion_true_by_pred": [
+    [
+     1539,
+     2,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     1,
+     443,
+     0
+    ]
+   ],
+   "n": 1985
+  },
+  "122": {
+   "confusion_true_by_pred": [
+    [
+     2472,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2472
+  },
+  "124": {
+   "confusion_true_by_pred": [
+    [
+     1534,
+     0,
+     0
+    ],
+    [
+     30,
+     1,
+     0
+    ],
+    [
+     31,
+     16,
+     0
+    ]
+   ],
+   "n": 1612
+  },
+  "201": {
+   "confusion_true_by_pred": [
+    [
+     1372,
+     261,
+     0
+    ],
+    [
+     1,
+     127,
+     0
+    ],
+    [
+     72,
+     126,
+     0
+    ]
+   ],
+   "n": 1959
+  },
+  "203": {
+   "confusion_true_by_pred": [
+    [
+     1807,
+     720,
+     0
+    ],
+    [
+     0,
+     2,
+     0
+    ],
+    [
+     25,
+     419,
+     0
+    ]
+   ],
+   "n": 2973
+  },
+  "205": {
+   "confusion_true_by_pred": [
+    [
+     2569,
+     0,
+     0
+    ],
+    [
+     0,
+     3,
+     0
+    ],
+    [
+     15,
+     56,
+     0
+    ]
+   ],
+   "n": 2643
+  },
+  "207": {
+   "confusion_true_by_pred": [
+    [
+     1521,
+     21,
+     0
+    ],
+    [
+     96,
+     10,
+     0
+    ],
+    [
+     93,
+     116,
+     0
+    ]
+   ],
+   "n": 1857
+  },
+  "208": {
+   "confusion_true_by_pred": [
+    [
+     1555,
+     29,
+     0
+    ],
+    [
+     2,
+     0,
+     0
+    ],
+    [
+     349,
+     642,
+     0
+    ]
+   ],
+   "n": 2577
+  },
+  "209": {
+   "confusion_true_by_pred": [
+    [
+     2615,
+     4,
+     0
+    ],
+    [
+     214,
+     169,
+     0
+    ],
+    [
+     1,
+     0,
+     0
+    ]
+   ],
+   "n": 3003
+  },
+  "215": {
+   "confusion_true_by_pred": [
+    [
+     3190,
+     1,
+     0
+    ],
+    [
+     0,
+     3,
+     0
+    ],
+    [
+     32,
+     132,
+     0
+    ]
+   ],
+   "n": 3358
+  },
+  "220": {
+   "confusion_true_by_pred": [
+    [
+     1950,
+     1,
+     0
+    ],
+    [
+     6,
+     88,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ]
+   ],
+   "n": 2045
+  },
+  "223": {
+   "confusion_true_by_pred": [
+    [
+     2042,
+     1,
+     0
+    ],
+    [
+     22,
+     51,
+     0
+    ],
+    [
+     194,
+     279,
+     0
+    ]
+   ],
+   "n": 2589
+  },
+  "230": {
+   "confusion_true_by_pred": [
+    [
+     2245,
+     7,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ]
+   ],
+   "n": 2253
+  }
+ }
+}

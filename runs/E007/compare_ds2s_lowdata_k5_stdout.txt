@@ -1,0 +1,3 @@
+[lowdata_k5] E007-E003-k5 vs E007-E002-k5 on ds2s: delta -0.0086 CI0.9875 [-0.0858, +0.0794] (without 232: 0.04245418217324537) -> no detectable change (CI includes 0)
+  slice lowdata_k5: delta -0.0086 CI0.9875 [-0.0858, +0.0794] -> no detectable change
+wrote runs/E007/compare_ds2s_lowdata_k5.json

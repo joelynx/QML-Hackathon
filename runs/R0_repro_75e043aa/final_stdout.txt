@@ -1,0 +1,9 @@
+R0_repro_75e043aa esn seed 0: 8.5s
+R0_repro_75e043aa esn seed 1: 6.9s
+R0_repro_75e043aa esn seed 2: 7.1s
+R0_repro_75e043aa esn seed 3: 6.6s
+R0_repro_75e043aa esn seed 4: 7.0s
+
+real	0m46.335s
+user	0m0.000s
+sys	0m0.030s

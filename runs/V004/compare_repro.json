@@ -1,0 +1,114 @@
+{
+ "tuning": {
+  "n_lines": 30,
+  "configs_equal": true,
+  "best_lam_equal_all_lines": true,
+  "max_abs_score_diff": 0.00032506425908163106,
+  "pipe_revisions": [
+   "55884b1fb66732b9"
+  ]
+ },
+ "selected": {
+  "critic": {
+   "index": 28,
+   "arm": "esn",
+   "config": {
+    "size": 55,
+    "rho": 0.6801305020819445,
+    "leak": 0.10244788459973231,
+    "in_scale": 0.9796057536708305,
+    "density": 0.05409639694101503,
+    "bias": 0.5368532157292856
+   },
+   "lam": 0.001,
+   "score": 0.6744868148588367,
+   "n_configs": 30
+  },
+  "same_index_config_lam": true,
+  "score_diff": 7.630071679098904e-05
+ },
+ "ds2s_pred": {
+  "0": {
+   "critic_sha": "6996d03d8dddc1e2a6a0523f75ded867e2530c15461db81487b0d6b72c2ba7cc",
+   "equals_logged_headline_input": true
+  },
+  "1": {
+   "critic_sha": "8a70f0713e25c7b4b4aac42a13847c7bff8fe4e2a4d7ac1d8c29e63379089987",
+   "equals_logged_headline_input": true
+  },
+  "2": {
+   "critic_sha": "0cacdc4c2f47ea9347493a6fdd20a087456e5e5ad1a38a3a2e2d698fd1ddbbdc",
+   "equals_logged_headline_input": true
+  },
+  "3": {
+   "critic_sha": "cc2cfa437a2861ed79041e4a92474aef93183ab89f2a97013a0b36c4bb12fc91",
+   "equals_logged_headline_input": true
+  },
+  "4": {
+   "critic_sha": "8511ccea894187a57660fc41628f233a4d689e998660c00f5f4b5289a6ab68ee",
+   "equals_logged_headline_input": true
+  }
+ },
+ "oof_ds1_identical": {
+  "0": true,
+  "1": true,
+  "2": true,
+  "3": true,
+  "4": true,
+  "5": true,
+  "6": true,
+  "7": true,
+  "8": true,
+  "9": true
+ },
+ "model_arrays": {
+  "0": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "1": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "2": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "3": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "4": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "5": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "6": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "7": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "8": {
+   "same_keys": true,
+   "arrays_identical": true
+  },
+  "9": {
+   "same_keys": true,
+   "arrays_identical": true
+  }
+ },
+ "leakcheck": {
+  "exp": "V004/R0",
+  "seed": 0,
+  "arm": "esn",
+  "pipe_revision": "55884b1fb66732b9",
+  "beats_checked": 731,
+  "passed": true
+ }
+}

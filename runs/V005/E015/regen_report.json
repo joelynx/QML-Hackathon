@@ -1,0 +1,104 @@
+{
+ "seeds": {
+  "0": {
+   "regen_sha256": "b12511ff638b5c0f6cbc2a96f2254acaa8cad2888a884a5b601f55d1210654c5",
+   "scored_file_sha256": "b12511ff638b5c0f6cbc2a96f2254acaa8cad2888a884a5b601f55d1210654c5",
+   "manifest_prediction_sha256": "b12511ff638b5c0f6cbc2a96f2254acaa8cad2888a884a5b601f55d1210654c5",
+   "logged_sha256": "b12511ff638b5c0f6cbc2a96f2254acaa8cad2888a884a5b601f55d1210654c5",
+   "artifact_sha256": "3a49eebaf8aa79a8a8837ebbd2874b746e31e49bb82d13f660509b026d99486d",
+   "manifest_artifact_sha256": "3a49eebaf8aa79a8a8837ebbd2874b746e31e49bb82d13f660509b026d99486d",
+   "artifact_unchanged": true,
+   "noise_meta": {
+    "q1": 0.00453044353041776,
+    "q2": 0.014595354716949449,
+    "e01": 0.031000000000000028,
+    "e10": 0.031000000000000028,
+    "trajectories": 32,
+    "shots_per_trajectory": 32
+   },
+   "seconds": 101.0,
+   "match_all": true,
+   "artifact_match": true
+  },
+  "1": {
+   "regen_sha256": "8360ff36eaedc315940c97df876a40e457e8650cff1ed9b397fd5a2ba71d6839",
+   "scored_file_sha256": "8360ff36eaedc315940c97df876a40e457e8650cff1ed9b397fd5a2ba71d6839",
+   "manifest_prediction_sha256": "8360ff36eaedc315940c97df876a40e457e8650cff1ed9b397fd5a2ba71d6839",
+   "logged_sha256": "8360ff36eaedc315940c97df876a40e457e8650cff1ed9b397fd5a2ba71d6839",
+   "artifact_sha256": "b6c2972013205a9e62685f4e5661be483a03ac4cc0af76df00a9f082acf0f08e",
+   "manifest_artifact_sha256": "b6c2972013205a9e62685f4e5661be483a03ac4cc0af76df00a9f082acf0f08e",
+   "artifact_unchanged": true,
+   "noise_meta": {
+    "q1": 0.00453044353041776,
+    "q2": 0.014595354716949449,
+    "e01": 0.031000000000000028,
+    "e10": 0.031000000000000028,
+    "trajectories": 32,
+    "shots_per_trajectory": 32
+   },
+   "seconds": 71.4,
+   "match_all": true,
+   "artifact_match": true
+  },
+  "2": {
+   "regen_sha256": "31b800c03cefd491064f41ac03cec7c4dacda14d61d151342dd074d037a96e9a",
+   "scored_file_sha256": "31b800c03cefd491064f41ac03cec7c4dacda14d61d151342dd074d037a96e9a",
+   "manifest_prediction_sha256": "31b800c03cefd491064f41ac03cec7c4dacda14d61d151342dd074d037a96e9a",
+   "logged_sha256": "31b800c03cefd491064f41ac03cec7c4dacda14d61d151342dd074d037a96e9a",
+   "artifact_sha256": "de3da08e82464e7404b7a8a18a8bf0f8ed98c811f26e0d3e0d188e6d4e00b117",
+   "manifest_artifact_sha256": "de3da08e82464e7404b7a8a18a8bf0f8ed98c811f26e0d3e0d188e6d4e00b117",
+   "artifact_unchanged": true,
+   "noise_meta": {
+    "q1": 0.00453044353041776,
+    "q2": 0.014595354716949449,
+    "e01": 0.031000000000000028,
+    "e10": 0.031000000000000028,
+    "trajectories": 32,
+    "shots_per_trajectory": 32
+   },
+   "seconds": 69.3,
+   "match_all": true,
+   "artifact_match": true
+  },
+  "3": {
+   "regen_sha256": "ab58c43aedfb83989526bf858c4c985e0f53f5b3e5a04545d8a4d67ba767cb0f",
+   "scored_file_sha256": "ab58c43aedfb83989526bf858c4c985e0f53f5b3e5a04545d8a4d67ba767cb0f",
+   "manifest_prediction_sha256": "ab58c43aedfb83989526bf858c4c985e0f53f5b3e5a04545d8a4d67ba767cb0f",
+   "logged_sha256": "ab58c43aedfb83989526bf858c4c985e0f53f5b3e5a04545d8a4d67ba767cb0f",
+   "artifact_sha256": "02b29ce290b0a918c8dd36abb6932fb7649afcbafc1018dc5e3e9ae44845ba57",
+   "manifest_artifact_sha256": "02b29ce290b0a918c8dd36abb6932fb7649afcbafc1018dc5e3e9ae44845ba57",
+   "artifact_unchanged": true,
+   "noise_meta": {
+    "q1": 0.00453044353041776,
+    "q2": 0.014595354716949449,
+    "e01": 0.031000000000000028,
+    "e10": 0.031000000000000028,
+    "trajectories": 32,
+    "shots_per_trajectory": 32
+   },
+   "seconds": 71.3,
+   "match_all": true,
+   "artifact_match": true
+  },
+  "4": {
+   "regen_sha256": "85367739ff317de01cdbde28737eb79d537fe932190c40bd3ceb174ff8b32407",
+   "scored_file_sha256": "85367739ff317de01cdbde28737eb79d537fe932190c40bd3ceb174ff8b32407",
+   "manifest_prediction_sha256": "85367739ff317de01cdbde28737eb79d537fe932190c40bd3ceb174ff8b32407",
+   "logged_sha256": "85367739ff317de01cdbde28737eb79d537fe932190c40bd3ceb174ff8b32407",
+   "artifact_sha256": "dc80f3aa9ddc80bd97df6ced46e74a924bef9043be8424b795f370347f3c27b2",
+   "manifest_artifact_sha256": "dc80f3aa9ddc80bd97df6ced46e74a924bef9043be8424b795f370347f3c27b2",
+   "artifact_unchanged": true,
+   "noise_meta": {
+    "q1": 0.00453044353041776,
+    "q2": 0.014595354716949449,
+    "e01": 0.031000000000000028,
+    "e10": 0.031000000000000028,
+    "trajectories": 32,
+    "shots_per_trajectory": 32
+   },
+   "seconds": 68.5,
+   "match_all": true,
+   "artifact_match": true
+  }
+ }
+}

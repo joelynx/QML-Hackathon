@@ -1,0 +1,1 @@
+{"device_arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q", "mode": "programset", "max_tasks": 1, "max_usd": 18}

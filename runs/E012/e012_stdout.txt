@@ -1,0 +1,7 @@
+code_revision eval 8501643023cd2eb6 / pipe 55884b1fb66732b9 / p4 ablate f7fe9f52db014c44
+E012 seed 0: OOF lam0.1 0.6680 (E003 0.6682) agree 0.9855 34.2s
+E012 seed 1: OOF lam0.1 0.6689 (E003 0.6652) agree 0.9852 38.7s
+E012 seed 2: OOF lam0.1 0.6692 (E003 0.6699) agree 0.9855 37.3s
+E012 seed 3: OOF lam0.1 0.6654 (E003 0.6616) agree 0.9845 35.3s
+E012 seed 4: OOF lam0.1 0.6751 (E003 0.6707) agree 0.9864 37.1s
+E012 check_runs passed; mean OOF 0.6693104187115602 E003 0.6671311604186211

@@ -1,0 +1,9 @@
+E003 ds2s seed 0: b1450a4e6c69cc79 artifact a30c951215032d5b unchanged, reservoir arrays equal, 5.1s
+E003 ds2s seed 1: e76ac40d02f1eeb7 artifact 39a56b1b1b3e67de unchanged, reservoir arrays equal, 4.8s
+E003 ds2s seed 2: 24ea20f4a4bc91f1 artifact cb005da3df5429ce unchanged, reservoir arrays equal, 5.1s
+E003 ds2s seed 3: 903d9d6f454e1c20 artifact b23e1025d55cbe88 unchanged, reservoir arrays equal, 4.6s
+E003 ds2s seed 4: ff2c09b9c6f382e7 artifact bc5d6d49ead27e74 unchanged, reservoir arrays equal, 5.0s
+
+real	0m29.480s
+user	0m0.015s
+sys	0m0.000s

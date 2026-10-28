@@ -1,0 +1,9 @@
+E002 svdb seed 0: 55da4b6fd2233da1 artifact 0f5b4333465d9e48 unchanged, reservoir arrays equal, 2.1s
+E002 svdb seed 1: cf05f375de00fc73 artifact 58d5ede9934003b5 unchanged, reservoir arrays equal, 2.0s
+E002 svdb seed 2: a19b6a4376ff4244 artifact 3d4a76f788c7f69a unchanged, reservoir arrays equal, 1.9s
+E002 svdb seed 3: ce9aa662eaeb29e9 artifact ee95d1c4898ad238 unchanged, reservoir arrays equal, 2.5s
+E002 svdb seed 4: 59c7ebaf44b268eb artifact d3cf14e13e605dc9 unchanged, reservoir arrays equal, 1.7s
+
+real	0m18.865s
+user	0m0.000s
+sys	0m0.031s

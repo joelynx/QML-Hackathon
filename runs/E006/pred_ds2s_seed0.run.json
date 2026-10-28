@@ -1,0 +1,13 @@
+{
+ "arm_id": "E006-rr",
+ "seed": 0,
+ "split": "ds2s",
+ "config_id": "E006-rr",
+ "lam": 0.1,
+ "code_revision": "eval 9a1922c8898b90db / pipe 75e043aa9915baf2",
+ "model_artifact": "runs/E006/model_seed0.npz",
+ "model_artifact_sha256": "a0f6f446cd429f38fd57987de9de57727a83bc55741c9cb0c4aed9c63224c1d6",
+ "reservoir_seed": null,
+ "shot_seed": null,
+ "prediction_sha256": "d60aee56504d186b58bc00b0ec49f4bfe27bdcc93bf2d5e000bc7f65638baa1e"
+}

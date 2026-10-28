@@ -1,0 +1,68 @@
+{
+ "n_beats_complete": 24,
+ "devices": [
+  "local:braket_sv"
+ ],
+ "n_tasks": 96,
+ "vs_exact": {
+  "mean_abs_diff": 0.017551915542865323,
+  "mean_abs_diff_by_snapshot": [
+   0.011341235944719025,
+   0.017426349699995954,
+   0.020301900439098422,
+   0.02113817608764789
+  ],
+  "mean_abs_diff_Z": 0.01479206078450564,
+  "mean_abs_diff_ZZ": 0.018165216600278585,
+  "median_feature_corr": 0.9921038340263058,
+  "median_feature_corr_by_snapshot": [
+   0.9718196931696177,
+   0.9962335993459625,
+   0.9931830322064669,
+   0.9933978120040484
+  ],
+  "pooled_corr": 0.9971613867985735,
+  "zz_shrink_slope": 0.9996429867056871
+ },
+ "vs_shot": {
+  "mean_abs_diff": 0.02521750710227273,
+  "mean_abs_diff_by_snapshot": [
+   0.016110321969696965,
+   0.024857954545454544,
+   0.029675662878787878,
+   0.030226089015151517
+  ],
+  "mean_abs_diff_Z": 0.020926920572916667,
+  "mean_abs_diff_ZZ": 0.02617097077546296,
+  "median_feature_corr": 0.9839656231372612,
+  "median_feature_corr_by_snapshot": [
+   0.9474114225830212,
+   0.9912959102466175,
+   0.9857531596953785,
+   0.9882998064508566
+  ],
+  "pooled_corr": 0.9941265782217046,
+  "zz_shrink_slope": 0.9920567001392101
+ },
+ "shot_vs_exact_mean_abs_diff": 0.01776808314025402,
+ "pred_agree_hw_vs_shot": 0.8333333333333334,
+ "pred_agree_hw_vs_exact": 0.9166666666666666,
+ "pred_agree_shot_vs_exact": 0.8333333333333334,
+ "pred_counts": {
+  "hw": {
+   "N": 8,
+   "S": 8,
+   "V": 8
+  },
+  "shot": {
+   "N": 8,
+   "S": 8,
+   "V": 8
+  },
+  "exact": {
+   "N": 10,
+   "S": 6,
+   "V": 8
+  }
+ }
+}

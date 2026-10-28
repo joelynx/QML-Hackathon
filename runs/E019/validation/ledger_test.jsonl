@@ -1,0 +1,1 @@
+{"time_utc": "2026-10-28T14:58:34.271631+00:00", "event": "pre-submit", "device": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q", "plan": "plan_rigetti_b48.json", "mode": "programset", "first": "rigetti_b48_k1_c000", "n_exec": 40, "shots_per_exec": 1024, "est_usd": 17.708, "cum_after_usd": 17.708}

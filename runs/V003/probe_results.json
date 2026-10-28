@@ -1,0 +1,79 @@
+{
+ "P1_headline_after_peeks": {
+  "score_quantum_candidate_on_ds2s": "accepted",
+  "diagnostic_5x5_no_manifest_check_on_ds2s": "accepted",
+  "secondary_pair_A_on_ds2s": "accepted",
+  "headline_pair_B_after_seeing_A_and_B": "accepted",
+  "full_eval_log_entries": [
+   [
+    "score",
+    null
+   ],
+   [
+    "compare",
+    "diagnostic"
+   ],
+   [
+    "compare",
+    "secondary"
+   ],
+   [
+    "compare",
+    "headline"
+   ]
+  ]
+ },
+ "P1b_lowdata_not_immutable": {
+  "lowdata_k5_first": "accepted",
+  "first_slice": "no detectable change",
+  "lowdata_k5_second_different_files": "accepted",
+  "second_slice": "favorable"
+ },
+ "P2_copies_pass": {
+  "headline_with_5_copies_of_one_run": "accepted",
+  "distinct_prediction_hashes": 1,
+  "distinct_artifact_hashes": 1
+ },
+ "P2b_mixed_configs_and_shared_arm_id": {
+  "secondary_with_5_configs_and_baseline_arm_id_equal_to_candidate": "accepted"
+ },
+ "P3_P4_confirmation": {
+  "confirmation_with_unwritable_out": "error: FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\\\Users\\\\admin\\\\Desktop\\\\Water Hackathon\\\\quantum_healthcare\\\\runs\\\\V003\\\\probe_tmp\\\\p3_confirm_out\\\\not_a_dir.txt'",
+  "access_log_entries_after": 1,
+  "output_written": false,
+  "repair_access_with_different_model_artifacts": "accepted",
+  "artifact_sets_equal_across_accesses": false
+ },
+ "P5_headline_rerun_path_spelling": {
+  "first_headline_relative_paths": "accepted",
+  "identical_files_absolute_paths": "refused: a headline pair was already evaluated on ds2s (['Q', 'C'], 2026-10-26T18:51:28+04:00); later pairs use --role secondary"
+ },
+ "B1_bootstrap_bruteforce": {
+  "macro_ci_scorer": [
+   0.051765159727351615,
+   0.2358188467463124
+  ],
+  "macro_ci_bruteforce": [
+   0.051765159727351615,
+   0.2358188467463124
+  ],
+  "auprc_S_ci_scorer": [
+   0.11959319985432933,
+   0.4578581017184606
+  ],
+  "auprc_S_ci_bruteforce": [
+   0.11959319985432938,
+   0.45785810171846053
+  ],
+  "auprc_V_ci_scorer": [
+   0.08330845002365131,
+   0.3932708329110135
+  ],
+  "auprc_V_ci_bruteforce": [
+   0.08330845002365127,
+   0.3932708329110135
+  ],
+  "macro_match": true,
+  "auprc_match": true
+ }
+}

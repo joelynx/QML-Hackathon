@@ -1,0 +1,21 @@
+{
+ "arm_id": "E011-qrc",
+ "seed": 2,
+ "split": "ds2s",
+ "config_id": "E011-qrc-cfg15",
+ "code_revision": "eval 8501643023cd2eb6 / pipe 55884b1fb66732b9",
+ "model_artifact": "runs/E011/model_seed2.npz",
+ "model_artifact_sha256": "12c64a67b2fb47ecdbd5c621c33d2f1df66400782044e288940e841e73b0521f",
+ "reservoir_seed": 2,
+ "shot_seed": 1002,
+ "prediction_sha256": "24ea20f4a4bc91f1788a393598db1d5d2ce48e3a2a7c99c708ca9556308751ba",
+ "config": {
+  "in_scale": 0.3168896563622144,
+  "J": 0.10612427232347672,
+  "h": 0.15868034322631924,
+  "depth": 2,
+  "topology": "ring",
+  "disorder": 0.42064771253862454
+ },
+ "lam": 0.1
+}
