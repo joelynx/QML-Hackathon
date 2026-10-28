@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Reading Heartbeats with a Quantum Reservoir</title>
+<style>
+@page {
+  size: A4;
+  margin: 24mm 24mm 22mm 24mm;
+  @top-right {
+    content: "Quantum Healthcare Hackathon 2026 \2013  Quantum reservoir ECG";
+    font-family: Cambria, "Cambria Math", serif; font-size: 9pt; color: #111;
+    vertical-align: bottom; padding-bottom: 2.2mm; border-bottom: 0.6pt solid #111;
+  }
+  @bottom-center { content: counter(page); font-family: Cambria, serif; font-size: 10pt; }
+}
+@page :first { @top-right { content: none; border-bottom: none; } }
+
+:root { --blue: #2f64b5; --callout: #fdf5d3; --callout-edge: #eadb9a; --rule: #111; }
+html { font-variant-ligatures: none; font-family: Cambria, "Cambria Math", "Times New Roman", serif; font-size: 10.6pt; line-height: 1.38; color: #111; }
+body { margin: 0; }
+p { margin: 0 0 0.55em 0; text-align: justify; hyphens: auto; orphans: 3; widows: 3; }
+a { color: inherit; text-decoration: none; }
+a.url { color: var(--blue); font-family: Consolas, monospace; font-size: 0.9em; }
+code, .mono { font-family: Consolas, "Courier New", monospace; font-size: 0.88em; }
+em { font-style: italic; }
+math { font-family: "Cambria Math"; font-size: 1.02em; }
+
+/* title block */
+.title { text-align: center; margin: 14mm 0 9mm 0; }
+.title p { text-align: center; hyphens: none; }
+.title h1 { font-size: 20pt; margin: 0 0 3mm 0; font-weight: bold; letter-spacing: 0.1pt; }
+.title .subtitle { font-size: 12.5pt; margin: 0 0 5mm 0; font-style: italic; }
+.title .byline { font-size: 11pt; margin: 0 0 2mm 0; }
+.title .date { font-size: 11pt; margin: 0; }
+
+/* contents */
+.toc .tochead { font-size: 15pt; font-weight: bold; margin: 0 0 4mm 0; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li.l2 { margin-top: 2.6mm; font-weight: bold; }
+.toc li.l3 { padding-left: 7mm; font-size: 10pt; margin-top: 0.4mm; }
+.toc .row { display: flex; align-items: baseline; }
+.toc .num { display: inline-block; min-width: 7mm; }
+.toc li.l3 .num { min-width: 9mm; }
+.toc .dots { flex: 1; overflow: hidden; white-space: nowrap; margin: 0 1.5mm; color: #444; }
+.toc .dots::after { content: ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ."; letter-spacing: 1.6pt; }
+.toc li.l2 .dots::after { content: none; }
+.toc .pg { min-width: 6mm; text-align: right; }
+
+/* headings */
+h2 { font-size: 15pt; margin: 7mm 0 3mm 0; break-after: avoid; font-weight: bold; }
+h3 { font-size: 12pt; margin: 5mm 0 2mm 0; break-after: avoid; font-weight: bold; }
+h4 { font-size: 10.6pt; margin: 3.5mm 0 1mm 0; break-after: avoid; font-weight: bold; }
+h2 .secnum { display: inline-block; min-width: 9mm; }
+h3 .secnum { display: inline-block; min-width: 11mm; }
+.newpage { break-before: page; }
+
+/* lists */
+ul, ol { margin: 0.2em 0 0.65em 0; padding-left: 6.5mm; }
+li { margin: 0.15em 0; text-align: justify; hyphens: auto; }
+ol.steps > li::marker { font-weight: bold; }
+
+/* callout */
+.callout { background: var(--callout); border-left: 0; padding: 3mm 4mm; margin: 3.5mm 0 4mm 0; break-inside: avoid; }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.blue { background: #eaf1fb; }
+.callout.grey { background: #f1f1ef; }
+
+/* figures */
+figure { margin: 4mm 0 5mm 0; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; }
+figure.w90 img { width: 90%; }
+figure.w80 img { width: 80%; }
+figure.w70 img { width: 70%; }
+figcaption { text-align: left; font-size: 9.6pt; margin-top: 2mm; line-height: 1.32; }
+figcaption .fignum { color: var(--blue); font-weight: bold; }
+
+/* tables (booktabs look) */
+table { border-collapse: collapse; margin: 3mm auto 4.5mm auto; font-size: 9.6pt; break-inside: avoid; }
+table.full { width: 100%; }
+thead th { border-top: 1.1pt solid var(--rule); border-bottom: 0.6pt solid var(--rule); padding: 1.3mm 2.2mm; text-align: left; font-weight: bold; }
+tbody td { padding: 1.0mm 2.2mm; vertical-align: top; }
+tbody tr:last-child td { border-bottom: 1.1pt solid var(--rule); }
+td.r, th.r { text-align: right; }
+td.c, th.c { text-align: center; }
+tr.best td { font-weight: bold; }
+.tabcap { text-align: center; font-size: 9.6pt; margin: 4mm 0 -1.5mm 0; font-style: italic; }
+.tabnote { font-size: 8.8pt; text-align: left; margin-top: -3mm; margin-bottom: 4mm; color: #333; }
+
+/* changelog */
+.log { border-top: 0.6pt solid #111; padding-top: 2.5mm; margin-top: 5mm; break-inside: avoid; }
+.log h4 { margin-top: 0; font-size: 11pt; word-spacing: 0.08em; }
+.log dl { display: grid; grid-template-columns: 24mm 1fr; column-gap: 3mm; row-gap: 1.2mm; margin: 0 0 2mm 0; }
+.log dt { font-weight: bold; }
+.log dd { margin: 0; text-align: justify; hyphens: auto; }
+
+/* notes */
+.notes { font-size: 8.9pt; line-height: 1.3; margin-top: 3mm; border-top: 0.5pt solid #111; width: 100%; padding-top: 1.5mm; }
+.notes p { margin: 0 0 0.35em 0; }
+sup.fn { font-size: 0.7em; }
+
+.refs p { padding-left: 8mm; text-indent: -8mm; font-size: 9.6pt; text-align: left; }
+.endrule { border-top: 2pt solid #111; margin-top: 6mm; }
+.small { font-size: 9.4pt; }
+.tag { display: inline-block; font-size: 8.4pt; padding: 0 1.4mm; border: 0.5pt solid #777; border-radius: 1mm; margin-left: 1mm; }
+.kv { display: grid; grid-template-columns: 38mm 1fr; column-gap: 3mm; row-gap: 1mm; font-size: 9.8pt; }
+.kv div:nth-child(odd) { font-weight: bold; }
+pre { font-family: Consolas, monospace; font-size: 8.3pt; background: #f5f5f3; padding: 2.5mm 3mm; white-space: pre-wrap; break-inside: avoid; line-height: 1.3; }
+</style>
+</head>
+<body>
+
+<div class="title">
+  <h1>Reading Heartbeats with a Quantum Reservoir</h1>
+  <p class="subtitle">A matched, pre-registered test on patients the model has never seen, from GPU simulation to a real quantum processor</p>
+  <p class="byline">Quantum Healthcare Hackathon 2026 &middot; National / Hybrid track</p>
+  <p class="date">26&ndash;28 October 2026 &middot; Code and evidence: <a class="url" href="https://github.com/joelynx/QML-Hackathon">github.com/joelynx/QML-Hackathon</a></p>
+</div>
+
+<!--TOC-->
+
+<h2 id="s-glance" class="newpage nonum">The project on one page</h2>
+
+<div class="kv">
+  <div>The question</div><div>Can a quantum reservoir help software flag abnormal heartbeats for a patient it has never seen, compared with a classical model that is matched to it in every other respect?</div>
+  <div>Data</div><div>MIT-BIH Arrhythmia Database: 21 held-out test patients, 47,129 scored beats. External check: MIT-BIH Supraventricular Arrhythmia Database (SVDB), 78 records, 184,286 beats.</div>
+  <div>Quantum model</div><div>A 10-qubit quantum reservoir: the beat is written into qubit rotations, the qubits interact for a fixed time, and 220 measured averages become the features.</div>
+  <div>Classical baseline</div><div>An echo state network (a classical reservoir) with the same input, the same 8 heart-rhythm features, the same 220-feature budget, the same readout and the same tuning budget.</div>
+  <div>Amazon Braket</div><div>Calibration-driven noise simulation for two quantum processors, validation of our native-gate programs on Braket&rsquo;s LocalSimulator, and one real task on Rigetti Cepheus-1-108Q (48 beats, about USD 17.71).</div>
+  <div>Headline result</div><div>Overall: inconclusive (+0.021 macro-F1, 95% interval [&minus;0.016, +0.062]). Ventricular beats: F1 0.805 &rarr; 0.874 and false ventricular alarms roughly halved on the test split, with four qualifications: a classical mean-field model of the same circuit reproduces it, gradient boosting exceeds it, simulated device noise shrinks it, and it was not confirmed on SVDB.</div>
+</div>
+
+<div class="callout">
+<p><b>The one-sentence version.</b> We built the fairest comparison we could between a quantum and a classical reservoir for heartbeat classification, found a favorable ventricular-beat result against the matched classical model on the MIT-BIH test split. Then a classical mean-field model of the same circuit reproduced it, a second database did not confirm it, and on a real quantum processor the features differed strongly from simulation.</p>
+</div>
+
+<h3 id="s-strengths" class="nonum">What makes this work strong</h3>
+<ul>
+<li><b>Patient-independent by construction.</b> Training and test patients never overlap. We found that the standard inter-patient split is not subject-disjoint (two records come from the same person) and fixed it.</li>
+<li><b>Decided before we looked.</b> The metric, split, decision rule and four sub-questions were written down before any tuning, and the evaluation was approved by a human before any model was scored on the test patients. The evaluation code enforces the order of test access and logs every access.</li>
+<li><b>Matched baseline and real controls.</b> The classical baseline differs from the quantum model in one box of the pipeline only. Four further models test where any effect comes from.</li>
+<li><b>Checked twice.</b> A pre-registered run on a second database (which did not confirm the ventricular gain), two independent verifications by reviewer agents, and a byte-for-byte rebuild of the headline from a clean computer and a fresh data download.</li>
+<li><b>All the way to hardware.</b> The same circuit was run through shot noise, realistic device noise, Amazon Braket&rsquo;s simulator and a real Rigetti Cepheus-1-108Q processor.</li>
+</ul>
+
+<h3 id="s-novel" class="nonum">What is new</h3>
+<p>Only the first point is a priority claim, and only as far as our literature search reaches; the others are design contributions of this project.</p>
+<ul>
+<li>To our search (about 31 papers, 26 October 2026; not a systematic review), the first quantum reservoir study on MIT-BIH with an inter-patient split <em>and</em> a matched classical reservoir.</li>
+<li>A <b>patient-relative input</b>: each beat is compared with that patient&rsquo;s own recent beats before it enters either reservoir.</li>
+<li>The <b>mean-field test</b> used as an attribution tool: the identical circuit run without entanglement, to separate &ldquo;a quantum-circuit feature map helps&rdquo; from &ldquo;quantum correlations help&rdquo;.</li>
+<li>A <b>noise-to-hardware ladder</b> for one fixed circuit, with <b>beat packing</b> that fits five beats onto one Rigetti chip at once.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s-problem">What we set out to do</h2>
+
+<h3 id="s-problem-clinical">The healthcare problem</h3>
+<p>A Holter monitor records a patient&rsquo;s electrocardiogram (ECG) for a day or more, about 100,000 heartbeats per day. Nobody can read that by hand, so software labels every beat and a technician or cardiologist reviews the beats it flags. Two kinds of abnormal (<em>ectopic</em>) beat matter here:</p>
+<ul>
+<li><b>Supraventricular ectopic beats (S)</b>, which start too early in the upper chambers (the atria);</li>
+<li><b>Ventricular ectopic beats (V)</b>, which start in the lower chambers (the ventricles) and look wide and strange on the ECG.</li>
+</ul>
+<p>Every other beat is <b>normal (N)</b> for our purposes. There are two costs. A <b>missed</b> ectopic beat can hide an arrhythmia; a <b>false flag</b> adds review work for a person.</p>
+
+<h3 id="s-problem-hard">Why this is hard: the new patient</h3>
+<p>Heartbeats differ a lot between people. A model trained on some patients and tested on beats of the <em>same</em> patients does very well, because it has effectively seen those hearts before. The realistic setting is different: the model is trained on other people and must work on a new patient with none of that patient&rsquo;s labels. This is called the <b>inter-patient</b> setting, and performance drops sharply in it, especially for S beats. The reference inter-patient benchmark reports that only 38.5% of the beats it flagged as S really were S [3].</p>
+<h3 id="s-problem-prior">What the literature led us to expect</h3>
+<p>The prior evidence is sceptical. In a large benchmark of 12 quantum models on 160 datasets, out-of-the-box classical models won, and removing entanglement often did as well or better [2]. With matched size and tuning effort, the quantum reservoir advantages studied by Pandey disappear [10] (abstract read). A systematic review of quantum machine learning for digital health found that &ldquo;performance differentials between quantum and classical algorithms show no consistent trend to support empirical quantum utility in digital health&rdquo; [5]. So we designed a comparison strict enough to be believed whichever way it came out: a matched classical reservoir, a no-entanglement control, a stronger classical model and a locked second database.</p>
+<div class="callout">
+<p><b>A flaw in much published quantum ECG work.</b> Many studies split beats at random into training and test sets, so beats from the same patient land on both sides. That measures recognition of hearts the model has already seen, not generalisation to a new patient. We split by patient throughout.</p>
+</div>
+
+<h3 id="s-problem-data">The data</h3>
+<p>We use the <b>MIT-BIH Arrhythmia Database</b> [9], the standard benchmark, distributed by PhysioNet [11]: 48 half-hour, two-lead recordings from 47 people, every beat annotated by cardiologists. Beat labels are grouped into the standard AAMI classes, and the task uses N, S and V. Recordings with pacemakers are excluded, as is standard practice.</p>
+<p>We use the standard de Chazal inter-patient split [3]: 22 training recordings (called DS1; 50,542 beats) and 22 test recordings (DS2). Then we made it stricter. Recordings 201 and 202 come from the same person, one in training and one in test (the database documentation says so). We removed record 202 from the test set. The resulting test split, <b>ds2s</b>, has 21 patients, 10.53 hours and 47,129 scored beats: 42,148 N, 1,781 S and 3,200 V.</p>
+<p>A second database, the <b>MIT-BIH Supraventricular Arrhythmia Database</b> (SVDB; 78 half-hour records, 184,286 beats) [4], was locked away for a single, logged confirmation run at the end (Section <span class="secref" data-ref="s-svdb"></span>).</p>
+
+<h3 id="s-problem-brief">What the brief asks, and where we answer it</h3>
+<table class="full">
+<thead><tr><th>Hackathon step</th><th>Our answer</th><th class="c">Section</th></tr></thead>
+<tbody>
+<tr><td>Define the healthcare problem</td><td>Flagging ectopic beats for patients never seen in training; MIT-BIH and SVDB</td><td class="c"><span class="secref" data-ref="s-problem"></span></td></tr>
+<tr><td>Establish a strong classical baseline</td><td>A matched echo state network (credited to Jaeger [7]), plus a tuned gradient-boosting model for context</td><td class="c"><span class="secref" data-ref="s-esn"></span>, <span class="secref" data-ref="s-quantum-really"></span></td></tr>
+<tr><td>Develop the quantum contribution</td><td>A 10-qubit quantum reservoir: why it fits, how it works, how it behaves under noise and on hardware</td><td class="c"><span class="secref" data-ref="s-qrc"></span>, <span class="secref" data-ref="s-braket"></span></td></tr>
+<tr><td>Evaluate both approaches fairly</td><td>One shared pipeline, a pre-registered decision rule, logged test access, an external database</td><td class="c"><span class="secref" data-ref="s-fair"></span>, <span class="secref" data-ref="s-svdb"></span></td></tr>
+</tbody></table>
+
+<!-- ============================================================ -->
+<h2 id="s-picture">The whole system in one picture</h2>
+<figure id="fig-pipeline">
+<img src="../figures/fig_pipeline.png" alt="pipeline">
+<figcaption><span class="fignum">Figure <span class="fignumv"></span>:</span> One shared pipeline with two interchangeable reservoirs. Everything except the reservoir box is identical in the quantum and classical arms, including the features, the readout and the tuning budget.</figcaption>
+</figure>
+<p>Read it as six steps:</p>
+<ol class="steps">
+<li><b>Cut out the beat.</b> Take a 0.7-second window of ECG around each annotated heartbeat and squeeze it into 40 numbers.</li>
+<li><b>Compare with the patient&rsquo;s own normal.</b> Subtract the typical shape of that patient&rsquo;s previous 32 beats. What remains is how <em>this</em> beat differs from <em>this</em> patient&rsquo;s usual beat.</li>
+<li><b>Feed a reservoir.</b> Pass those 40 numbers, in 4 steps of 10, into a fixed dynamical system: either 10 interacting qubits (quantum) or 55 interacting artificial neurons (classical).</li>
+<li><b>Read 220 numbers out.</b> After each step, record 55 numbers describing the reservoir&rsquo;s state: 4 &times; 55 = 220 features in both arms.</li>
+<li><b>Add rhythm.</b> Append 8 numbers about timing: how early the beat came, how long until the next one, and the recent average rhythm.</li>
+<li><b>Decide.</b> A simple linear classifier (logistic regression), the only trained part, outputs N, S or V.</li>
+</ol>
+<div class="callout">
+<p><b>Why reservoirs?</b> Neither reservoir is trained; a handful of its settings are chosen by search on the training patients, and only the final linear readout learns from them, so the models have few trainable parameters, which suits the hard part of the problem: generalising to new patients from 22 training recordings. And a quantum reservoir is the natural place to try a quantum computer: it needs no gradient-based training of the circuit, so it avoids the training difficulties of variational quantum models.</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s-input">Building block 1: from an ECG trace to a patient-relative beat</h2>
+<h3 id="s-input-window">The beat window</h3>
+<p>We use the lead called MLII, selected by name (one recording stores it in its second channel, which a channel-number rule would have missed), at its native 360 samples per second. For each annotated beat we take the signal from 0.25 s before to 0.45 s after the beat, average it into 40 bins, subtract its median and divide by its standard deviation. This per-beat normalisation removes the local offset and amplitude. No other filtering is applied.</p>
+<p>The beat positions come from the database annotations. We do not build a beat detector; this is a deliberate scope limit (Section <span class="secref" data-ref="s-limits"></span>).</p>
+
+<h3 id="s-input-relative">The patient-relative window, and why it matters</h3>
+<p>Early on (experiment E001, on the training patients only) we saw something surprising: adding the raw beat shape to the rhythm features made the classifier <em>worse</em> on held-out patients (macro-F1 from 0.637 with rhythm alone to 0.546). The raw shape of a heartbeat is very personal, and a shape learned on one person does not transfer to another.</p>
+<p>What does transfer is how a beat <em>differs from that same patient&rsquo;s normal beats</em>. So the reservoir input is the window minus the element-wise median of the same patient&rsquo;s previous 32 windows. It uses only the past and needs no labels, so it is legitimate for a new patient. On the training patients this recovered most of the lost accuracy (to about 0.62&ndash;0.63; anomaly A009), and we fixed it as the shared input for both reservoirs before any tuning.</p>
+<div class="callout">
+<p><b>Key idea.</b> The reservoirs do not see &ldquo;what a heartbeat looks like&rdquo;; they see &ldquo;how this heartbeat deviates from this patient&rsquo;s usual heartbeat&rdquo;. That single change is what makes morphology useful across patients.</p>
+</div>
+
+<h3 id="s-input-rr">The rhythm block</h3>
+<p>Ectopic beats usually come early. Eight timing features are appended in every model: the interval to the previous beat (pre-RR), to the next beat (post-RR), the 10-beat average interval, the log-ratios pre/average, post/average, pre/post and short-term/long-term average, and the beat&rsquo;s amplitude relative to the previous 32 beats. Using the next beat means the classifier waits up to one beat before deciding, so it suits offline Holter analysis rather than instant alarms.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-reservoir">Building block 2: reservoir computing in plain terms</h2>
+<p>Drop a stone into a pond and watch the ripples. The pattern of ripples a moment later depends, in a complicated nonlinear way, on where and how the stone fell. If you can photograph the ripples, a very simple rule applied to the photograph may tell you which stone was thrown, even though the rule itself knows nothing about water.</p>
+<p>That is a <b>reservoir</b>: a fixed, rich dynamical system (the pond) that turns an input into a complicated pattern, plus a simple trained <b>readout</b> (the rule) that reads the pattern. Only the readout learns. The pond is chosen once, through a handful of settings such as how strongly its parts interact, and then left alone.</p>
+<p>For this project the &ldquo;stone&rdquo; is the 40-number patient-relative beat, fed in 4 steps. The &ldquo;photographs&rdquo; are taken after each step, 55 numbers each. We compare two ponds: a classical one made of simulated neurons and a quantum one made of qubits.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-esn">Building block 3: the classical baseline, an echo state network</h2>
+<p>An echo state network [7] is a fixed, randomly connected recurrent network of artificial neurons. At each input step <math><mi>k</mi></math> its state vector <math><mi mathvariant="bold">h</mi></math> is updated as</p>
+<p style="text-align:center"><math display="block"><mi mathvariant="bold">h</mi><mo>&larr;</mo><mo>(</mo><mn>1</mn><mo>&minus;</mo><mi>a</mi><mo>)</mo><mi mathvariant="bold">h</mi><mo>+</mo><mi>a</mi><mspace width="0.2em"/><mi>tanh</mi><mo>(</mo><mi>&rho;</mi><mi mathvariant="bold">W</mi><mi mathvariant="bold">h</mi><mo>+</mo><mi>s</mi><msub><mi mathvariant="bold">W</mi><mtext>in</mtext></msub><msub><mi mathvariant="bold">u</mi><mi>k</mi></msub><mo>+</mo><mi mathvariant="bold">b</mi><mo>)</mo></math></p>
+<p>where <math><msub><mi mathvariant="bold">u</mi><mi>k</mi></msub></math> is the input step, <math><mi mathvariant="bold">W</mi></math> a sparse random matrix scaled to spectral radius <math><mi>&rho;</mi></math>, <math><mi>a</mi></math> the leak (how much of the old state is kept) and <math><mi>s</mi></math> the input scale. It is the natural classical counterpart of a quantum reservoir: both are fixed dynamical systems, and in both only the readout is trained.</p>
+<p><b>Tuning.</b> Thirty configurations were drawn at random from a declared search space (size, spectral radius, leak, input scale, density, bias) and each was scored by 5-fold cross-validation <em>by patient</em> on the training recordings only. The selected network (E002) has 55 neurons, spectral radius 0.68, leak 0.10, input scale 0.98, density 0.054 and bias 0.54; its 55 neuron values after each of the 4 steps give 220 features.</p>
+<p><b>Performance on the 21 test patients</b> (5 seeds): macro-F1 <b>0.7065</b>. Per class (sensitivity / positive predictivity / F1): N 0.907 / 0.985 / 0.944; S 0.595 / 0.269 / 0.370; V 0.953 / 0.697 / 0.805.</p>
+<p><b>Is the baseline handicapped?</b> Its selected regularisation sat at the edge of the search grid, which can mean the grid was too narrow. We extended the grid; the same configuration was selected and the predictions were byte-identical (E010). An independent reviewer agent rebuilt this baseline and reproduced all five test prediction files byte for byte (V004).</p>
+
+<!-- ============================================================ -->
+<h2 id="s-qrc">Building block 4: the quantum reservoir</h2>
+<h3 id="s-qrc-circuit">The circuit</h3>
+<figure id="fig-circuit">
+<img src="../figures/fig_circuit.png" alt="circuit">
+<figcaption><span class="fignum">Figure <span class="fignumv"></span>:</span> One input step of the quantum reservoir. Ten input samples set ten qubit rotations; two layers of ring-shaped ZZ couplings and transverse-field rotations let the qubits interact; then the qubits are measured. The four input steps are applied one after another to the same qubits.</figcaption>
+</figure>
+<p>Ten qubits start in the state <math><mo>|</mo><mn>0</mn><mo>&#x2026;</mo><mn>0</mn><mo>&rang;</mo></math>. For each of the 4 input steps:</p>
+<ol class="steps">
+<li><b>Write the data.</b> Each of the step&rsquo;s 10 samples rotates one qubit about the Y axis by an angle proportional to the sample (input scale &times; sample). Writing new data into a state that already holds the previous steps is called <em>data re-uploading</em>.</li>
+<li><b>Let the qubits interact.</b> Apply 2 layers of: ZZ couplings <math><mi>exp</mi><mo>(</mo><mo>&minus;</mo><mi>i</mi><msub><mo>&sum;</mo><mrow><mi>q</mi><mi>r</mi></mrow></msub><msub><mi>J</mi><mrow><mi>q</mi><mi>r</mi></mrow></msub><msub><mi>Z</mi><mi>q</mi></msub><msub><mi>Z</mi><mi>r</mi></msub><mo>)</mo></math> between neighbours on a ring, with fixed random disorder in their strengths, then a rotation RX(<math><mi>h</mi></math>) of every qubit (a transverse field). This is what can entangle the qubits.</li>
+<li><b>Measure.</b> Estimate the 10 single-qubit averages <math><mo>&lang;</mo><msub><mi>Z</mi><mi>q</mi></msub><mo>&rang;</mo></math> and the 45 pair averages <math><mo>&lang;</mo><msub><mi>Z</mi><mi>q</mi></msub><msub><mi>Z</mi><mi>r</mi></msub><mo>&rang;</mo></math>, each from <b>1,024 shots</b>, as a real device would. That is 55 numbers per step and 4 &times; 55 = <b>220 features</b>, exactly the classical network&rsquo;s count.</li>
+</ol>
+<p>On hardware, &ldquo;measure after step <math><mi>k</mi></math>&rdquo; means a separate circuit containing steps 1 to <math><mi>k</mi></math>, so each beat needs 4 circuits of 10 qubits.</p>
+
+<h3 id="s-qrc-sim">Simulating it faithfully</h3>
+<p>We wrote a GPU statevector simulator in PyTorch. Ten qubits need 2<sup>10</sup> = 1,024 complex amplitudes, small enough to simulate exactly for every beat. The simulator matches an independent dense-matrix implementation to 4&times;10<sup>&minus;7</sup> (E001).</p>
+<p>Shots are sampled, not skipped: finite-shot noise is part of the headline model. Each beat draws its shots from its own counter-based random stream in double precision, so a beat&rsquo;s features do not depend on which other beats were simulated with it. Together with double-precision arithmetic in the classical network and the readout (anomaly A011), this is what makes every headline prediction file reproducible byte for byte.</p>
+
+<h3 id="s-qrc-config">The selected reservoir</h3>
+<p>The quantum reservoir got exactly the same tuning procedure and budget as the classical one: 30 random configurations of input scale, coupling <math><mi>J</mi></math>, field <math><mi>h</mi></math>, depth, ring or chain, and disorder, scored on the training patients only. The winner (E003) has input scale 0.317, <math><mi>J</mi></math> = 0.106, <math><mi>h</mi></math> = 0.159, depth 2, a ring, and disorder 0.42.</p>
+<div class="callout">
+<p><b>A clue we noticed at once.</b> The selected couplings are weak (<math><mi>J</mi></math> = 0.106, near the bottom of the search range 0.1&ndash;1.5). Weak couplings keep the ten qubits close to a product state, where each qubit can be described on its own. That made a classical &ldquo;no-entanglement&rdquo; version of the same circuit an especially telling control (Section <span class="secref" data-ref="s-quantum-really"></span>).</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s-readout">Building block 5: the readout and the tuning budget</h2>
+<p>Both arms end in the same readout: the 220 reservoir features and the 8 rhythm features are standardised and fed to a <b>class-balanced multinomial logistic regression</b> with an L2 penalty. &ldquo;Class-balanced&rdquo; means S and V beats are up-weighted so that the rare classes are not ignored. The penalty strength is chosen from {0.001, 0.01, 0.1, 1} on the training patients, and the predicted class is the most probable one.</p>
+<p>The matching rules were declared before tuning: the same pipeline, readout and readout grid; the same tuning budget (30 configurations per arm, the same random-search procedure and seed scheme); and the headline pair named before the run.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-fair">How we kept the comparison fair</h2>
+<h3 id="s-fair-metric">The score: what macro-F1 means</h3>
+<p>For each class we ask two questions. <b>Sensitivity</b>: of the beats that really are of this class, what fraction did we find? <b>Positive predictivity (precision)</b>: of the beats we labelled as this class, what fraction really are? The <b>F1</b> score combines them (their harmonic mean), so it is high only when both are high. <b>Macro-F1</b> is the plain average of the N, S and V F1 scores.</p>
+<p>Averaging over classes matters because 89% of test beats are normal. A model that calls every beat normal gets N F1 0.944 but S and V F1 of zero, so its macro-F1 is only 0.315. Macro-F1 cannot be gamed by ignoring the rare, clinically important classes.</p>
+
+<h3 id="s-fair-bootstrap">How sure are we? The patient bootstrap</h3>
+<p>Beats from the same patient are alike, so 47,129 beats are not 47,129 independent pieces of evidence; there are really only 21 patients. We therefore estimate uncertainty by resampling <em>patients</em>: draw 21 records with replacement, for both models together, resample the 5 seeds within each model, recompute the difference in macro-F1, and repeat 8,000 times. The middle 95% of those differences is the confidence interval. This is a <b>paired two-level bootstrap</b>.</p>
+
+<h3 id="s-fair-rule">Rules written before the results</h3>
+<p>The decision rule, the slice family and the access rules were fixed in the evaluation specification (<code>EVAL.md</code>) before tuning began, and a human approved it before any model was scored on the test patients:</p>
+<ul>
+<li><b>Decision rule for the headline.</b> <em>Favorable</em> only if the difference is at least +0.02, its 95% interval excludes zero, and it stays positive without record 232 (one patient who holds most S beats; Section <span class="secref" data-ref="s-results"></span>). <em>Unfavorable</em> if the interval lies wholly below zero. Otherwise <em>no detectable change</em>, which means &ldquo;not enough evidence&rdquo;, not &ldquo;equal&rdquo;.</li>
+<li><b>Four sub-questions (the slice family)</b>, tested at the stricter 98.75% level to allow for asking four questions: S-class F1, V-class F1, and macro-F1 after refitting both readouts on only 5 and on only 11 training patients.</li>
+<li><b>Access control.</b> Every test-split scoring is logged automatically with the hash of every prediction file, at most 15 are allowed without the human&rsquo;s approval, and the first non-reference model scored had to be the pre-registered headline. We used 13 of the 15.</li>
+<li><b>A check on every model: no peeking at the future.</b> A beat may use signal up to the next beat, or up to 1 s after the beat itself if that is later, and nothing beyond. A full-pipeline check replaces everything after that boundary with different signal and requires every prediction to stay the same: 731 beats, 0 violations, for every reservoir model.</li>
+</ul>
+<div class="callout">
+<p><b>Enforced by code, not by good intentions.</b> The evaluation command refuses to score a second, different headline, refuses if another model was scored first, logs every access with file hashes, and runs the external database through a placeholder-label dry run before the real access is logged. It has 43 automated tests.</p>
+</div>
+
+<h3 id="s-fair-verify">Independent verification</h3>
+<p>Two reviewer agents, each starting in a fresh context with no memory of the work, checked the project. V004 rebuilt the classical baseline and reproduced all its prediction files byte for byte. V005 checked the external confirmation, the depth experiments and every claim in the write-up: it first failed one inaccurate statement and two overstatements, then found one wrong number and three wording items on re-check; all were corrected and the final claim set passed. From a clean environment and a fresh download of the data, V005 rebuilt all 10 headline prediction files and the headline table byte for byte in 27.3 minutes.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-results">Results on the 21 test patients</h2>
+<h3 id="s-results-headline">The headline and the four sub-questions</h3>
+<table class="full">
+<thead><tr><th>Comparison</th><th class="r">Quantum</th><th class="r">Classical</th><th>Difference [interval]</th><th>Outcome</th></tr></thead>
+<tbody>
+<tr class="best"><td>Headline: macro-F1</td><td class="r">0.7273</td><td class="r">0.7065</td><td>+0.0208 [&minus;0.0157, +0.0617]</td><td>no detectable change</td></tr>
+<tr class="best"><td>Slice: V-class F1</td><td class="r">0.874</td><td class="r">0.805</td><td>+0.0688 [+0.0207, +0.1543]</td><td>favorable</td></tr>
+<tr><td>Slice: S-class F1</td><td class="r">0.347</td><td class="r">0.370</td><td>&minus;0.0231 [&minus;0.1456, +0.0978]</td><td>no detectable change</td></tr>
+<tr><td>Slice: readouts refit on 5 patients</td><td class="r">0.6898</td><td class="r">0.6984</td><td>&minus;0.0086 [&minus;0.0858, +0.0794]</td><td>no detectable change</td></tr>
+<tr><td>Slice: readouts refit on 11 patients</td><td class="r">0.6944</td><td class="r">0.7253</td><td>&minus;0.0308 [&minus;0.1045, +0.0546]</td><td>no detectable change</td></tr>
+</tbody></table>
+<p class="tabnote">Headline interval 95%; slice intervals 98.75%. Seed means over 5 seeds. Experiments E003 vs E002, E007, E008.</p>
+<p>The overall difference is +0.021 in favour of the quantum reservoir, but its interval includes zero, so under our own rule the headline is <b>inconclusive</b>. One of the four sub-questions is <b>favorable</b>: ventricular beats.</p>
+
+<h3 id="s-results-v">Where the ventricular gain comes from</h3>
+<p>The quantum arm&rsquo;s ventricular true positives are almost unchanged (3,036 vs 3,050 per seed), but its false ventricular alarms fall from <b>1,324 to 709</b> per seed, mostly on normal beats of patients with few or no V beats (records 117, 222, 105, 111 and 212) and on S beats of record 232. V positive predictivity rises from 0.697 to 0.811 at nearly the same V sensitivity (0.953 vs 0.949). Per patient, among the 9 records with at least 10 V beats, the quantum arm has the higher V F1 in 5.</p>
+
+<figure id="fig-forest">
+<img src="../figures/fig_forest.png" alt="forest">
+<figcaption><span class="fignum">Figure <span class="fignumv"></span>:</span> Every logged comparison on one axis. Each dot is a difference (first-named model minus second), each bar its interval. Against a classical comparator, only the V-class slice of the headline pair clears zero in the quantum arm&rsquo;s favour; the controls, the depth experiments and the external database are discussed in the next sections.</figcaption>
+</figure>
+
+<h3 id="s-results-s">Where the S side loses: one patient</h3>
+<p>Record 232 holds <b>1,381 of the 1,781</b> S beats in the test split (77.5%), so S metrics on this split largely measure one patient. The quantum arm finds 310 fewer S beats per seed than the classical one, 288 of them in record 232. Leaving out any one record keeps the headline difference positive (from +0.011 without record 213 to +0.046 without 232), but that does not change the pre-registered interval.</p>
+
+<h3 id="s-results-burden">What a reviewer would experience</h3>
+<figure id="fig-burden" class="w90">
+<img src="../figures/fig_review_burden.png" alt="review burden">
+<figcaption><span class="fignum">Figure <span class="fignumv"></span>:</span> Review burden per hour of recording on the test split (seed means). The quantum arm raises fewer flags, but misses more ectopic beats.</figcaption>
+</figure>
+<table>
+<thead><tr><th>Per hour of recording</th><th class="r">Classical (E002)</th><th class="r">Quantum (E003)</th><th class="r">Difference</th></tr></thead>
+<tbody>
+<tr><td>S-or-V flags</td><td class="r">806</td><td class="r">608</td><td class="r">&minus;198</td></tr>
+<tr><td>Normal beats flagged</td><td class="r">374</td><td class="r">217</td><td class="r">&minus;157</td></tr>
+<tr><td>Missed ectopic beats</td><td class="r">57</td><td class="r">93</td><td class="r">+36 (+63%)</td></tr>
+<tr><td>S sensitivity</td><td class="r">59.5%</td><td class="r">42.1%</td><td class="r">&minus;17.4 points</td></tr>
+<tr><td>V sensitivity</td><td class="r">95.3%</td><td class="r">94.9%</td><td class="r">&minus;0.4 points</td></tr>
+</tbody></table>
+<p>Fewer flags at this operating point come with more missed ectopic beats. We did not measure review time and did not set an operating point for a clinical target, so this describes a trade-off; it does not show a workflow benefit.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-quantum-really">Is it really quantum? The controls</h2>
+<h3 id="s-mf">The mean-field test</h3>
+<p>Picture each qubit as an arrow pointing somewhere on a sphere (its Bloch vector). In the full quantum simulation the ten arrows can become <b>entangled</b>: the state of the whole can no longer be described arrow by arrow, which is why it needs 1,024 complex numbers. The <b>mean-field model</b> forbids that. Every qubit stays its own arrow, and each ZZ coupling simply turns a qubit&rsquo;s arrow by an amount set by its neighbours&rsquo; average <math><mo>&lang;</mo><mi>Z</mi><mo>&rang;</mo></math>. Pair averages become products of single-qubit averages, and the same 1,024-shot sampling is applied. A classical computer evaluates it in time that grows only linearly with the number of qubits. This control comes from the quantum reservoir literature [8].</p>
+<p>If the quantum arm&rsquo;s advantage needed entanglement, the mean-field model should lose it. It does not:</p>
+<table class="full">
+<thead><tr><th>Control (same selected settings, no tuning of its own)</th><th>Macro-F1</th><th>Difference [95% interval]</th><th>V-class F1</th></tr></thead>
+<tbody>
+<tr><td>Quantum (E003) vs mean-field model of the same circuit (E004)</td><td>0.7273 vs 0.7234</td><td>+0.0039 [&minus;0.0028, +0.0115]</td><td>both round to 0.874; &minus;0.0001 [&minus;0.0155, +0.0166]</td></tr>
+<tr><td>Circuit without couplings, <math><mi>J</mi></math> = 0 (E005) vs quantum</td><td>0.7264 vs 0.7273</td><td>&minus;0.0009 [&minus;0.0444, +0.0319]</td><td>&minus;0.0634 [&minus;0.1321, &minus;0.0210]</td></tr>
+<tr><td>Rhythm features only (E006)</td><td>0.6997</td><td>one deterministic run</td><td>0.739</td></tr>
+</tbody></table>
+<p>So: removing entanglement (mean-field) changes nothing we can detect; removing the couplings altogether costs ventricular F1 (while raising S F1); and the 8 rhythm features alone already reach 0.700, close to the classical reservoir&rsquo;s 0.707. The couplings matter, and a classical spin model of them reproduces their effect; this benchmark detected no added contribution from entanglement. Because an interval that includes zero does not prove equality, our claim is precise: <b>this benchmark detected no added benefit of the full quantum model over the mean-field model</b>.</p>
+
+<h3 id="s-boost">A stronger classical model</h3>
+<p>The matched echo state network is a controlled comparator, not necessarily the strongest classical model. After the test results were in, we tuned gradient-boosted trees on the same inputs (E016; declared as a post-hoc, secondary comparison). Overall they tie both reservoirs, but only because they rarely predict S and so lose the S beats of record 232. Their ventricular F1 is <b>0.943</b>, above both the quantum arm (0.874; &minus;0.068 [&minus;0.159, &minus;0.031]) and the classical reservoir, and without record 232 they lead the quantum arm by 0.087 overall.</p>
+
+<h3 id="s-cka">Do the two feature maps even differ?</h3>
+<p>We compared the feature maps directly on the training patients, without any test labels (E017). Linear CKA measures whether two sets of features are the same representation up to rotation and scaling (1 = identical). Quantum vs mean-field: <b>0.986</b>. Quantum vs a rerun of itself with new shots: 0.992; with another reservoir seed: 0.989. Quantum vs the classical reservoir: 0.525. In other words, the mean-field map is about as close to the quantum map as the quantum map is to itself. The geometric difference of Huang et al. [6], a measure of how much room a quantum kernel has to beat a classical one, tells the same story: the mean-field map sits at the same scale as a shot-noise rerun of the quantum map itself (9.6 vs 10.5 at the smallest regulariser), against 35 for the classical reservoir (descriptive values).</p>
+<figure id="fig-shots-noise">
+<img src="../figures/fig_shots_noise.png" alt="shots and noise">
+<figcaption><span class="fignum">Figure <span class="fignumv"></span>:</span> Left: shot count barely matters from 1,024 shots upward (training-patient cross-validation). Right: ventricular F1 on the test split for every model; the mean-field model matches the quantum reservoir, device noise erodes it, and boosted trees exceed it.</figcaption>
+</figure>
+
+<!-- ============================================================ -->
+<h2 id="s-depth">Depth experiments</h2>
+<p>These were declared in writing before they ran and reuse the selected quantum configuration. Every test-split comparison here is secondary and descriptive, and all were chosen after the headline results had been seen.</p>
+<h3 id="s-depth-shots">How many shots?</h3>
+<p>With exact expectation values instead of 1,024 shots (E012), the test-split difference is +0.0005 [&minus;0.0058, +0.0081]: shot noise at 1,024 shots has no measurable effect. On the training patients (E013), performance is flat from 1,024 shots upward and lower at 64 (0.648 vs 0.667), and the feature error halves with every fourfold increase in shots, as the 1/&radic;shots law predicts.</p>
+<h3 id="s-depth-qubits">How many qubits?</h3>
+<p>On the training patients (E014), 6 qubits scored 0.680, 8 qubits 0.667 and 12 qubits 0.6635, against 0.667 for 10; dropping all pair correlators (keeping only <math><mo>&lang;</mo><mi>Z</mi><mo>&rang;</mo></math>) scored 0.678. On the test split, 6 qubits vs 10 is +0.0078 [&minus;0.0055, +0.0188]. More qubits did not help, and the pair correlators added little, consistent with the mean-field finding. (Changing the qubit count also changes the input resolution, so the two are confounded.)</p>
+<h3 id="s-depth-noise">What does device noise do?</h3>
+<p>We simulated the circuit with realistic errors (E015): depolarising noise after every gate and readout errors on every measured bit, at the rates Amazon Braket reports for two real processors (Section <span class="secref" data-ref="s-braket"></span>), with the readout retrained on noisy features. We predicted that noise would push the model towards the no-coupling control. That prediction failed: on the training patients, the noisy ventricular F1 (0.699 at Rigetti&rsquo;s rates, 0.717 at IQM&rsquo;s) fell below both the noiseless circuit (0.742) and the no-coupling control (0.756). On the test split, at Rigetti&rsquo;s rates, ventricular F1 fell from 0.874 to <b>0.821</b>. Most of the favorable V-slice margin does not survive device noise in simulation, and the simulation omits idle decay, crosstalk and qubit routing, so real hardware should be worse.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-braket">Amazon Braket: from simulator to a real quantum computer</h2>
+<p>A quantum model that only exists in simulation leaves the obvious question open: what happens on a real device? We used Amazon Braket at four levels, each one checked before the next, so that the single paid task was as unlikely as possible to fail for a reason we could have caught for free.</p>
+
+<h3 id="s-braket-cal">Level 1: calibration data drives the noise simulation (free)</h3>
+<p>Braket returns each device&rsquo;s current calibration. Fetched on 28 October 2026, the chip-wide medians were: <b>Rigetti Cepheus-1-108Q</b>, single-qubit error 0.0030, two-qubit (CZ) error 0.0117, readout error 0.031; <b>IQM Garnet</b>, 0.0006, 0.0045, and 0.010 / 0.027. These numbers set the error rates of the Pauli-trajectory noise simulation of Section <span class="secref" data-ref="s-depth-noise"></span>, run on all training beats for both devices and on the test beats for Rigetti.</p>
+
+<h3 id="s-braket-local">Level 2: our programs on Braket&rsquo;s LocalSimulator (free)</h3>
+<p>Real devices run only their own <em>native gates</em> on specific physical qubits. We compiled the snapshot circuits into each device&rsquo;s native gates on pinned physical qubits (verbatim programs of up to 160 CZ gates and 995 single-qubit gates per beat snapshot on one 10-qubit ring; a packed hardware circuit carries up to five such rings) and ran them on the Braket LocalSimulator:</p>
+<ul>
+<li><b>Correctness.</b> For all four snapshots of each of 4 test beats, on both gate sets, the Braket results reproduce our own statevector simulator to within <b>3.5&times;10<sup>&minus;6</sup></b>.</li>
+<li><b>Packing.</b> Two beats placed on disjoint rings of the same chip give the same results as each beat alone (within 3.1&times;10<sup>&minus;6</sup>).</li>
+<li><b>Bit order.</b> A deliberately reversed bit order gives errors of 0.10&ndash;0.22 on the single-ring circuits and 0.038 and 0.18 on the two packed circuits, against 0.015&ndash;0.033 for the correct order at 1,024 shots.</li>
+<li><b>End-to-end analysis.</b> Each 10-qubit ring of the packed 24-beat Rigetti plan was run separately on the LocalSimulator (96 runs, 1,024 shots), written in the hardware result format and analysed with the hardware analysis code. Its features match the exact simulation with mean absolute difference <b>0.018</b> and correlation <b>0.997</b>, the level of shot noise alone. The program-set submission format was checked separately with two executables.</li>
+</ul>
+
+<h3 id="s-braket-guard">Level 3: a submission path with a hard cost cap</h3>
+<p>The submission script enforces a device allowlist (Rigetti Cepheus-1-108Q and IQM Garnet only), a 1,024-shot cap, an approval file, written after the human approves, naming the device, the number of tasks and the cap, and a cost ledger that writes each estimate <em>before</em> submission and refuses any task whose estimated cumulative cost would exceed the approved cap. The estimates use the published prices; the actual bill is to be checked in AWS Billing. Our first submission was refused by AWS before any task was created, because the account lacked Braket&rsquo;s service-linked role; nothing was charged. The role was created with the human team member&rsquo;s approval and the same job was resubmitted.</p>
+
+<h3 id="s-braket-hw">Level 4: one task on a real Rigetti processor</h3>
+<p>Each beat needs 4 circuits of 10 qubits, but Rigetti Cepheus-1-108Q had 107 qubits available when we fetched its description. <b>Beat packing</b> places five beats side by side on disjoint 10-qubit rings, so 48 beats &times; 4 snapshots needed 40 circuits instead of 192. One program-set task ran 40 circuits &times; 1,024 shots at an estimated <b>USD 17.71</b> (USD 0.30 per task plus USD 0.000425 per shot), within the USD 35 cap. All 48 beats completed. The beats were drawn without looking at their labels, 16 per class predicted by the simulation.</p>
+<figure id="fig-braket">
+<img src="../figures/fig_braket.png" alt="braket">
+<figcaption><span class="fignum">Figure <span class="fignumv"></span>:</span> From simulator to quantum processor. Features from Braket&rsquo;s LocalSimulator lie on the exact-simulation line; features from the Rigetti processor are pulled towards zero and scattered, far beyond shot noise.</figcaption>
+</figure>
+<table>
+<thead><tr><th>Features compared with the exact simulation</th><th class="r">Mean absolute difference</th><th class="r">Correlation</th></tr></thead>
+<tbody>
+<tr><td>1,024-shot simulation (shot noise only)</td><td class="r">0.018</td><td class="r">&ndash;</td></tr>
+<tr><td>Braket LocalSimulator, 24 beats</td><td class="r">0.018</td><td class="r">0.997</td></tr>
+<tr><td>Rigetti Cepheus-1-108Q, 48 beats</td><td class="r">0.347</td><td class="r">0.70</td></tr>
+</tbody></table>
+<p>On hardware the pair correlators are contracted towards zero (regression slope 0.46), as the noise simulation predicted. The readout trained on noiseless simulated features gives the same class as the simulation for only <b>41.7%</b> of beats, against 33.3% expected by chance and an 87.5% ceiling set by shot noise alone, and its predictions skew to S (35 of 48), the same failure the noise simulation showed.</p>
+<div class="callout">
+<p><b>What the hardware run tells us.</b> The circuit runs on a current quantum processor, but its features are not the simulated ones. A hardware deployment would need a readout trained on hardware features, plus error mitigation. This is a 48-beat, label-free diagnostic from one task under one calibration state; we claim no hardware accuracy.</p>
+</div>
+<h3 id="s-braket-cost">What would a full day cost?</h3>
+<p>As prospective arithmetic only (nothing measured): 4 circuits &times; 1,024 shots is 4,096 shots per beat. One Holter day of about 100,000 beats would need about 410 million shots, about USD 174,000 at Rigetti&rsquo;s on-demand shot price of USD 0.000425 [1] (without beat packing, which could cut the shot count up to fivefold; task fees excluded). A 10-qubit state has only 1,024 amplitudes, so this study makes no claim of computational advantage.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-svdb">External confirmation on a second database</h2>
+<p>The last test was decided on 26 October and run once on 28 October: take the exact frozen models (both arms, 5 seeds each, trained on the MIT-BIH training patients) and score them on SVDB, a database chosen by PhysioNet &ldquo;to supplement the examples of supraventricular arrhythmias&rdquo; in MIT-BIH. Its S beats are spread over 73 of its 78 records, so it tests the S class far better than our test split. The pre-registered criterion: <em>confirmed</em> only if the macro-F1 difference is positive and its 95% interval excludes zero.</p>
+<p>Before the access, a predict-only path loaded the 10 saved models without modifying them and reproduced all 10 logged test-split prediction hashes, proving it used the same models (E018).</p>
+<table>
+<thead><tr><th>SVDB (78 records, 184,286 beats, 39 h)</th><th class="r">Quantum</th><th class="r">Classical</th><th>Difference [95% interval]</th></tr></thead>
+<tbody>
+<tr class="best"><td>Macro-F1</td><td class="r">0.6402</td><td class="r">0.6488</td><td>&minus;0.0085 [&minus;0.0476, +0.0274]</td></tr>
+<tr><td>N F1</td><td class="r">0.938</td><td class="r">0.935</td><td>+0.004 [&minus;0.006, +0.014]</td></tr>
+<tr><td>S F1</td><td class="r">0.412</td><td class="r">0.438</td><td>&minus;0.026 [&minus;0.078, +0.024]</td></tr>
+<tr><td>V F1</td><td class="r">0.570</td><td class="r">0.574</td><td>&minus;0.003 [&minus;0.089, +0.073]</td></tr>
+<tr><td>S-or-V flags per hour</td><td class="r">801</td><td class="r">870</td><td>descriptive</td></tr>
+<tr><td>Missed ectopic beats per hour</td><td class="r">133</td><td class="r">111</td><td>descriptive</td></tr>
+</tbody></table>
+<p><b>Outcome: not confirmed.</b> The difference is negative whichever record is left out. The quantum arm keeps the same direction of trade-off as before (fewer flags, more misses), but the ventricular F1 gain does not reappear. The SVDB interval for V F1 is wide enough that it neither confirms nor excludes a gain of the size seen on the test split.</p>
+
+<!-- ============================================================ -->
+<h2 id="s-onebeat">Following one beat from file to prediction</h2>
+<p>To make the pipeline concrete, here is what happens to a single beat of a test patient in the quantum arm.</p>
+<ol class="steps">
+<li><b>Load.</b> The MLII lead of the recording is read at 360 samples per second. The database annotation gives the beat&rsquo;s position.</li>
+<li><b>Window.</b> The 0.7 s around the beat (252 samples) is averaged into 40 bins, then centred on its median and divided by its standard deviation.</li>
+<li><b>Patient-relative.</b> The element-wise median of this patient&rsquo;s previous 32 windows is subtracted. For a typical normal beat little remains; a beat that differs from the patient&rsquo;s usual beat leaves a clear shape.</li>
+<li><b>Encode.</b> The 40 numbers are cut into 4 steps of 10. In step 1, sample <math><mi>q</mi></math> sets the rotation RY(0.317 &times; sample) of qubit <math><mi>q</mi></math>.</li>
+<li><b>Evolve.</b> Two layers of ZZ couplings on the ring (strengths around 0.106, varied by the fixed disorder) and RX(0.159) rotations act on all 10 qubits.</li>
+<li><b>Measure.</b> 1,024 shots give 10 single-qubit and 45 pair averages: 55 features. Steps 2, 3 and 4 add 55 more each: 220.</li>
+<li><b>Rhythm.</b> The 8 timing features are computed from the beat positions, including the next beat.</li>
+<li><b>Decide.</b> The 228 standardised numbers go into the logistic readout, which outputs three probabilities; the largest wins. On real hardware, steps 4&ndash;6 would be 4 circuits per beat, 4,096 shots in total.</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="s-limits">Limitations</h2>
+<ul>
+<li><b>No quantum advantage.</b> A classical mean-field model of the same circuit reaches nearly the same performance; we claim a quantum-circuit feature map, not a speed-up or an accuracy gain due to entanglement.</li>
+<li><b>Inconclusive headline.</b> Only one of four sub-questions is favorable, and a favorable sub-question does not rescue the headline.</li>
+<li><b>Not the strongest classical model.</b> Boosted trees beat both reservoirs on ventricular beats (post-hoc comparison).</li>
+<li><b>Not confirmed externally.</b> The ventricular gain did not reappear on SVDB.</li>
+<li><b>Trade-off, not a free gain.</b> Fewer flags come with 36 more missed ectopic beats per hour; review time was not measured.</li>
+<li><b>One patient dominates S.</b> Record 232 holds 77.5% of test S beats; only 21 test patients in total, so intervals are wide.</li>
+<li><b>Scope.</b> Annotated beat positions (no beat detector); one-beat lookahead, so offline use; MIT-BIH is an enriched historical database, so per-hour rates are not clinical rates.</li>
+<li><b>Simulation-scored.</b> All scored results are simulated; the noise model omits idle decay, crosstalk and routing; the hardware run is a small, label-free diagnostic.</li>
+<li><b>Post-hoc depth work.</b> The depth experiments were chosen after the headline results were seen; they are reported as secondary and descriptive.</li>
+<li><b>Conditional intervals.</b> The intervals cover test patients and seeds for the fixed training set and selected configurations, not the choice of another training cohort.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s-log">Engineering log: what went wrong and how we fixed it</h2>
+<p>A competition project lives or dies by small details. These are the ones that mattered, in order.</p>
+
+<div class="log"><h4>The standard split is not patient-independent (A004)</h4><dl>
+<dt>Symptom</dt><dd>Two recording headers, 201 (training) and 202 (test), describe the same 68-year-old man on the same medications.</dd>
+<dt>Diagnosis</dt><dd>The database documentation confirms that records 201 and 202 come from the same subject. The widely used split is record-disjoint, not subject-disjoint.</dd>
+<dt>Fix</dt><dd>The primary test split drops record 202 (21 patients). The published 22-record split is kept only as a secondary split for literature comparison.</dd></dl></div>
+
+<div class="log"><h4>Raw beat shape does not transfer across patients (E001, A009)</h4><dl>
+<dt>Symptom</dt><dd>On held-out training patients, adding the beat window to the rhythm features lowered macro-F1 from 0.637 to 0.546.</dd>
+<dt>Diagnosis</dt><dd>Absolute morphology is patient-specific; deviations from a patient&rsquo;s own normal beat are not.</dd>
+<dt>Fix</dt><dd>The patient-relative window, fixed as the shared reservoir input before any tuning; a rhythm-only control is reported next to every result.</dd></dl></div>
+
+<div class="log"><h4>Predictions that depended on batch size (A011)</h4><dl>
+<dt>Symptom</dt><dd>The first no-lookahead check of the classical baseline flagged two beats whose probabilities changed by about 10<sup>&minus;7</sup> when unrelated later beats were removed.</dd>
+<dt>Diagnosis</dt><dd>Single-precision matrix products round differently for different batch shapes. A real leak would change outputs by orders of magnitude more.</dd>
+<dt>Fix</dt><dd>Double precision for the network update and the readout (the shot sampler had already been fixed the same way). The check now passes with 0 violations, and retuning in double precision selects the same configurations.</dd></dl></div>
+
+<div class="log"><h4>A baseline setting at the edge of its grid (A010)</h4><dl>
+<dt>Symptom</dt><dd>The classical baseline selected the smallest regularisation in its grid.</dd>
+<dt>Diagnosis</dt><dd>A grid edge can hide a better setting just outside it and unfairly handicap the baseline.</dd>
+<dt>Fix</dt><dd>The grid was extended to 10<sup>&minus;5</sup> (E010, E011). Both arms selected the same settings and the predictions were byte-identical, so the grid edge did not handicap the baseline.</dd></dl></div>
+
+<div class="log"><h4>A guard test touched the locked database (26 October, 17:45)</h4><dl>
+<dt>Symptom</dt><dd>Before any model existed, a path-binding bug made a guard test open the real SVDB label file.</dd>
+<dt>Diagnosis</dt><dd>The run failed on beat-ID validation before any metric was computed; nothing beyond already-public information was displayed or stored.</dd>
+<dt>Fix</dt><dd>The bug was fixed, the guard test now asserts that the real file is never opened, and a reviewer agent (V002) judged SVDB uncompromised as a confirmation set. The incident is disclosed in the write-up.</dd></dl></div>
+
+<div class="log"><h4>Confirming without touching the frozen models (A018)</h4><dl>
+<dt>Symptom</dt><dd>The only way to predict a new database refitted the readout and rewrote the saved model files, changing their hashes.</dd>
+<dt>Diagnosis</dt><dd>The confirmation policy requires the exact trained models, verifiably unchanged.</dd>
+<dt>Fix</dt><dd>A predict-only path that loads each saved model, checks the regenerated reservoir against the saved arrays, and had to reproduce all 10 logged test-split prediction hashes before SVDB was opened. It did.</dd></dl></div>
+
+<div class="log"><h4>The first quantum task was refused (E019)</h4><dl>
+<dt>Symptom</dt><dd>AWS refused the first Rigetti submission.</dd>
+<dt>Diagnosis</dt><dd>The account lacked Braket&rsquo;s service-linked role. No task had been created and nothing was charged (checked with a task search).</dd>
+<dt>Fix</dt><dd>The role was created with the human team member&rsquo;s approval; the cost ledger was changed to release a refused estimate; the identical job then ran.</dd></dl></div>
+
+<div class="log"><h4>Our own claims, checked by a critic (V005)</h4><dl>
+<dt>Symptom</dt><dd>The final reviewer failed one inaccurate statement (the timing of the pre-registration) and two overstatements in the write-up, then one wrong number on re-check.</dd>
+<dt>Diagnosis</dt><dd>Wording drifts towards stronger claims than the evidence supports, even when the numbers are right.</dd>
+<dt>Fix</dt><dd>Each was corrected and the final claim set passed. This document is built from that claim set; its added Braket and engineering details were checked afterwards by a second reviewer agent against the logged artifacts, and corrected where needed.</dd></dl></div>
+
+<!-- ============================================================ -->
+<h2 id="s-repro">Reproducing the work</h2>
+<p>Everything runs from the public repository with Python 3.12 (tested on Windows 11; one CUDA GPU recommended). Raw data is downloaded from PhysioNet&rsquo;s open-data mirror and every file is checked against PhysioNet&rsquo;s published SHA-256 sums.</p>
+<pre>python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements-lock.txt
+.venv/Scripts/python -m pip install -e .
+.venv/Scripts/python scripts/reproduce.py --check   # regenerate the 10 headline prediction
+                                                    # files and compare with the logged hashes</pre>
+<p>The audit mode regenerates the headline without any new test-split access. Our own run took 26 minutes and matched byte for byte; the reviewer&rsquo;s clean-environment run with a fresh download took 27.3 minutes. Every number in this document maps to an experiment card and an artifact through <code>docs/EVIDENCE.md</code>.</p>
+
+<h2 id="s-refs" class="nonum">References</h2>
+<div class="refs">
+<p>[1] Amazon Web Services. Amazon Braket pricing. https://aws.amazon.com/braket/pricing/ (accessed 28 October 2026).</p>
+<p>[2] J. Bowles, S. Ahmed and M. Schuld. Better than classical? The subtle art of benchmarking quantum machine learning models. arXiv:2403.07059, 2024.</p>
+<p>[3] P. de Chazal, M. O&rsquo;Dwyer and R. B. Reilly. Automatic classification of heartbeats using ECG morphology and heartbeat interval features. <em>IEEE Transactions on Biomedical Engineering</em>, 2004. doi:10.1109/tbme.2004.827359</p>
+<p>[4] S. D. Greenwald. Improved detection and classification of arrhythmias in noise-corrupted electrocardiograms using contextual information. Ph.D. thesis, Harvard-MIT Division of Health Sciences and Technology, 1990. (MIT-BIH Supraventricular Arrhythmia Database, PhysioNet, doi:10.13026/C2V30W.)</p>
+<p>[5] R. S. Gupta, C. E. Wood, T. Engstrom, J. D. Pole and S. Shrapnel. A systematic review of quantum machine learning for digital health. <em>npj Digital Medicine</em>, 2025. doi:10.1038/s41746-025-01597-z</p>
+<p>[6] H.-Y. Huang, M. Broughton, M. Mohseni, R. Babbush, S. Boixo, H. Neven and J. R. McClean. Power of data in quantum machine learning. <em>Nature Communications</em>, 2021. doi:10.1038/s41467-021-22539-9</p>
+<p>[7] H. Jaeger. The &ldquo;echo state&rdquo; approach to analysing and training recurrent neural networks. GMD technical report, 2001.</p>
+<p>[8] M. Kornja&#269;a et al. Large-scale quantum reservoir learning with an analog quantum computer. arXiv:2407.02553, 2024.</p>
+<p>[9] G. B. Moody and R. G. Mark. The impact of the MIT-BIH Arrhythmia Database. <em>IEEE Engineering in Medicine and Biology</em> 20(3):45&ndash;50, 2001. (MIT-BIH Arrhythmia Database, PhysioNet, doi:10.13026/C2F305.)</p>
+<p>[10] T. Pandey. When classical baselines are tuned as carefully as the quantum model, does quantum reservoir computing still win? arXiv:2607.09905, 2026. (Abstract read; full text not accessed.)</p>
+<p>[11] T. Pollard, B. E. Moody, L. Lehman, B. Gow, C. Fernandes, C. Xie, A. Johnson, R. G. Mark and T. Heldt. PhysioNet as a global platform for biomedical research. <em>Nature Health</em>, 2026. doi:10.1038/s44360-026-00096-z</p>
+</div>
+<div class="endrule"></div>
+</body>
+</html>

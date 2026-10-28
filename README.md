@@ -1,6 +1,57 @@
 # Quantum reservoir features vs a matched classical reservoir for patient-independent heartbeat classification
 
-Quantum Healthcare Hackathon 2026, National / Hybrid track. This README is the complete written submission: problem, methods, the purpose of the quantum component, the shared evaluation, results, limitations and reproduction. Every number carries the ID of the experiment (`E###`), anomaly (`A###`) or verification (`V###`) it comes from. [`docs/EVIDENCE.md`](docs/EVIDENCE.md) maps each number to its artifact, command, result type and evaluation version.
+**A pre-registered, matched and externally checked test of a quantum reservoir on ECG: from a GPU simulator, through Amazon Braket's simulator and calibration-driven noise models, to a real Rigetti quantum processor.**
+
+Quantum Healthcare Hackathon 2026, National / Hybrid track. **Easy-reading version: [`QML_Hackathon_Solution_Description.pdf`](QML_Hackathon_Solution_Description.pdf)** (the same project explained step by step, with figures).
+
+This README is the complete written submission: problem, methods, the purpose of the quantum component, the shared evaluation, results, limitations and reproduction. Every number carries the ID of the experiment (`E###`), anomaly (`A###`) or verification (`V###`) it comes from. [`docs/EVIDENCE.md`](docs/EVIDENCE.md) maps each number to its artifact, command, result type and evaluation version.
+
+![Pipeline: one shared pipeline, two interchangeable reservoirs](docs/figures/fig_pipeline.png)
+
+## Highlights
+
+| At a glance | |
+|---|---|
+| Clinical task | Flag ectopic heartbeats (S, V) for patients the model has never seen |
+| Test data | 21 held-out MIT-BIH patients (47,129 scored beats), plus 78 external SVDB records (184,286 beats) |
+| Quantum model | 10-qubit quantum reservoir, 4 data re-uploading steps, 1,024 shots per circuit, 220 features |
+| Classical baseline | Echo state network matched on input, RR features, feature count (220), readout and tuning budget (30 configurations each) |
+| Controls | Classical mean-field model of the same circuit, the circuit without couplings, RR features only, tuned gradient boosting |
+| Amazon Braket | Calibration-driven noise simulation for Rigetti and IQM, LocalSimulator validation of the native-gate programs, one real Rigetti Cepheus-1-108Q task (48 beats, about USD 17.71) |
+| Integrity | Evaluation approved before any model's test-split scoring; 13 of 15 permitted test-split scorings used, each logged with prediction hashes; two independent critic verifications; byte-for-byte reproduction from a clean environment |
+
+### Strengths
+
+- **A test designed to convince a sceptic.** The metric, split, decision rule and a four-member slice family were fixed in `EVAL.md` before tuning, and the human approved the evaluation before any model was scored on the test split. The evaluation command enforces the rules: the pre-registered headline must be the first non-reference model scored on the test split, every test-split scoring is appended to `runs/full_eval_log.jsonl` with the hash of each prediction file, and the external database sits behind a placeholder-label preflight (Section 4).
+- **Truly patient-independent.** No patient appears in both training and test. We found that the standard de Chazal inter-patient split is not subject-disjoint (records 201 and 202 come from the same subject) and removed record 202 from the test split (A004). Much published quantum ECG work uses beat-level random splits instead.
+- **A baseline matched on everything except the reservoir.** Both arms share the input encoding, the 8 RR-interval features, the readout dimension (220 reservoir features), the class-balanced logistic readout and the tuning budget (30 configurations chosen on training patients only). The only difference is the box in the middle of the pipeline (figure above).
+- **Controls that show where an effect comes from.** A classical mean-field model of the same circuit (E004), the same circuit without couplings (E005), an RR-only readout (E006), a tuned gradient-boosting model (E016) and kernel diagnostics (E017) turn "the quantum arm scored higher on one class" into an explained result.
+- **A clinically readable effect, reported with its costs.** On the MIT-BIH test split the quantum reservoir roughly halves false ventricular alarms against the matched classical reservoir (709 vs 1,324 per seed) at nearly the same V sensitivity (0.949 vs 0.953), and V-class F1 rises from 0.805 to 0.874 (+0.069, 98.75% CI [+0.021, +0.154]; pre-registered slice; E003 vs E002, A015). Section 5 reports what it costs (36 more missed ectopic beats per hour, S sensitivity 17.4 points lower), and the Summary gives the four qualifications.
+- **Checked on a second database and by independent reviewers.** The frozen headline pair was run once on SVDB under a pre-registered criterion (E018); the ventricular gain was not confirmed there, and we report that as prominently as the gain. Two critic agents in fresh contexts verified the work (V004, V005). From a clean environment and a fresh data download, all 10 headline prediction files and the headline table were reproduced byte for byte in 27.3 min (V005).
+- **From simulation to a real quantum computer, within budget.** The same circuit was taken through shot noise, calibration-driven device noise, Amazon Braket's LocalSimulator and a real Rigetti QPU, at an estimated USD 17.71 against a USD 35 cap (Amazon Braket, below).
+- **An honest answer with a mechanism.** The primary comparison is inconclusive and we say so. The analysis explains where the ventricular gain comes from: the tuner chose weak couplings (J = 0.106), so the circuit stays close to a product state, and the mean-field model reproduces nearly all of the quantum arm's performance (A016).
+
+### What is new
+
+Only the first point is a priority claim, and only as far as our literature search reaches; the others are design contributions of this project.
+
+- **To our search, the first study of its kind.** In our scan of about 31 papers (2026-10-26, with a paper-search tool; not a systematic review), we found no quantum reservoir study on MIT-BIH that uses an inter-patient split and a matched classical reservoir.
+- **A patient-relative input for the reservoir.** Each beat window minus the element-wise median of the same patient's previous 32 windows: causal, label-free, and on the training patients it recovered most of the accuracy that raw morphology loses across patients (E001, proxy; A009).
+- **The mean-field test as an attribution tool for medical quantum machine learning.** Running the identical gates on product states (the classical-spin control of Kornjača et al. 2024) separates "a quantum-circuit feature map helps" from "quantum correlations help". Here the two agree to within 0.0039 macro-F1, and their feature maps have linear CKA 0.986, about as close as the quantum reservoir is to a rerun of itself (0.992 with new shots, 0.989 with another reservoir seed) (E004, E017).
+- **A batch-invariant finite-shot simulator.** The GPU statevector simulator draws each beat's shots from its own counter-based random stream in float64, so a beat's features do not depend on how beats are batched (A011). It matches an independent dense-matrix implementation to 4e-7 (E001).
+- **A noise-to-hardware ladder for one fixed circuit.** The selected circuit is evaluated with exact expectations, with finite shots, with calibration-driven noise for two quantum processors, on Braket's LocalSimulator in native gates and on a real QPU, so each step's effect is measured on its own (E012, E013, E015, E019).
+- **Beat packing on a many-qubit chip.** Five beats run side by side on disjoint 10-qubit rings of Rigetti Cepheus-1-108Q (107 qubits available at fetch time), so 48 beats × 4 snapshot circuits needed 40 circuits instead of 192 (E019).
+
+### Amazon Braket: simulations and real hardware
+
+We used Amazon Braket at four levels, each one checked before the next (details in Section 6.6):
+
+1. **Device calibration → noise simulation (free).** Braket's device calibration data for Rigetti Cepheus-1-108Q and IQM Garnet (fetched 2026-10-28) set the error rates of a Pauli-trajectory simulation of the whole pipeline, on the training patients for both devices and on the test patients for Rigetti (E015). At Rigetti's rates the quantum reservoir's V F1 falls from 0.874 to 0.821.
+2. **Braket LocalSimulator (free).** Our compiled native-gate programs for both devices (up to 160 two-qubit CZ gates per beat snapshot on one 10-qubit ring) reproduce our own statevector simulator to within 3.5e-6 for all four snapshots of 4 test beats. Packing beats on disjoint rings, the measurement bit order and the program-set submission format were checked. Every 10-qubit ring of the packed 24-beat plan, run separately (96 runs, 1,024 shots) and analysed with the hardware analysis code, matched the exact simulation at the level of shot noise (mean absolute feature difference 0.018, pooled correlation 0.997) (E019).
+3. **Guarded submission.** A device allowlist, a 1,024-shot cap, an approval file written after the human approves, and a cost ledger that refuses any task whose estimated cumulative cost would exceed the approved cap are enforced in code (`scripts/braket_submit.py`). The estimates use the published prices; the actual bill is to be checked in AWS Billing.
+4. **A real quantum processor.** One program-set task on Rigetti Cepheus-1-108Q: 48 beats, 40 circuits × 1,024 shots, about USD 17.71. The hardware features are contracted towards zero (slope 0.46; mean absolute difference from simulation 0.347, against 0.018 for shot noise), as the noise simulation predicted, and a readout trained on noiseless features does not transfer (41.7% class agreement, against an 87.5% ceiling) (E019).
+
+![From simulator to QPU: Braket LocalSimulator and Rigetti hardware against the exact simulation](docs/figures/fig_braket.png)
 
 **Result types used below.** *Full*: scored on the patient-held-out test split by the approved evaluation command (one command, logged). *Proxy*: training-data (DS1) cross-validation score. *Diagnostic*: tests a mechanism; no test-split score. A positive delta always means the first-named arm is better.
 
@@ -82,7 +133,7 @@ Quantum Healthcare Hackathon 2026, National / Hybrid track. This README is the c
   - **Mean-field model (E004).** The same gates on product states: each qubit is a Bloch vector, each ZZ gate becomes a Z rotation driven by the neighbours' ⟨Z⟩, ⟨Z_q Z_r⟩ is the product of single-qubit values, and the same 1,024-shot sampling is applied. A classical computer evaluates it in time linear in the number of qubits. It equals the exact statevector QRC at J = 0 to 3.5e-6.
   - **Separable circuit (E005).** The same circuit with J = 0: no couplings, no entanglement.
   - **RR only (E006).** The shared readout on the 8 RR features alone.
-- **Hardware resources (prospective arithmetic; nothing measured).** 4 snapshot circuits × 1,024 shots = 4,096 shots per beat. Scoring all 47,523 ds2s beats for one seed would take about 194.7 million shots. At about 100,000 beats per patient-day, one Holter day would need about 410 million shots, about USD 174,000 at Rigetti's on-demand price of USD 0.000425 per shot (checked 2026-10-28; task fees excluded). The longest snapshot circuit has 80 logical ZZ interactions (2 layers × 10 ring edges × 4 steps) before compilation to native gates, and the 4 circuits of a beat have 200 in total. Actual cost, latency and power depend on compilation, connectivity, batching and queueing, none of which has been measured. A 10-qubit statevector has only 1,024 amplitudes, so this study makes no claim of computational advantage.
+- **Hardware resources (prospective arithmetic; nothing measured).** 4 snapshot circuits × 1,024 shots = 4,096 shots per beat. Scoring all 47,523 ds2s beats for one seed would take about 194.7 million shots. At about 100,000 beats per patient-day, one Holter day would need about 410 million shots, about USD 174,000 at Rigetti's on-demand price of USD 0.000425 per shot (checked 2026-10-28; task fees excluded; without beat packing). The longest snapshot circuit has 80 logical ZZ interactions (2 layers × 10 ring edges × 4 steps) before compilation to native gates, and the 4 circuits of a beat have 200 in total. Actual cost, latency and power depend on compilation, connectivity, batching and queueing, none of which has been measured. A 10-qubit statevector has only 1,024 amplitudes, so this study makes no claim of computational advantage.
 
 ## 4. Fair evaluation
 
@@ -128,6 +179,10 @@ Tables: `runs/tables/*.md`. Figure: top of this README.
 | Control: quantum vs mean-field | QRC vs classical mean-field model of the same circuit | 0.7273 vs 0.7234 | +0.0039 [−0.0028, +0.0115] (95%); V F1 −0.0001 [−0.0155, +0.0166] | no detectable change | full, secondary | E003 vs E004 |
 | Control: separable minus quantum | QRC with J = 0 (first) vs QRC | 0.7264 vs 0.7273 | −0.0009 [−0.0444, +0.0319] (95%); V F1 **−0.0634 [−0.1321, −0.0210]**; S F1 +0.0671 [−0.0139, +0.1308] | no detectable change overall | full, secondary | E005 vs E003 |
 | Control: rhythm only | readout on the 8 RR features | 0.6997 (S F1 0.390, V F1 0.739) | single deterministic run, no interval | descriptive | full, `score` | E006 |
+
+![Every logged comparison: paired difference with confidence interval](docs/figures/fig_forest.png)
+
+*Figure: every logged comparison on one axis (difference and interval; 98.75% for the slice family, 95% otherwise). Built by `scripts/make_report_figures.py` from the logged comparison outputs, without reading any label file.*
 
 **Where the V gain comes from (A015).** The QRC arm's V false positives fall from 1,324 to 709 per seed, mostly normal beats in records with few or no V beats (117, 222, 105, 111, 212) and S beats in record 232, while V true positives are unchanged (3,036 vs 3,050). V PPV is 0.811 vs 0.697 at V sensitivity 0.949 vs 0.953. V AUPRC is 0.955 vs 0.918, +0.036 [−0.001, +0.138] (descriptive). Per record, among the 9 records with at least 10 V units, the QRC arm has the higher V F1 in 5. The largest loss is record 105 (−0.167, 41 V units), and three records (200, 214, 221) are within ±0.0015 (A015).
 
@@ -193,6 +248,8 @@ The declared prediction held: flat from 1,024 shots upward, lower at 64 (−0.01
 - **Full, secondary, descriptive (ds2s):** **Rigetti-noise vs E003 +0.0016 [−0.0331, +0.0248]**, no detectable change overall; without record 232 −0.018. Per class: **V F1 −0.053 [−0.114, −0.020]** (0.821 vs 0.874), S F1 +0.058 [−0.036, +0.121]. The noise-aware readout trades V for S, as the no-coupling control did (E005).
 - **Consequence:** at Rigetti's calibrated rates, the QRC's V F1 falls from 0.874 to 0.821, against the ESN's 0.805 (an unpaired, descriptive comparison), so most of the headline's favorable V-slice margin does not survive device noise in this simulation. The simulation omits idle decay, crosstalk and routing, so real hardware is expected to be worse.
 - A readout trained on noiseless features and applied to noisy ones collapses (DS1 out-of-fold, seed 0: 0.278 Rigetti, 0.498 IQM, against 0.668): a hardware deployment would need a readout trained on hardware-like features.
+![Shot noise, device noise and V-class F1](docs/figures/fig_shots_noise.png)
+
 - Checks: with all error rates at 0 the noise simulator reproduces the headline simulator bit for bit; the ⟨Z⟩ and ⟨ZZ⟩ magnitudes shrink step by step with circuit depth as expected; lookahead check passed.
 
 ### 6.4 A strong non-reservoir classical model (E016)
@@ -216,8 +273,15 @@ Both comparisons show no detectable change overall. But the overall tie rests on
 - **Geometric difference** g(K_C‖K_QRC) (Huang et al. 2021) at regulariser 1e-3 / 1e-2 / 1e-1: mean-field 9.6 / 7.4 / 3.3, which is the same scale as a shot-noise replicate of the QRC itself (10.5 / 7.9 / 3.4); ESN 35 / 21 / 10; separable 27 / 23 / 13. No pair meets the paper's rule for choosing the regulariser, so these are descriptive.
 - **Reading:** as a representation, the mean-field map is as close to the QRC as the QRC is to a rerun of itself, which supports the mean-field finding at the feature level (A016). This is a statement about linear kernels on measured expectations on DS1; it cannot establish or exclude a quantum advantage.
 
-### 6.6 Amazon Braket hardware features (E019)
+### 6.6 Amazon Braket: simulations, validation and hardware features (E015, E019)
 - **E019** (diagnostic, label-free): E003's seed-0 circuits for a small seeded draw of ds2s beats (stratified by the simulated predicted class, fixed before any task), 4 snapshot circuits per beat, several beats packed on disjoint 10-qubit rings of one device per task. Measured: per-feature correlation and mean absolute difference between hardware features and the finite-shot and exact simulations, and agreement of the seed-0 readout's predicted class with the simulation's. No macro-F1 is claimed. Every task needs the human's approval with a cost estimate (cap USD 35); the device allowlist (Rigetti Cepheus-1-108Q and IQM Garnet only), the shot cap and the cost ledger are enforced in code (`scripts/braket_submit.py`, run in a separate Braket SDK environment; circuit building and analysis in `src/qhc/p4/braket_hw.py`).
+
+**Braket simulations before any paid task (E019 mechanism checks; free; `runs/E019/validation/`, `runs/E019/summary.json`).** Amazon Braket was first used without cost, at three levels:
+- **Calibration-driven noise simulation.** The error rates of E015 (Section 6.3) come from the device calibration that Braket returns for Rigetti Cepheus-1-108Q and IQM Garnet; the Pauli-trajectory simulation then runs the full pipeline on DS1 for both devices and on ds2s for Rigetti.
+- **Native-gate programs on the Braket LocalSimulator** (`braket_sv`, amazon-braket-sdk 1.127.6). E003's snapshot circuits were compiled to each device's native gates on pinned physical qubits (verbatim programs, up to 160 CZ and 995 single-qubit gates per beat snapshot on one 10-qubit ring; a packed hardware circuit carries up to five such rings). On the LocalSimulator they reproduce our complex64 statevector to within 3.5e-6 for all four snapshots of each of 4 test beats on both gate sets. Two beats packed on disjoint rings give the same marginals as single rings (≤ 3.1e-6). A bit-order control separates the correct order (mean absolute error 0.015-0.033 at 1,024 shots) from a fully reversed order (0.10-0.22 on the single-ring circuits; 0.038 and 0.18 on the two packed circuits).
+- **End-to-end analysis check.** Each 10-qubit ring of the packed 24-beat Rigetti plan was run separately on the LocalSimulator (96 runs, 1,024 shots), written in the hardware result format and analysed with the hardware analysis code: features match the exact simulation with mean absolute difference 0.018 and pooled correlation 0.997, the level of shot noise alone. The program-set submission format was checked separately with two executables. The real fetch path was first exercised on the paid task (its first attempt failed on credentials and succeeded with the AWS profile set; E019 card).
+
+The figure in the Highlights compares these LocalSimulator features and the hardware features with the exact simulation.
 
 **Result (E019; diagnostic, label-free; real hardware).** The human team member approved Rigetti Cepheus-1-108Q, 48 beats, one task, cap USD 18. The first submission was refused by AWS before any task was created: the account lacked Braket's service-linked role, and nothing was charged. After the role was created, one program-set task ran 40 circuits × 1,024 shots, with 5 beats' circuits on disjoint 10-qubit rings per circuit, at an estimated USD 17.71. All 48 beats completed.
 - **Features.** Hardware features differ from the exact simulation by a mean absolute **0.347**, against **0.018** between the 1,024-shot and exact simulations. Pooled correlation with the simulation is **0.70**, median per-feature correlation 0.53. Hardware ZZ correlators are contracted towards zero (regression slope 0.46), as the device-noise simulation predicts (E015).
@@ -313,6 +377,12 @@ It refuses to run where `runs/E002/tuning.jsonl` or `runs/E003/tuning.jsonl` exi
 ```
 The headline `compare` refuses to run twice with different models and refuses if any other model was scored on the test split first, so a rerun from scratch needs an empty `runs/full_eval_log.jsonl`. The demo (`runs/demo/qrc_E003_rec232.png`) shows the QRC arm's predicted classes and S/V probabilities on 20 s of test record 232; it shows predictions only, no reference labels.
 
+**Figures and the PDF write-up** (no label access; the PDF needs Google Chrome or Microsoft Edge installed):
+```
+.venv/Scripts/python -I scripts/make_report_figures.py         # docs/figures/fig_*.png from the logged outputs
+.venv/Scripts/python -I scripts/build_report.py                # QML_Hackathon_Solution_Description.pdf from docs/report/report.html
+```
+
 **Expected runtime.** On one RTX 6000 Ada: tuning about 6 min (ESN) and 10 min (QRC); final runs seconds per seed; a 5-seed comparison with 8,000 bootstrap replicates about 5-12 min on one CPU core.
 
 ## 10. Code layout
@@ -320,7 +390,7 @@ The headline `compare` refuses to run twice with different models and refuses if
 - `src/qhc/` (top level): the evaluation: `evalspec` (splits, classes, rules), `units` (evaluation units, label-free positions, folds, subsets), `scorer`, `evaluate` (the guarded `compare`/`score` command and access logs), `leakcheck`. Its hash is the evaluation revision in `EVAL.md`.
 - `src/qhc/pipe/`: the models: `features` (beat windows, patient-relative windows, RR block), `reservoirs` (GPU statevector QRC, mean-field model, ESN), `readout`, `run` (tuning, final runs, controls, reduced-data refits, lookahead check), `tables`, `demo`.
 - `src/qhc/p4/`: Phase 4 code, added without editing the two packages above: `predict` (predict-only path from saved artifacts, A018), `ablate` (shots, exact expectations, qubit count, readout size), `noise` (device-noise trajectories), `boost` (gradient-boosting context model), `kernels` (alignment, CKA, geometric difference), `braket_hw` (E019: label-free beat draw, circuit packing, cost plan and analysis; submission is `scripts/braket_submit.py`).
-- `scripts/`: `download_data.py`, `reproduce.py`, `make_figure.py`, and `braket_submit.py` (E019 task submission, run only in the separate `.venv-braket` environment with the human's approval per task).
+- `scripts/`: `download_data.py`, `reproduce.py`, `make_figure.py`, `make_report_figures.py` (figures for the README and the PDF), `build_report.py` (the PDF, from `docs/report/report.html`), and `braket_submit.py` (E019 task submission, run only in the separate `.venv-braket` environment with the human's approval per task).
 - `tests/test_scorer.py`: the 43 evaluation fixtures.
 - `runs/`: every experiment's outputs (`runs/E###/`), the test-split access log `runs/full_eval_log.jsonl`, tables `runs/tables/`, verification outputs `runs/V###/`, the demo `runs/demo/`. Raw and processed data (`runs/data/`) are excluded from the repository and rebuilt by the commands above.
 - Project records: `EVAL.md` (evaluation specification and change history), `EXPERIMENTS.md` (one card per experiment), `ANOMALIES.md`, `VERIFICATIONS.md` (critic reports), `IDEAS.md`, `PROBLEM_BRIEF.md`, `STATE.md`, `PROGRESS_REVIEW_2026-10-28.md` (an independent progress review whose claim corrections are applied here). The first draft of the write-up is kept in `docs/history/WRITEUP_2026-10-26.md`.
