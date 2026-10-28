@@ -16,14 +16,14 @@ One card per experiment, including failures, null results, and aborted runs. Kee
 | E009 | Matched-λ diagnostic on DS1 OOF: both headline arms at every λ of the declared grid (A015) | diagnostic (DS1 OOF) | not assessed | not requested | n/a |
 | E010 | A010 fairness check: ESN retuned over the same 30 configurations with the extended readout grid λ ∈ {1e-5, ..., 1}; **same selection as E002 (cfg28, λ 0.001); predictions byte-identical** | proxy (DS1 OOF) | not assessed | not requested | n/a |
 | E011 | A010 fairness check, quantum side: QRC retuned the same way; **same selection as E003 (cfg15, λ 0.1); predictions byte-identical** | proxy (DS1 OOF) | not assessed | not requested | n/a |
-| E012 | I004: exact-expectation QRC (shots = None), E003 configuration, 5 seeds; ds2s secondary vs E003 | proxy; full (EV2, secondary): E012 vs E003 +0.0005 [-0.0058, +0.0081] | no detectable change | not requested | n/a |
-| E013 | I004: shot sweep {64, 256, 4096} at E003's configuration and lambda, DS1 OOF | proxy: 64 shots 0.648, 256 0.660, 1,024 0.667, 4,096 0.668, exact 0.669 | not assessed | not requested | n/a |
-| E014 | I007: qubit count {6, 8, 12} and Z-only readout ablations; DS1-rule variant to ds2s secondary vs E003 | proxy; full (EV2, secondary): n6 selected (DS1 0.680); E014-n6 vs E003 +0.0078 [-0.0055, +0.0188] | no detectable change | not requested | n/a |
-| E015 | I005: device-noise simulation (Rigetti Cepheus, IQM Garnet calibration); Rigetti to ds2s secondary vs E003 | proxy; full (EV2, secondary): Rigetti-noise vs E003 +0.0016 [-0.0331, +0.0248]; V F1 -0.053 [-0.114, -0.020] | no detectable change | not requested | n/a |
-| E016 | I009 (review P1): gradient-boosting context model on window + RR, N = 30 DS1 budget; ds2s secondary vs E003 and E002 | proxy; full (EV2, secondary): E003 vs E016 +0.0057 [-0.1389, +0.0676] (w/o 232 -0.087); E002 vs E016 -0.0151 [-0.1896, +0.0766]; E016 V F1 0.943 | no detectable change | not requested | n/a |
-| E017 | I008: kernel-target alignment, CKA and geometric difference of the feature maps on DS1 | diagnostic: CKA QRC-mean-field 0.986, QRC-ESN 0.525 | not assessed | not requested | n/a |
-| E018 | SVDB confirmation of the frozen headline pair E003 vs E002 via the A018 predict-only path | full (EV2, confirmation): SVDB 0.6402 vs 0.6488 | not confirmed (delta -0.0085 [-0.0476, +0.0274]) | not requested | n/a |
-| E019 | I006: Braket hardware features of E003's seed-0 circuit on a label-free ds2s subset | diagnostic: hardware vs exact features MAD 0.347, corr 0.70; class agreement 41.7% (ceiling 87.5%); USD 17.71 est. | not assessed | not requested | n/a |
+| E012 | I004: exact-expectation QRC (shots = None), E003 configuration, 5 seeds; ds2s secondary vs E003 | proxy; full (EV2, secondary): E012 vs E003 +0.0005 [-0.0058, +0.0081] | no detectable change | pass (V005, validity) | n/a |
+| E013 | I004: shot sweep {64, 256, 4096} at E003's configuration and lambda, DS1 OOF | proxy: 64 shots 0.648, 256 0.660, 1,024 0.667, 4,096 0.668, exact 0.669 | not assessed | pass (V005, validity) | n/a |
+| E014 | I007: qubit count {6, 8, 12} and Z-only readout ablations; DS1-rule variant to ds2s secondary vs E003 | proxy; full (EV2, secondary): n6 selected (DS1 0.680); E014-n6 vs E003 +0.0078 [-0.0055, +0.0188] | no detectable change | pass (V005, validity) | n/a |
+| E015 | I005: device-noise simulation (Rigetti Cepheus, IQM Garnet calibration); Rigetti to ds2s secondary vs E003 | proxy; full (EV2, secondary): Rigetti-noise vs E003 +0.0016 [-0.0331, +0.0248]; V F1 -0.053 [-0.114, -0.020] | no detectable change | pass (V005, validity) | n/a |
+| E016 | I009 (review P1): gradient-boosting context model on window + RR, N = 30 DS1 budget; ds2s secondary vs E003 and E002 | proxy; full (EV2, secondary): E003 vs E016 +0.0057 [-0.1389, +0.0676] (w/o 232 -0.087); E002 vs E016 -0.0151 [-0.1896, +0.0766]; E016 V F1 0.943 | no detectable change | pass (V005, validity) | n/a |
+| E017 | I008: kernel-target alignment, CKA and geometric difference of the feature maps on DS1 | diagnostic: CKA QRC-mean-field 0.986, QRC-ESN 0.525 | not assessed | pass (V005, validity) | n/a |
+| E018 | SVDB confirmation of the frozen headline pair E003 vs E002 via the A018 predict-only path | full (EV2, confirmation): SVDB 0.6402 vs 0.6488 | not confirmed (delta -0.0085 [-0.0476, +0.0274]) | pass (V005, validity) | n/a |
+| E019 | I006: Braket hardware features of E003's seed-0 circuit on a label-free ds2s subset | diagnostic: hardware vs exact features MAD 0.347, corr 0.70; class agreement 41.7% (ceiling 87.5%); USD 17.71 est. | not assessed | pass (V005, validity) | n/a |
 
 ## Declarations made before any tuning run (2026-10-26 ~19:15 UAE; EVAL.md matched-baseline rules 1-4)
 
@@ -343,7 +343,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Uncertainty (method from EVAL.md):** two-level bootstrap, B = 8,000; leave-one-record-out −0.0003 (219) to +0.0022 (232)
 - **Mechanism check:** exact features differ from the 1,024-shot features (mean absolute difference 0.017); DS1 OOF argmax agreement with E003 98.5-98.6%; ds2s agreement 98%; lookahead check passed (731 beats, 0 violations); `check_runs` passed.
 - **Cost:** < 0.05 GPU-h, USD 0
-- **Execution:** completed | **Outcome:** no detectable change (secondary, descriptive) | **Verification:** not requested | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** no detectable change (secondary, descriptive) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** shot noise at 1,024 shots costs nothing measurable on ds2s; the measurement model is not what limits the QRC arm.
 
 ## E013
@@ -362,7 +362,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Uncertainty (method from EVAL.md):** none (proxy; DS1 record-level uncertainty is about ±0.05)
 - **Mechanism check:** feature error halves with each 4x in shots (1/sqrt(shots)); the 1,024-shot recompute reproduces E003's OOF files exactly.
 - **Cost:** < 0.05 GPU-h, USD 0
-- **Execution:** completed | **Outcome:** not assessed (proxy) | **Verification:** not requested | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** not assessed (proxy) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** prospective hardware arithmetic: 256 shots per circuit would cost about 0.008 DS1 macro-F1 (proxy) at a quarter of the shots.
 
 ## E014
@@ -382,7 +382,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Uncertainty (method from EVAL.md):** two-level bootstrap, B = 8,000; leave-one-record-out +0.0004 (232) to +0.0105 (222)
 - **Mechanism check:** n = 10 equality check above; lookahead check passed for n6 (0 violations); `check_runs` passed; ds2s argmax agreement with E003 97%.
 - **Cost:** < 0.1 GPU-h, USD 0
-- **Execution:** completed | **Outcome:** no detectable change (secondary, descriptive) | **Verification:** not requested | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** no detectable change (secondary, descriptive) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** confound: changing n also resamples each 10-sample chunk to n points, so qubit count and input resolution move together. Smaller readouts (n = 6, Z-only) score higher on DS1 (A020). More qubits did not help.
 
 ## E015
@@ -404,7 +404,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Mechanism check:** (i) rates 0, T = 1: bit-identical to `reservoirs.QRC` for seeds 0 and 1, batch-invariant; (ii) noisy/noiseless mean |Z| and |ZZ| shrink step by step (Rigetti Z 0.81→0.49, ZZ 0.67→0.28 over snapshots 1-4; IQM Z 0.93→0.79, ZZ 0.88→0.65); gates-only snapshot-1 values match the analytic prediction. Lookahead check passed (731 beats, 0 violations); `check_runs` passed.
 - **Exploratory (seed 0, DS1 OOF):** a readout trained on noiseless features and applied to noisy features collapses to 0.278 (Rigetti) and 0.498 (IQM) against 0.668 (A021).
 - **Cost:** about 0.5 GPU-h (Rigetti 16.9 min, IQM 9.8 min, lookahead 7.2 min), USD 0 (only free metadata calls)
-- **Execution:** completed | **Outcome:** no detectable change (secondary, descriptive); V F1 lower (95% CI excludes 0) | **Verification:** not requested | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** no detectable change (secondary, descriptive); V F1 lower (95% CI excludes 0) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** no idle T1/T2 decay, crosstalk or routing; on Rigetti arbitrary rotations compile to more than one pulse, so 1q error is probably underestimated; the noise simulation is therefore optimistic. The noise-aware readout recovers macro-F1 by moving the decision towards S; the V-class gain over the ESN (the headline's favorable slice) does not survive device noise at Rigetti's rates.
 
 ## E016
@@ -424,7 +424,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Uncertainty (method from EVAL.md):** two-level bootstrap, B = 8,000; leave-one-record-out E003 vs E016 −0.0869 (232) to +0.0236 (222); E002 vs E016 −0.1329 (232) to +0.0046 (222)
 - **Mechanism check:** 5 distinct prediction and model hashes; `check_runs` passed; lookahead check passed (731 beats, 0 violations); DS1 seed-0 OOF reproduces the tuning score exactly.
 - **Cost:** about 0.3 CPU-h, USD 0
-- **Execution:** completed | **Outcome:** no detectable change in both comparisons (secondary, descriptive) | **Verification:** not requested | **Adoption:** n/a (context)
+- **Execution:** completed | **Outcome:** no detectable change in both comparisons (secondary, descriptive) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a (context)
 - **Limitations and next action:** post-hoc (chosen after the ds2s results). The overall tie is carried by record 232's S beats, which the boosted trees rarely predict (A019); pooled over the other 20 records the boosted trees lead (−0.087 against E003, −0.133 against E002), though not in every record (not in 100, 123, 210 or 219; V005 F2), and their V F1 is higher than both reservoir arms' with a 95% CI that excludes 0. The matched ESN is a controlled comparator, not the strongest classical model.
 
 ## E017
@@ -442,7 +442,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Uncertainty (method from EVAL.md):** none (diagnostic, one subsample)
 - **Mechanism check:** regenerated reservoirs equal the saved artifacts; reference rows calibrate the scale of "same map".
 - **Cost:** < 0.05 GPU-h, USD 0
-- **Execution:** completed | **Outcome:** not assessed (diagnostic) | **Verification:** not requested | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** not assessed (diagnostic) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** at the representation level the mean-field map is as close to the QRC as the QRC is to itself under a new shot or reservoir seed, which supports A016; linear kernels on measured expectations, DS1 only. KTA does not predict readout F1 (the separable map has the highest KTA but the lowest ds2s V F1). References verified via paperfetch: Kornblith et al., ICML 2019, PMLR 97:3519-3529; Cortes, Mohri & Rostamizadeh, JMLR 13:795-828 (2012); Huang et al., Nat. Commun. 12, 2631 (2021), doi:10.1038/s41467-021-22539-9.
 
 ## E018
@@ -463,7 +463,7 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Uncertainty (method from EVAL.md):** two-level bootstrap over 78 records and seeds, B = 8,000; leave-one-record-out −0.0157 (859) to −0.0010 (892), negative for every record left out
 - **Mechanism check:** see the precondition; every manifest points at the original artifact with an unchanged hash.
 - **Cost:** CPU about 35 min (single-threaded bootstrap); USD 0
-- **Execution:** completed | **Outcome:** **not confirmed** (pre-registered criterion: delta > 0 and CI lower bound > 0; observed delta −0.0085, CI includes 0: no detectable change) | **Verification:** not requested (the critic checks the report in Phase 5) | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** **not confirmed** (pre-registered criterion: delta > 0 and CI lower bound > 0; observed delta −0.0085, CI includes 0: no detectable change) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** the ds2s V-class gain did not transfer: on SVDB the QRC arm's V F1 equals the ESN's (0.570 vs 0.574); its V PPV is higher (0.544 vs 0.463) and its V sensitivity lower (0.600 vs 0.763), the same direction of trade-off as on ds2s but without the F1 gain. SVDB differs in sampling rate (128 Hz, resampled) and lead; possible subject overlap with MIT-BIH (A006). The predict-only path ran with pipeline `55884b1fb66732b9` while the artifacts record `da67af87f8b8fd73`; the ds2s hash match covers the MIT-BIH path, and the SVDB resampling branch has no earlier reference output. No repair access is planned: no implementation defect is known.
 
 ## E019
@@ -480,5 +480,5 @@ Authorized by the human 2026-10-28 ~18:20 ("Don't drop the experiments...") and 
 - **Baseline score / candidate score / signed delta:** **diagnostic (label-free, 48 beats):** hardware vs exact simulation: mean absolute feature difference **0.347** (Z 0.318, ZZ 0.354; by snapshot 0.373, 0.370, 0.335, 0.312), against 0.018 between the 1,024-shot and exact simulations; pooled feature correlation **0.70**, median per-feature correlation 0.53 (by snapshot 0.39, 0.63, 0.52, 0.48); regression slope of hardware on simulated ZZ 0.46 (contraction). Predicted class with the seed-0 readout (trained on noiseless simulated DS1 features): hardware agrees with the finite-shot simulation on **41.7%** of beats and with exact on 37.5%; the ceiling (finite-shot vs exact) is 87.5%. Hardware predictions are skewed to S (N 3, S 35, V 10 of 48).
 - **Uncertainty (method from EVAL.md):** none (48 beats, diagnostic)
 - **Mechanism check:** local-simulator validation of the same circuits (features within 3.5e-6 of our statevector; packed rings equal single rings; bit order checked against a reversed-order control); 48 of 48 beats complete on hardware.
-- **Execution:** completed | **Outcome:** not assessed (diagnostic) | **Verification:** not requested | **Adoption:** n/a
+- **Execution:** completed | **Outcome:** not assessed (diagnostic) | **Verification:** pass (V005, validity; 2026-10-28) | **Adoption:** n/a
 - **Limitations and next action:** no readout-error mitigation; one task, one calibration state; 48 beats. The feature contraction and the S-skewed transfer match the device-noise simulation (E015, A021): a readout trained on noiseless features does not transfer to hardware features. EVAL.md's hardware track planned about 100 beats with a macro-F1 on the subset; this run is smaller and label-free (E019 card; USD 35 cap).

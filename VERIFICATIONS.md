@@ -615,3 +615,28 @@ One report per verification, written by the critic. The coordinator links each r
     - Everything else in the repair is verified.
     - After R1-R4, a grep of those four lines (plus the F4 history check) is enough for PASS. No rerun is needed.
     - Validity (question 1) stays PASS.
+- **Final check** (critic, 2026-10-28 20:56 UAE; README sha256 prefix `4e3f4606a6b15a97`, commit `87fd848`, clean working tree):
+  - **R1: fixed.**
+    - README.md:132 now reads "three records (200, 214, 221) are within ±0.0015 (A015)".
+    - A015 (ANOMALIES.md:167) carries a dated correction note: "only 214 is within ±0.001; three records (200, 214, 221) are within ±0.0015". This matches the logged per-record confusions.
+  - **R2: fixed.** README.md:152 now reads "scored higher on DS1 than the selected J (0.679 vs 0.667; E005, proxy)".
+  - **R3: fixed.** The verification slot describes the first check (one inaccurate statement, two overstatements) and the re-check (one wrong number, three wording items). It points to V005 for the final status and gives Soundness as "3 once the corrected claim set passes".
+  - **R4: fixed.** README.md:342 now reads "checked against the Semantic Scholar record".
+  - **R5: fixed** (README.md:62 and EVIDENCE.md:34).
+  - **F6: fixed** (EXPERIMENTS.md:320).
+  - **F4: fixed.**
+    - `git log --all` on the three r3 label CSVs returns nothing.
+    - `git ls-files` lists no `labels_*` file.
+    - The only commit is `87fd848`.
+  - **F7: redacted, by the human's choice.**
+    - `git log --all -p` contains 0 occurrences of the account ID, and `git grep` finds none.
+    - The tracked files carry `<aws-account-id>`.
+    - `runs/E019_unredacted/` is ignored and untracked.
+  - **Claim set (question 2): PASS.**
+    - Every item from F1-F8 and R1-R5 is resolved.
+    - No number checked disagrees with the logged outputs.
+    - No claim is stronger than its evidence: no quantum advantage is claimed, and the post-hoc secondaries are labelled descriptive.
+  - **Validity (question 1):** PASS, as recorded above.
+  - **Overall V005 verdict: PASS.**
+  - **Scorecard:** Soundness anchor 3 is now met (critic PASS, access-logged confirmation, published variant count, every claim traceable), so the critic's rating is 3. The other ratings are unchanged: Performance 2, Ingenuity 3, Depth 3, both gates 3. These are internal ratings, not the judges'.
+  - **Scope:** unchanged from the report above. Rubric agreement between the two raters is a consistency check, not validation against the judges.

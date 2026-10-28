@@ -110,8 +110,8 @@ Quantum Healthcare Hackathon 2026, National / Hybrid track. This README is the c
   - **README claim set:** the first check failed on one inaccurate statement and two overstatements:
     - the inaccurate statement: the pre-registration timing;
     - the overstatements: the boosted trees "leading everywhere" outside record 232, and "as well as or better" for the DS1 ablations.
-  - **Re-check after the repair cycle:** the three items were fixed. It then found one wrong number (records within ±0.001 of equal V F1) and three small wording items, all corrected in this version. The final status of the claim set is in `VERIFICATIONS.md` V005.
-  - **Blind scorecard ratings (critic = generator):** Performance 2, Ingenuity 3, Depth 3, Soundness 2 (3 once the corrected claim set passes), both gates 3. These are internal ratings, not the judges'.
+  - **Re-check after the repair cycle:** the three items were fixed. It then found one wrong number (records within ±0.001 of equal V F1) and three small wording items, all corrected in this version. The final check of the corrected claim set passed (V005 final outcome, 2026-10-28 ~21:05 UAE). **V005 overall: PASS.**
+  - **Blind scorecard ratings (critic = generator):** Performance 2, Ingenuity 3, Depth 3, Soundness 3, both gates 3. These are internal ratings, not the judges'.
   - **Re-check of the corrected lines:** see `VERIFICATIONS.md` V005.
 
 ## 5. Results on ds2s (all simulated)
